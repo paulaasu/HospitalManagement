@@ -1,4 +1,4 @@
-package src.clases;
+package clases;
 
 public class VentanaMedico {
 

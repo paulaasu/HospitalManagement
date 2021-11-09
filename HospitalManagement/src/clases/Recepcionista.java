@@ -1,5 +1,5 @@
 package clases;
 
-public class Recepcionista {
-
+public class Recepcionista extends Usuario {
+	
 }
