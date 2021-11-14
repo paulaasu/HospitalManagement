@@ -59,6 +59,7 @@ Integer telefono, String direccion ,Date fecha_nacimiento,HistorialClinico histo
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	
 	}
 		
 	}
