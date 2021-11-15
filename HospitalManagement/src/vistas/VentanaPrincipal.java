@@ -18,8 +18,15 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
+
+import paneles.PanelPacientes;
+import paneles.PanelAgenda;
+import paneles.PanelConsultas;
+import paneles.PanelExportar;
+import paneles.PanelImportar;
 
 public class VentanaPrincipal extends JFrame {
 	private boolean paciente = false;
@@ -28,6 +35,7 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lblAgenda;
 	private JLabel lblExportar;
 	private JLabel lblImportar;
+	
 
 	private JPanel contentPane;
 
@@ -62,6 +70,57 @@ public class VentanaPrincipal extends JFrame {
 		add(panel1, BorderLayout.WEST);
 		Panel2 panel2 = new Panel2();
 		add(panel2, BorderLayout.CENTER);
+		 //CAMBIO DE PANELES
+		lblAgenda.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				panel2.removeAll();
+				panel2.revalidate();
+				add(new PanelAgenda(), BorderLayout.CENTER);
+				
+			}
+		}); 
+		
+		lblConsultas.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				panel2.removeAll();
+				panel2.revalidate();
+				add(new PanelConsultas(), BorderLayout.CENTER);
+				
+			}
+		});
+		
+		lblPaciente.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				panel2.removeAll();
+				panel2.revalidate();
+				add(new PanelPacientes(), BorderLayout.CENTER);
+				
+				
+			}
+		});
+		
+		lblExportar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				panel2.removeAll();
+				panel2.revalidate();
+				add(new PanelExportar(), BorderLayout.CENTER);
+				
+			}
+		});
+		
+		lblImportar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				panel2.removeAll();
+				panel2.revalidate();
+				add(new PanelImportar(), BorderLayout.CENTER);
+				
+			}
+		});
 		
 	}
 	
@@ -76,7 +135,7 @@ public class VentanaPrincipal extends JFrame {
 			setLayout(new BorderLayout());
 			
 			JLabel JLabelImagen = new JLabel();
-			JLabelImagen.setIcon(new ImageIcon("C:\\Users\\Propietario\\Pictures\\Imagenesproyecto\\ImagenLogo.jpg")); //LOGO ARRIBA
+			JLabelImagen.setIcon(new ImageIcon("C:\\Users\\Propietario\\Pictures\\Imagenesproyecto\\ImagenLogo.jpg"));
 			add(JLabelImagen, BorderLayout.NORTH);
 			
 			Panel3 panel3 = new Panel3();
@@ -84,7 +143,7 @@ public class VentanaPrincipal extends JFrame {
 			
 			JLabel JLabelImagen2 = new JLabel();
 			JLabelImagen2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			JLabelImagen2.setIcon(new ImageIcon("C:\\Users\\Propietario\\Pictures\\Imagenesproyecto\\Logosalir.png")); //IMAGEN SALIR
+			JLabelImagen2.setIcon(new ImageIcon("file:///C:/Users/Propietario/Pictures/Imagenesproyecto/Logosalir.png"));
 			JLabelImagen2.setBorder(new MatteBorder(2, 0, 2, 2, (Color) Color.WHITE));
 			JLabelImagen2.setBackground(Color.LIGHT_GRAY);
 			JLabelImagen2.setOpaque(true);
@@ -151,51 +210,13 @@ public class VentanaPrincipal extends JFrame {
 		
 	}
 	
-	class Panel2 extends JPanel{
-	//	JPanelPacientes panelPaciente;
+	class Panel2 extends JPanel{ //PANEL QUE TE APARECE AL PRINCIPIO
 		public Panel2(){
 			setLayout(new BorderLayout());
-			
-			lblAgenda.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					setBackground(Color.GREEN);
-					
-				}
-			}); 
-			
-			lblConsultas.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					setBackground(Color.GREEN);
-					
-				}
-			});
-			
-			lblPaciente.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-			//		setVisible(false);
-			//		panelPaciente.setVisible(true);
-					
-				}
-			});
-			
-			lblExportar.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					setBackground(Color.GREEN);
-					
-				}
-			});
-			
-			lblImportar.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					setBackground(Color.GREEN);
-					
-				}
-			});
+			JLabel datos = new JLabel("HOSPITAL MANAGEMENT");
+			datos.setHorizontalAlignment(SwingConstants.CENTER);
+			datos.setFont(new Font("Tahoma", Font.BOLD, 24));
+			add(datos, BorderLayout.NORTH);
 			
 
 			
