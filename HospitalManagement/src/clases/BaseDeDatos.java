@@ -61,6 +61,20 @@ Integer telefono, String direccion ,Date fecha_nacimiento,HistorialClinico histo
 		}
 	
 	}
+	public static void eliminarPacientes(Connection con, String dni, String nombre, String apellidos, 
+			Integer telefono, String direccion ,Date fecha_nacimiento,HistorialClinico historialClinico) {
+		String sentSQL = "DELETE FROM alumno WHERE dni ='"+dni+"'";
+		try {
+			Statement stmt = ((java.sql.Connection) con).createStatement();
+			stmt.executeUpdate(sentSQL);
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+		
+	
 		
 	}
 	/*	-AÑADIR UN PACIENTE A LA BASE DE DATOS 
