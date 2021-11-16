@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 
@@ -58,10 +59,7 @@ public class VentanaLogin extends JFrame {
 		contentPane.add(panel3);
 		
 		contentPane.setBackground(Color.WHITE);
-		
-	
-		
-		
+
 	}
 	
 	class Panel1 extends JPanel{
@@ -95,27 +93,54 @@ public class VentanaLogin extends JFrame {
 		}
 	}
 	
-	class Panel4 extends JPanel{ //PANEL QUE CONTIENE LA IMAGEN USUARIO
+	class Panel4 extends JPanel{ //PANEL QUE CONTIENE "INICIAR SESION"
 		
 		public Panel4() {
 			
-			JLabel JLabelImagen = new JLabel();
-			JLabelImagen.setIcon(new ImageIcon("C:\\Users\\Propietario\\Pictures\\Imagenesproyecto\\UsuarioIcono.png"));
-			add(JLabelImagen);
+			JLabel datos = new JLabel("INICIAR SESIÓN");
+			datos.setHorizontalAlignment(SwingConstants.CENTER);
+			datos.setFont(new Font("Sherif", Font.PLAIN, 24));
+			add(datos, BorderLayout.NORTH);
+			
+//			JLabel JLabelImagen = new JLabel();
+//			JLabelImagen.setIcon(new ImageIcon("C:\\Users\\Propietario\\Pictures\\Imagenesproyecto\\UsuarioIcono.png"));
+//			add(JLabelImagen);
 		//	setBackground(Color.PINK);
 		}
 		
 		
 	}
 	
-	class Panel5 extends JPanel{ // PANEL CON USUARIOS Y CONTRASEÑAS
+	class Panel5 extends JPanel{ //CON EL LOGO Y LOS USUARIOS Y CONTRASEÑAS
 		private JTextField txt_user;
 		private JTextField txt_password;
 		private JButton boton;
 		
 		public Panel5() {
 			
-			 JLabel lblNewLabel = new JLabel("USUARIO:");
+			setLayout(new BorderLayout());
+			
+			
+			Panel7 panel7 = new Panel7();
+			add(panel7, BorderLayout.NORTH);
+			
+			Panel6 panel6 = new Panel6();
+			add(panel6, BorderLayout.CENTER);
+			
+		//	 setBackground(Color.GRAY);
+		}
+	}
+	
+	class Panel6 extends JPanel{ //PANEL QUE ORDENA LOS USUARIOS Y CONTRASEÑAS
+		private JTextField txt_user;
+		private JTextField txt_password;
+		private JButton boton;
+		
+		private Panel6() {
+			
+			setLayout(new GridLayout(6,1));
+			
+			JLabel lblNewLabel = new JLabel("USUARIO:");
 			 add(lblNewLabel);
 			 txt_user = new JTextField(10);
 			 add(txt_user);
@@ -127,7 +152,18 @@ public class VentanaLogin extends JFrame {
 			 
 			 boton = new JButton("Aceptar");
 			 add(boton);
-		//	 setBackground(Color.GRAY);
+			
+		}
+	}
+	
+	class Panel7 extends JPanel{
+		
+		private Panel7() {
+			setLayout(new FlowLayout());
+			
+			JLabel JLabelImagen = new JLabel();
+			JLabelImagen.setIcon(new ImageIcon("C:\\Users\\Propietario\\Pictures\\Imagenesproyecto\\UsuarioIcono.png"));
+			add(JLabelImagen, BorderLayout.NORTH);
 		}
 	}
 	
