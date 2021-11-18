@@ -1,23 +1,38 @@
 package clases;
 
+import java.sql.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class Cita extends Medico{
-	
-	protected  SimpleDateFormat fechaYHoraCita = new SimpleDateFormat( "dd/MM/yyyy hh:mm" );
+	/*como tenemos un SimpleDateFormat  hay que pase de   date a string*/
+	private static SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yyyy hh:mm" );
+	private Date fechaYHoraCita ;
 	TipoCita tipodecita;
-	public Cita(ArrayList<Cita> cita, SimpleDateFormat fechaYHoraCita, TipoCita tipodecita) {
-		super(cita);
-		this.fechaYHoraCita = fechaYHoraCita;
-		this.tipodecita = tipodecita.GINECOLOGO;
-		
+	public Cita(ArrayList<Cita> cita, String fechaYHoraCita, TipoCita tipodecita) {
+		super();
+		try {
+			this.fechaYHoraCita = (Date) sdf.parse(fechaYHoraCita);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.tipodecita =tipodecita.CABECERA ;
 	}
-	public SimpleDateFormat getFechaYHoraCita() {
+	public Cita() {
+		super();
+	}
+	public Date getFechaYHoraCita() {
 		return fechaYHoraCita;
 	}
-	public void setFechaYHoraCita(SimpleDateFormat fechaYHoraCita) {
-		this.fechaYHoraCita = fechaYHoraCita;
+	public void setFechaYHoraCita(String fechaYHoraCita) {
+		try {
+			this.fechaYHoraCita =  (Date) sdf.parse(fechaYHoraCita);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	public TipoCita getTipodecita() {
 		return tipodecita;
@@ -27,8 +42,10 @@ public class Cita extends Medico{
 	}
 	@Override
 	public String toString() {
-		return "Cita Nombre del medico =" + nombre + ", Fecha  Y HoraCita=" + fechaYHoraCita + ", Tipo de cita=" + tipodecita;
+		return "Cita nombre=" + nombre + ", apellidos=" + apellidos + ", fechaYHoraCita=" + fechaYHoraCita
+				+ ", tipodecita=" + tipodecita ;
 	}
+	
 	
 	
 	

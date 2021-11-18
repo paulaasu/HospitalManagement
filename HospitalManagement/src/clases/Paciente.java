@@ -2,12 +2,12 @@ package clases;
 
 import java.text.SimpleDateFormat;
 
-public class Paciente extends Usuario{
+public class Paciente extends Persona{
 	private HistorialClinico historialClinico;
 	
 	public Paciente(String dNI, String nombre, String apellidos, int telefono, String email, String direccion,
-			SimpleDateFormat fechaNacimiento, int salario, HistorialClinico historialClinico) {
-		super(dNI, nombre, apellidos, telefono, email, direccion, fechaNacimiento, salario);
+			String fechaNac, int salario, HistorialClinico historialClinico) {
+		super(dNI, nombre, apellidos, telefono, email, direccion, fechaNac, salario);
 		this.historialClinico = historialClinico;
 	}
 

@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.Connection;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -22,6 +23,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
+import clases.BaseDeDatos;
 import paneles.PanelPacientes;
 import paneles.PanelAgenda;
 import paneles.PanelConsultas;
@@ -35,6 +37,8 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lblAgenda;
 	private JLabel lblExportar;
 	private JLabel lblImportar;
+	//PARA LA BD
+	private Connection con;
 	
 
 	private JPanel contentPane;
@@ -59,6 +63,13 @@ public class VentanaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaPrincipal() {
+		
+		// para iniciar la base de datos en la ventana principal
+		con = BaseDeDatos.initBD("hospitalManagementBD.db");
+//		BaseDeDatos.anadirPaciente(con);
+//		BaseDeDatos.modificarPaciente(con);
+		
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 801, 517);
 		contentPane = new JPanel();

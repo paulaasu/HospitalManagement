@@ -2,11 +2,13 @@ package clases;
 
 import java.util.ArrayList;
 
-public class Medico extends Usuario {
+public class Medico extends Persona {
 		private ArrayList<Cita> cita;
 
-		public Medico(ArrayList<Cita> cita) {
-			super();
+		
+		public Medico(String dni, String nombre, String apellidos, int telefono, String email, String direccion,
+				String fechaNac, int salario, ArrayList<Cita> cita) {
+			super(dni, nombre, apellidos, telefono, email, direccion, fechaNac, salario);
 			this.cita = new ArrayList<>();
 		}
 		public Medico() {

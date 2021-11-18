@@ -2,12 +2,12 @@ package clases;
 
 import java.text.SimpleDateFormat;
 
-public class Informatico extends Usuario {
+public class Informatico extends Persona {
 	protected String cargo;
 
-	public Informatico(String dNI, String nombre, String apellidos, int telefono, String email, String direccion,
-			SimpleDateFormat fechaNacimiento, int salario, String cargo) {
-		super(dNI, nombre, apellidos, telefono, email, direccion, fechaNacimiento, salario);
+	public Informatico(String dni, String nombre, String apellidos, int telefono, String email, String direccion,
+			String fechaNac, int salario, String cargo) {
+		super(dni, nombre, apellidos, telefono, email, direccion, fechaNac, salario);
 		this.cargo = cargo;
 	}
 	public Informatico() {
