@@ -1,0 +1,5 @@
+package clases;
+
+public enum TipoAnalisis {
+	QUIMICA_CLINICA, COAGULACIÓN,DROGAS,HEMATOLOGÍA, BIOLOGIA_MOLECULAR;
+}

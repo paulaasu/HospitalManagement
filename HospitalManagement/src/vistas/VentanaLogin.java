@@ -1,9 +1,17 @@
 package vistas;
+<<<<<<< HEAD
+=======
+
+>>>>>>> branch 'master' of https://github.com/paulaasu/HospitalManagement
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridLayout;
+import java.awt.LayoutManager;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -12,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 
@@ -39,87 +48,145 @@ public class VentanaLogin extends JFrame {
 	
 	public VentanaLogin() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 565, 299);
+		setBounds(100, 100, 941, 558);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setLayout(new GridLayout());
 		
+		Panel1 panel1 = new Panel1();
+		contentPane.add(panel1);
+		Panel2 panel2 = new Panel2();
+		contentPane.add(panel2);
+		Panel3 panel3 = new Panel3();
+		contentPane.add(panel3);
 		
-		
-		Panel1 panel1=new Panel1();
-		contentPane.add(panel1, BorderLayout.SOUTH);
-		Panel3 panel3=new Panel3();
-		contentPane.add(panel3, BorderLayout.WEST);
-		Panel2 panel2=new Panel2();
-		contentPane.add(panel2, BorderLayout.CENTER);
+		contentPane.setBackground(Color.WHITE);
+
+	}
 	
+	class Panel1 extends JPanel{
 		
-		
-	}
-	/* Panel inferior con el boton aceptar*/
-	 class Panel1 extends JPanel{
-			private JButton btnAceptar;
-		 //constructor
-		public Panel1(){
-			setLayout(new FlowLayout(FlowLayout.RIGHT));
-			btnAceptar=new JButton("Aceptar");
-			btnAceptar.setFont(new Font("Tahoma", Font.BOLD, 13));
-			add(btnAceptar);
+		public Panel1() { //PANEL DE LA IZQUIERDA FOTO
 			
-			
-			
-		}
-	}
-	 /* Panel central */
-	 class Panel2 extends JPanel{
-			private JButton btnAceptar;
-			private JTextField txt_user;
-			private JTextField txt_password;
-		 //constructor
-		public Panel2(){
-			setLayout(null);
-			JLabel lblNewLabel = new JLabel("USER:");
-			lblNewLabel.setBounds(141, 77, 72, 16);
-			add(lblNewLabel);
-			
-			txt_user = new JTextField();
-			txt_user.setBounds(225, 74, 200, 22);
-			add(txt_user);
-			txt_user.setColumns(10);
-			
-			JLabel lblPassword = new JLabel("PASSWORD:");
-			lblPassword.setBounds(141, 112, 88, 16);
-			add(lblPassword);
-			
-			txt_password = new JTextField();
-			txt_password.setColumns(10);
-			txt_password.setBounds(228, 109, 200, 22);
-			add(txt_password);
-		
-			
-		}
-	}
-	 /* Panel inferior con el boton aceptar*/
-	 class Panel3 extends JPanel{
-			private JButton btnAceptar;
-			private JLabel label;
-		 //constructor
-		public Panel3(){
 			setLayout(new FlowLayout(FlowLayout.CENTER));
-			label=new JLabel();
-			label.setBounds(12, 56, 88, 123);
-			ImageIcon imagen=new ImageIcon("Media/imagen1.jpg");
-			Icon icon=new ImageIcon(imagen.getImage().getScaledInstance(label.getWidth(), label.getHeight(), label.ABORT));
-			label.setIcon(icon);
 			
-			add(label);
+			JLabel JLabelImagen = new JLabel();
+			JLabelImagen.setIcon(new ImageIcon("C:\\Users\\Propietario\\Pictures\\Imagenesproyecto\\LoginImagen1.jpg"));
+			add(JLabelImagen);
 			
-			
+		//	setBackground(Color.BLUE);
 			
 			
 		}
-	 }
+	}
+	
+	class Panel2 extends JPanel{ //PANEL DEL MEDIO 
+		private BorderLayout borderlayout1 = new BorderLayout();
+		
+		public Panel2() {
+			setLayout(borderlayout1);
+			Panel4 panel4 = new Panel4();
+			add(panel4, BorderLayout.NORTH);
+			setBackground(Color.GREEN);
+			
+			Panel5 panel5 = new Panel5();
+			add(panel5, BorderLayout.CENTER);
+			
+		}
+	}
+	
+	class Panel4 extends JPanel{ //PANEL QUE CONTIENE "INICIAR SESION"
+		
+		public Panel4() {
+			
+			JLabel datos = new JLabel("INICIAR SESIÓN");
+			datos.setHorizontalAlignment(SwingConstants.CENTER);
+			datos.setFont(new Font("Sherif", Font.PLAIN, 24));
+			add(datos, BorderLayout.NORTH);
+			
+//			JLabel JLabelImagen = new JLabel();
+//			JLabelImagen.setIcon(new ImageIcon("C:\\Users\\Propietario\\Pictures\\Imagenesproyecto\\UsuarioIcono.png"));
+//			add(JLabelImagen);
+		//	setBackground(Color.PINK);
+		}
+		
+		
+	}
+	
+	class Panel5 extends JPanel{ //CON EL LOGO Y LOS USUARIOS Y CONTRASEÑAS
+		private JTextField txt_user;
+		private JTextField txt_password;
+		private JButton boton;
+		
+		public Panel5() {
+			
+			setLayout(new BorderLayout());
+			
+			
+			Panel7 panel7 = new Panel7();
+			add(panel7, BorderLayout.NORTH);
+			
+			Panel6 panel6 = new Panel6();
+			add(panel6, BorderLayout.CENTER);
+			
+		//	 setBackground(Color.GRAY);
+		}
+	}
+	
+	class Panel6 extends JPanel{ //PANEL QUE ORDENA LOS USUARIOS Y CONTRASEÑAS
+		private JTextField txt_user;
+		private JTextField txt_password;
+		private JButton boton;
+		
+		private Panel6() {
+			
+			setLayout(new GridLayout(6,1));
+			
+			JLabel lblNewLabel = new JLabel("USUARIO:");
+			 add(lblNewLabel);
+			 txt_user = new JTextField(10);
+			 add(txt_user);
+			 
+			 JLabel lblPassword = new JLabel("CONTRASEÑA:");
+			 add(lblPassword);
+			 txt_password = new JTextField(10);
+			 add(txt_password);
+			 
+			 boton = new JButton("Aceptar");
+			 add(boton);
+			
+		}
+	}
+	
+	class Panel7 extends JPanel{
+		
+		private Panel7() {
+			setLayout(new FlowLayout());
+			
+			JLabel JLabelImagen = new JLabel();
+			JLabelImagen.setIcon(new ImageIcon("C:\\Users\\Propietario\\Pictures\\Imagenesproyecto\\UsuarioIcono.png"));
+			add(JLabelImagen, BorderLayout.NORTH);
+		}
+	}
+	
+	
+	
+	class Panel3 extends JPanel{ //PANEL DERECHA IMAGEN
+		
+		public Panel3() {
+			
+			setLayout(new FlowLayout(FlowLayout.CENTER));
+			
+			JLabel JLabelImagen = new JLabel();
+			JLabelImagen.setIcon(new ImageIcon("C:\\Users\\Propietario\\Pictures\\Imagenesproyecto\\LoginImagen2.jpg"));
+			add(JLabelImagen);
+			
+		//	setBackground(Color.RED);
+			
+		}
+	}
+	
 	
 	
 }
