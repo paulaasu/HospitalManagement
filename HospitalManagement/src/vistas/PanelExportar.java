@@ -1,4 +1,4 @@
-package src.vistas;
+package vistas;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

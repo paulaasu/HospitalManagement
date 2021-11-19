@@ -1,4 +1,4 @@
-package src.vistas;
+package vistas;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -63,7 +63,7 @@ public class PanelImportar extends JPanel{
 		panelT.add(tabbedPane, BorderLayout.CENTER);
 		
 		/*
-		 * PESTAÑA PACIENTE IMPORTAR
+		 * PESTAï¿½A PACIENTE IMPORTAR
 		 * */
 		JPanel panelPaciente = new JPanel();
 		panelPaciente.setBackground(new Color(220, 220, 220));
@@ -93,7 +93,7 @@ public class PanelImportar extends JPanel{
 		panelPaciente.add(btnBuscarFP);
 		
 		/*
-		 * PESTAÑA HISTORIAL IMPORTAR
+		 * PESTAï¿½A HISTORIAL IMPORTAR
 		 * */
 		JPanel panelHistorial = new JPanel();
 		tabbedPane.addTab("HISTORIAL", null, panelHistorial, null);

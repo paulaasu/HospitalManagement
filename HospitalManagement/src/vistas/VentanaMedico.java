@@ -1,4 +1,4 @@
-package src.vistas;
+package vistas;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -15,12 +15,12 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 
-import src.clases.Menu;
-import src.clases.Menu2;
-import src.clases.Menu3;
+import clases.Menu;
+import clases.Menu2;
+import clases.Menu3;
 
 
-
+ 
 public class VentanaMedico extends JFrame  implements ActionListener {
 	private JPanel contentPane;
 	private Menu menu;
