@@ -2,7 +2,6 @@ package paneles;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -18,25 +17,24 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import paneles.PanelPacientes.Panel4;
+import paneles.PanelPacientes.PanelAbajo;
+import paneles.PanelPacientes.PanelArriba;
 import vistas.VentanaPaciente;
-import clases.BaseDeDatos;
 
+public class PanelCitas extends JPanel {
 
-
-public class PanelPacientes extends JPanel {
-	
-	public PanelPacientes() {
+	public PanelCitas() {
 		setLayout(new BorderLayout());
-		JLabel datos = new JLabel("LISTADO DE PACIENTES");
+		setLayout(new BorderLayout());
+		JLabel datos = new JLabel("CITAS");
 		datos.setHorizontalAlignment(SwingConstants.CENTER);
 		datos.setFont(new Font("Sherif", Font.PLAIN, 24));
 		add(datos, BorderLayout.NORTH);
 		Panel4 panel4 = new Panel4();
 		add(panel4, BorderLayout.CENTER);
-		
 	}
-	
-	class Panel4 extends JPanel { 
+	class Panel4 extends JPanel { //AQUI ESTA EL GRIDLAYOUT DEL CENTRO
 		public Panel4() {
 			setLayout(new GridLayout(2,1));
 			PanelArriba panelarriba = new PanelArriba();
@@ -46,29 +44,23 @@ public class PanelPacientes extends JPanel {
 		}
 	}
 	class PanelArriba extends JPanel{
-
 		public PanelArriba() {
 			setLayout(new BorderLayout());
-;
+			setBackground(Color.BLUE);
+			//hacemos la conexion con la BD
+			
+			
 			//Creamos la JTable
 			DefaultTableModel modelo = new DefaultTableModel();
 			JTable tabla = new JTable(modelo);
 			//Creamos las columnas
-			modelo.addColumn("Nombre");
-			modelo.addColumn("Apellido");
-			modelo.addColumn("DNI");
-			modelo.addColumn("Fecha nacimiento");
-			modelo.addColumn("Género");
-			modelo.addColumn("Teléfono");
-			modelo.addColumn("Dirección");
+			modelo.addColumn("Nombre"); //nombre del paciente??
+			modelo.addColumn("Fecha");
+			modelo.addColumn("Hora");
+
+		
 			
-			try {
-				BaseDeDatos.actualizaTablaPaciente(modelo);
-			} catch (Exception e) {
-				System.out.println("No se puede rellenar la tabla");
-				e.printStackTrace();
-			}
-			
+					
 			// JSCROLLPANE Y AÑADIR LA TABLA
 			JScrollPane scrollPane = new JScrollPane(tabla);
 			scrollPane.setVisible(true);
@@ -88,7 +80,7 @@ public class PanelPacientes extends JPanel {
 			
 			JPanel PanelBuscar = new JPanel();
 			PanelBuscar.setLayout(new GridLayout(4, 1));
-			PanelBuscar.add(new JLabel("Busar paciente..."));
+			PanelBuscar.add(new JLabel("Busar cita..."));
 			buscar = new JTextField();
 			PanelBuscar.add(buscar);
 			botonBuscar = new JButton("Buscar");
@@ -102,7 +94,7 @@ public class PanelPacientes extends JPanel {
 			
 			JPanel PanelAñadir = new JPanel();
 			PanelAñadir.setLayout(new GridLayout(2, 1));
-			PanelAñadir.add(new JLabel("Añadir paciente..."));
+			PanelAñadir.add(new JLabel("Añadir cita..."));
 			botonAñadir = new JButton("Añadir");
 			PanelAñadir.add(botonAñadir);
 			add(PanelAñadir);
@@ -132,4 +124,3 @@ public class PanelPacientes extends JPanel {
 	}
 
 }
-

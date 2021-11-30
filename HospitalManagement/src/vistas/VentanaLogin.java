@@ -1,8 +1,4 @@
 package vistas;
-<<<<<<< HEAD
-=======
-
->>>>>>> branch 'master' of https://github.com/paulaasu/HospitalManagement
 
 import java.awt.BorderLayout;
 import java.awt.Color;

@@ -9,6 +9,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.swing.table.DefaultTableModel;
+import vistas.VentanaPaciente; // importamos el panel pacientes
+
 
 /***
  * 
@@ -17,11 +20,16 @@ import java.util.ArrayList;
  *
  */
 public class BaseDeDatos {
+	public static Statement stmt;
+	public static ResultSet rs;
+	public static char[] com;
+	public static Connection con;
+
 	public static Connection initBD(String hospitalManagementBD) {
-		Connection con = null;
+		con = null;
 		try {
 			Class.forName("org.sqlite.JDBC");
-			con = (Connection) DriverManager.getConnection("jdbc:sqlite:"+hospitalManagementBD);
+			con = DriverManager.getConnection("jdbc:sqlite:"+hospitalManagementBD);
 			
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -47,16 +55,14 @@ public class BaseDeDatos {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-	
 	}
+	
 	/***
 	 * Este metodo se utiliza para crear las tablas en la base de datos
 	 * @param con Pasamos la conexion 
 	 */
 	public static void crearTablas(Connection con) {
-		String sent1= "CREATE TABLE IF NOT EXISTS Paciente( dni String,  nombre String,  apellidos String, telefono Integer, email String, direccion String , "
-				+ "fecha_nacimiento String, diagnostico String, analisis String)";
+		String sent1= "create table paciente(nombre string,  apellido string, dni string, fecha_nacimiento string, genero string, telefono integer, direccion string )";
 		
 		String sent2 = "CREATE TABLA IF NOT EXISTS Medico( dni String,  nombre String,  apellidos String,"
 				+ " telefono Integer, email String,  direccion String , fecha_nacimiento String,cita String)" ;
@@ -64,7 +70,7 @@ public class BaseDeDatos {
 		String sent3 ="CREATE TABLA IF NOT EXISTS Persona(dni String,  nombre String,  apellidos String, "
 				+ "telefono Integer, email String,  direccion String , fecha_nacimiento Date, salario Intenger)";
 	
-		String sent4 ="CREATE TABLA IF NO EXISTS Usuario( nombre String,  contrasena String,  )";
+		String sent4 ="create table Usuario( nombre String,  contrasena String,  )";
 		Statement st = null;
 		
 		try {
@@ -77,11 +83,21 @@ public class BaseDeDatos {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			if(st!=null) {
+				try {
+					st.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 		}
 	
 	
 	
-	}
+	
 	
 	/***
 	 * Metodo que añade paciente usando los siguientes parametros:
@@ -94,10 +110,10 @@ public class BaseDeDatos {
 	 * @param fecha_nacimiento
 	 * @param historialClinico
 	 */
-	public static void anadirPaciente(Connection con ,String dni,String nombre , String apellidos ,
-			Integer telefono, String direccion, String fecha_nacimiento, HistorialClinico historialClinico) {
-		String sentSQL = "INSERT INTO alumno VALUES('"+dni+"','"+nombre+"','"+apellidos+
-				"',"+telefono+",'"+direccion+"','"+fecha_nacimiento+"','"+historialClinico+")";
+	public static void anadirPaciente(Connection con ,String nombre,String apellido , String dni , //FALTA EL HISTORIAL CLINICO
+			String fecha_nacimiento, String genero, Integer telefono, String direccion) {
+		String sentSQL = "INSERT INTO alumno VALUES('"+nombre+"','"+apellido+"','"+dni+
+				"','"+fecha_nacimiento+"','"+genero+"','"+telefono+"','"+direccion+"')";
 		
 		try {
 			Statement stmt =null;
@@ -279,7 +295,78 @@ try {
 				return p;
 			
 		}
+		
+		public static void actualizaTablaPaciente(DefaultTableModel tabla) { 
+			
+			try {
+				con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+				String sentSQL = "SELECT * FROM paciente";
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(sentSQL); //
+				
+				while (rs.next()) {
+					
+					Object[] fila = new Object[7]; // hay 7 columnas en la tabla paciente
+					//se rellena cada posición del array con una de las columnas de la tabla de bd
+					for (int i=0; i<7; i++) {
+						fila[i] = rs.getObject(i+1);
+					}
+					tabla.addRow(fila);					
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
 	}
+		public static void añadirPaciente(DefaultTableModel tabla) { 
+			
+			try {
+				con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+				String sentSQL = "SELECT * FROM paciente";
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(sentSQL); //
+				
+				
+				
+				while (rs.next()) {
+					
+					Object[] fila = new Object[7]; // hay 7 columnas en la tabla paciente
+					//se rellena cada posición del array con una de las columnas de la tabla de bd
+					for (int i=0; i<7; i++) {
+						fila[i] = rs.getObject(i+1);
+					}
+					tabla.addRow(fila);					
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+	}
+		
+		public static void main(String[] args) {
+			try {
+				Connection connection = null;
+				connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+				 stmt = connection.createStatement();
+				 
+				stmt.executeUpdate("drop table if exists paciente");
+				stmt.executeUpdate("create table paciente(nombre string,  apellido string, dni string, fecha_nacimiento string, genero string, telefono integer, direccion string )");
+				stmt.executeUpdate("insert into paciente values('Paula', 'Asua', '79079419Z', '26-07-2001', 'Femenino', 711726903, 'Zabale kalea')");
+				
+				stmt.executeUpdate("drop table if exists Usuario");
+				stmt.executeUpdate("create table Usuario(nombre String, contrasena String )");
+				
+			
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}
+		
+	}
+
 	/*	-CREAR TABLAS
 	 * -AÑADIR UN PACIENTE A LA BASE DE DATOS 
 	 * -ELIMINAR UN PACIENTE DE LA BASE DE DATOS
@@ -300,4 +387,3 @@ try {
 	
 	
 	
-

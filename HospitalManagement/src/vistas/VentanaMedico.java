@@ -18,14 +18,9 @@ import javax.swing.border.EmptyBorder;
 import clases.Menu;
 import clases.Menu2;
 import clases.Menu3;
-<<<<<<< HEAD
-=======
 import paneles.PanelExportar;
 import paneles.PanelImportar;
->>>>>>> branch 'master' of https://github.com/paulaasu/HospitalManagement
 
-
- 
 public class VentanaMedico extends JFrame  implements ActionListener {
 	private JPanel contentPane;
 	private Menu menu;
