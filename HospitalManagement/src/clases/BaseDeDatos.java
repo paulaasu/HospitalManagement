@@ -8,6 +8,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.FileHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import javax.swing.table.DefaultTableModel;
 import vistas.VentanaPaciente; // importamos el panel pacientes
@@ -25,12 +30,26 @@ public class BaseDeDatos {
 	public static char[] com;
 	public static Connection con;
 
+	private static Logger logger = Logger.getLogger( "BaseDatos" );
+	private static Handler handler ;
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public static Connection initBD(String hospitalManagementBD) {
 		con = null;
 		try {
-			Class.forName("org.sqlite.JDBC");
-			con = DriverManager.getConnection("jdbc:sqlite:"+hospitalManagementBD);
-			
+			//Class.forName("org.sqlite.JDBC");
+			//con = DriverManager.getConnection("jdbc:sqlite:"+hospitalManagementBD);
+			logger.log( Level.INFO, "Carga de librería org.sqlite.JDBC" );
+			Class.forName("org.sqlite.JDBC");  // Carga la base de datos en el squliteman
+			logger.log( Level.INFO, "Abriendo conexión con " + hospitalManagementBD );// se habre la conexion con la bbd
+			con = DriverManager.getConnection("jdbc:sqlite:" + hospitalManagementBD );
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -42,18 +61,37 @@ public class BaseDeDatos {
 		return con;
 		
 	}
+
+	
 /**
- * Usamos este metodo para cuando queremos cerrar la base de datos
+ *Para que el logger cuando ejecute la ventana , me salga en un fichero de texto
+ */
+	public static void prepararLogger() {
+		try {
+			handler = new FileHandler("BaseDatos.log");
+			handler.setFormatter(new SimpleFormatter());
+			logger.addHandler(handler);
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+/**
+ * Usamos este metodo para cerrar la conexión de la base de datos
  * @param con la conexion  la cerramos
  *
  */
-	public static void closeBD(Connection con) {
-	if(con!=null)
+	/** 
+	 */
+	public static void closeBD() {
 		try {
+			logger.log( Level.INFO, "Cerrando conexión" );
 			con.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.log( Level.SEVERE, "Excepción", e );
 		}
 	}
 	
@@ -62,15 +100,15 @@ public class BaseDeDatos {
 	 * @param con Pasamos la conexion 
 	 */
 	public static void crearTablas(Connection con) {
-		String sent1= "create table paciente(nombre string,  apellido string, dni string, fecha_nacimiento string, genero string, telefono integer, direccion string )";
+		String sent1= "CREATE TABLE IF NOT EXISTS Paciente(nombre string,  apellido string, dni string, fecha_nacimiento string, genero string, telefono integer, direccion string )";
 		
 		String sent2 = "CREATE TABLA IF NOT EXISTS Medico( dni String,  nombre String,  apellidos String,"
-				+ " telefono Integer, email String,  direccion String , fecha_nacimiento String,cita String)" ;
+				+ " telefono Integer, email String,  direccion String , fecha_nacimiento String,salario Integer,cita String)" ;
 		
 		String sent3 ="CREATE TABLA IF NOT EXISTS Persona(dni String,  nombre String,  apellidos String, "
 				+ "telefono Integer, email String,  direccion String , fecha_nacimiento Date, salario Intenger)";
 	
-		String sent4 ="create table Usuario( nombre String,  contrasena String,  )";
+		String sent4 ="CREATE TABLA IF NOT EXITS Usuario( nombre String,  contrasena String,  )";
 		Statement st = null;
 		
 		try {
@@ -100,7 +138,7 @@ public class BaseDeDatos {
 	
 	
 	/***
-	 * Metodo que añade paciente usando los siguientes parametros:
+	 * Metodo que añade un paciente usando los siguientes parametros:
 	 * @param con
 	 * @param dni
 	 * @param nombre
@@ -112,8 +150,36 @@ public class BaseDeDatos {
 	 */
 	public static void anadirPaciente(Connection con ,String nombre,String apellido , String dni , //FALTA EL HISTORIAL CLINICO
 			String fecha_nacimiento, String genero, Integer telefono, String direccion) {
-		String sentSQL = "INSERT INTO alumno VALUES('"+nombre+"','"+apellido+"','"+dni+
+		String sentSQL = "INSERT INTO paciente VALUES('"+nombre+"','"+apellido+"','"+dni+
 				"','"+fecha_nacimiento+"','"+genero+"','"+telefono+"','"+direccion+"')";
+		
+		try {
+			Statement stmt =null;
+			stmt= con.createStatement();
+			stmt.executeUpdate(sentSQL);
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+	}
+	/**
+	 * Metodo que añade un medico usando los siguientes parametros:
+	 * @param con
+	 * @param nombre
+	 * @param apellido
+	 * @param dni
+	 * @param fecha_nacimiento
+	 * @param genero
+	 * @param telefono
+	 * @param direccion
+	 * @param salario
+	 */
+	public static void anadirMedico(Connection con ,String nombre,String apellido , String dni , //FALTA EL HISTORIAL CLINICO
+			String fecha_nacimiento, String genero, Integer telefono, String direccion,Integer salario) {
+		String sentSQL = "INSERT INTO medico VALUES('"+nombre+"','"+apellido+"','"+dni+
+				"','"+fecha_nacimiento+"','"+genero+"','"+telefono+"','"+direccion+"','"+salario+"')";
 		
 		try {
 			Statement stmt =null;
@@ -137,9 +203,23 @@ public class BaseDeDatos {
 	 * @param fecha_nacimiento La fecha de nacimiento del paciente ( revisar)
 	 * @param historialClinico El historial clinico del paciente
 	 */
-	public static void eliminarPaciente(Connection con, String dni, String nombre, String apellidos, 
+	public static void eliminarPacientePorDni(Connection con, String dni, String nombre, String apellidos, 
 			Integer telefono, String direccion ,String fecha_nacimiento,HistorialClinico historialClinico) {
 		String sentSQL = "DELETE FROM Paciente  WHERE dni ='"+dni+"'";
+		 
+		try {
+			Statement stmt = null;
+			stmt= con.createStatement();
+			stmt.executeUpdate(sentSQL);
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public static void eliminarMedicoPorDni(Connection con, String dni, String nombre, String apellidos, 
+			Integer telefono, String direccion ,String fecha_nacimiento,Integer salario,HistorialClinico historialClinico) {
+		String sentSQL = "DELETE FROM Medico  WHERE dni ='"+dni+"'";
 		 
 		try {
 			Statement stmt = null;
@@ -162,7 +242,7 @@ public class BaseDeDatos {
 	 * @param fecha_nacimiento La fecha de nacimiento del paciente ( revisar)
 	 * @param historialClinico El historial clinico del paciente
 	 */
-	public static void modificarPaciente( Connection con, String dni,String nombre , String apellidos ,
+	public static void modificarPacientePorDni( Connection con, String dni,String nombre , String apellidos ,
 			Integer telefono,String email, String direccion, String fecha_nacimiento, HistorialClinico historialClinico) {
 		String sentSQL = "UPDATE  Paciente set nombre WHERE dni ='"+dni+"' ";
 		
@@ -176,6 +256,59 @@ public class BaseDeDatos {
 			e.printStackTrace();
 		}
 		
+		
+	}
+	/**
+	 * Metodo que modifica un medico a traves del dni
+	 * 
+	 * @param con La conexion con la base de datos
+	 * @param dni El dni del medico
+	 * @param nombre El nombre del medico
+	 * @param apellidos Los apellido del medico
+	 * @param telefono El telefono del medico
+	 * @param direccion La dirección del medico
+	 * @param salario El salario que gana el medico
+	 * @param fecha_nacimiento La fecha de nacimiento del medico ( revisar)
+	 */
+	public static void modificarMedicioPorDni( Connection con, String dni,String nombre , String apellidos ,
+			Integer telefono,String email, String direccion, String fecha_nacimiento,Integer salario) {
+		String sentSQL = "UPDATE  Medico set nombre WHERE dni ='"+dni+"' ";
+		
+		Statement stmt = null;
+		try {
+			stmt = con.createStatement();
+			stmt.executeUpdate(sentSQL);
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}
+	/**
+	 * Medico que busca un paciente por el dni
+	 * @param con conexion con la bbdd
+	 * @param dni El dni del paciente
+	 * @throws SQLException
+	 */
+	public  static void buscaUnPacientePorDNI(Connection con,String dni) throws SQLException {
+		Statement statement = con.createStatement();
+		String sent = "select * from persona where dni ="+dni;
+		ResultSet rs = statement.executeQuery(sent);
+		Paciente pac = null;
+		if(rs.next()) {
+			String nombre = rs.getString("nombre");
+			String apellido =rs.getString("apellido"); 
+			String dn = rs.getString("dni");
+			String fecha_nacimiento  = rs.getString("fecha_nacimiento");
+			String genero  =rs.getString("genero");
+			Integer telefono  =rs.getInt("telefono");
+			String direccion  =rs.getString("direccion");
+			pac = new Paciente(dni, nombre, apellido, 0, genero, direccion, fecha_nacimiento, 0, null);
+			
+		}
+		rs.close();
 		
 	}
 	/***
@@ -296,7 +429,7 @@ try {
 			
 		}
 		
-		public static void actualizaTablaPaciente(DefaultTableModel tabla) { 
+		public static void actualizaTablaPaciente(Connection con,DefaultTableModel tabla) { 
 			
 			try {
 				con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
@@ -319,7 +452,7 @@ try {
 			}
 		
 	}
-		public static void añadirPaciente(DefaultTableModel tabla) { 
+		public static void añadirPaciente(Connection con,DefaultTableModel tabla) { 
 			
 			try {
 				con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
@@ -347,9 +480,9 @@ try {
 		
 		public static void main(String[] args) {
 			try {
-				Connection connection = null;
-				connection = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-				 stmt = connection.createStatement();
+				Connection con = null;
+				con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+				stmt = con.createStatement();
 				 
 				stmt.executeUpdate("drop table if exists paciente");
 				stmt.executeUpdate("create table paciente(nombre string,  apellido string, dni string, fecha_nacimiento string, genero string, telefono integer, direccion string )");
@@ -364,11 +497,35 @@ try {
 				// TODO: handle exception
 			}
 		}
-		
-	}
+		public static TipoAnalisis getTipoAnalisis(String dni) throws SQLException {
+			Statement statement = con.createStatement();
+			String sent = "select tipo from paciente where dni="+dni;
+			ResultSet rs = statement.executeQuery(sent);
+			TipoAnalisis tipo = TipoAnalisis.BIOLOGIA_MOLECULAR;
+			if(rs.next()) {
+				String t = rs.getString("tipo");
+				tipo = TipoAnalisis.valueOf(t);
+			}
+			rs.close();
+			return tipo;
+		}
+	
+	public static TipoCita getTipoCita(String dni) throws SQLException {
+		Statement statement = con.createStatement();
+		String sent = "select tipo from medico where dni="+dni;
+		ResultSet rs = statement.executeQuery(sent);
+		TipoCita tip = TipoCita.CABECERA;
+		if(rs.next()) {
+			String t = rs.getString("tipo");
+			tip = TipoCita.valueOf(t);
+		}
+		rs.close();
+		return tip;
+	}}
 
-	/*	-CREAR TABLAS
-	 * -AÑADIR UN PACIENTE A LA BASE DE DATOS 
+	/*	-CREAR TABLAS (HECHO)
+	 * Logger ( hecho
+	 * -AÑADIR UN PACIENTE A LA BASE DE DATOS (HECH0)
 	 * -ELIMINAR UN PACIENTE DE LA BASE DE DATOS
 	 *  -MODIFICAR UN PACIENTE DE LA BASE DE DATOS
 	 *  

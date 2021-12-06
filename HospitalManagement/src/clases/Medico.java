@@ -5,24 +5,7 @@ import java.util.ArrayList;
 public class Medico extends Persona {
 		private ArrayList<Cita> cita;
 
-<<<<<<< HEAD
-		//Getters y Setters Médico
-		public ArrayList<Cita> getCita() {
-			return cita;
-		}
 
-		public void setCita(ArrayList<Cita> cita) {
-			this.cita = cita;
-		}
-
-		@Override
-		public String toString() {
-			return "Medico [cita=" + cita + ", nombre=" + nombre + ", apellidos=" + apellidos + ", telefono=" + telefono
-					+ ", email=" + email + ", direccion=" + direccion + ", salario=" + salario + "]";
-		}
-		
-		
-=======
 		
 		public Medico(String dni, String nombre, String apellidos, int telefono, String email, String direccion,
 				String fechaNac, int salario, ArrayList<Cita> cita) {
@@ -46,5 +29,5 @@ public class Medico extends Persona {
 			return "Medico [nombre=" + nombre + ", apellidos=" + apellidos + ", telefono=" + telefono + ", email="
 					+ email + ", direccion=" + direccion + ", salario=" + salario + ", cita=" + cita + "]";
 		}
->>>>>>> branch 'master' of https://github.com/paulaasu/HospitalManagement
+
 }

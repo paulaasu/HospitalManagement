@@ -8,6 +8,9 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -23,6 +26,7 @@ import javax.swing.border.EmptyBorder;
 import com.sun.jdi.connect.spi.Connection;
 
 import clases.BaseDeDatos;
+import clases.Paciente;
 
 
 
@@ -30,6 +34,8 @@ public class VentanaPaciente extends JFrame {
 	private JButton añadir;
 
 	private JPanel contentPanePaciente;
+	
+	private static Logger logger = Logger.getLogger( "VentanaPaciente" );
 
 	/**
 	 * Launch the application.
@@ -169,8 +175,10 @@ public class VentanaPaciente extends JFrame {
 						
 					
 					java.sql.Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
+					// añadir un paciente
 					BaseDeDatos.anadirPaciente(con, nombre, apellido, dni, fchanac, genero1, telefono, dir); //aqui no esta el error
-					BaseDeDatos.closeBD(con);
+					logger.log( Level.INFO, "Se ha añadido el paciente" );
+					BaseDeDatos.closeBD();
 					}else {
 						JOptionPane.showMessageDialog( contentPanePaciente, "Debes rellenar todos campos" );
 					}
@@ -182,6 +190,6 @@ public class VentanaPaciente extends JFrame {
 			
 		}
 	}
-}
+}	//AÑADIR UN PACIENTE Y GUARDARLO EN LA BASE DE DATOS(hecho)
 	
 

@@ -1,9 +1,11 @@
 package clases;
 
 import java.text.SimpleDateFormat;
+import java.util.regex.Pattern;
 
 public class Persona extends Usuario {
-	private String dni;	
+	private String dni;
+	
 	String nombre;
 	String apellidos;
 	int telefono;
@@ -17,6 +19,12 @@ public class Persona extends Usuario {
 			String fechaNac, int salario) {
 		super();
 		this.dni = dni;
+		String erdni = "[0-9]{8}[A-Z]";
+		boolean correctoDni = Pattern.matches(erdni, "12345678H");
+		if(correctoDni)
+			System.out.println("El DNI es correcto");
+		else
+			System.out.println("El DNI no es correcto");
 		this.nombre = nombre;
 		this.apellidos = apellidos;
 		this.telefono = telefono;
@@ -90,5 +98,6 @@ public class Persona extends Usuario {
 				+ ", email=" + email + ", direccion=" + direccion + ", FechaNacimiento=" + fechaNac
 				+ ", salario=" + salario ;
 	}
+	
 }
 

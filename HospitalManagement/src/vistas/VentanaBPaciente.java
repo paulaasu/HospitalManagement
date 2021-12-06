@@ -77,5 +77,5 @@ public class VentanaBPaciente extends JFrame{
 		panel_1.add(btnBuscar);
 		
 	}
-
+ // PODEMOS HACER AQUI UN BUSCAR PACIENTE DE LA BASE DE DATOS POR EL DNI 
 }

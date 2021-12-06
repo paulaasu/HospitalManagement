@@ -8,6 +8,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.LayoutManager;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -18,6 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import clases.BaseDeDatos;
 
 
 
@@ -133,7 +137,7 @@ public class VentanaLogin extends JFrame {
 	class Panel6 extends JPanel{ //PANEL QUE ORDENA LOS USUARIOS Y CONTRASEÑAS
 		private JTextField txt_user;
 		private JTextField txt_password;
-		private JButton boton;
+		private JButton botonAceptar;
 		
 		private Panel6() {
 			
@@ -149,8 +153,22 @@ public class VentanaLogin extends JFrame {
 			 txt_password = new JTextField(10);
 			 add(txt_password);
 			 
-			 boton = new JButton("Aceptar");
-			 add(boton);
+			 botonAceptar = new JButton("Aceptar");
+			 add(botonAceptar);
+			 
+			 //BOTON QUE VA A LA BASE DE DATOS (revisar)
+			 botonAceptar.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					BaseDeDatos.obtenerUsuario(null, nombre, con);
+					BaseDeDatos.closeBD();
+					
+					
+				}
+			});
+		
 			
 		}
 	}
