@@ -36,6 +36,11 @@ public class VentanaPaciente extends JFrame {
 	private JPanel contentPanePaciente;
 	
 	private static Logger logger = Logger.getLogger( "VentanaPaciente" );
+	
+	//para cambiar de una ventana a otra
+//	private JFrame ventanaAnterior;
+	//private static JFrame ventanaActual;
+	
 
 	/**
 	 * Launch the application.
@@ -58,6 +63,10 @@ public class VentanaPaciente extends JFrame {
 	 */
 	public VentanaPaciente() {
 		setDefaultCloseOperation(VentanaPaciente.EXIT_ON_CLOSE);
+		
+		//ventanaActual = this;
+	//	ventanaAnterior = va;
+		
 		setBounds(100, 100, 664, 446);
 		contentPanePaciente = new JPanel();
 		contentPanePaciente.setBorder(new EmptyBorder(5, 5, 5, 5));

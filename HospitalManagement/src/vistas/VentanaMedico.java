@@ -30,6 +30,10 @@ public class VentanaMedico extends JFrame  implements ActionListener {
 	private PanelExportar panelE;
 	private PanelImportar panelI;
 	
+	
+	
+	
+	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -47,6 +51,10 @@ public class VentanaMedico extends JFrame  implements ActionListener {
 	public VentanaMedico() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 679, 374);
+		
+		
+		
+		
 		
 		menu = new Menu();
 		setJMenuBar(menu);

@@ -19,6 +19,10 @@ import javax.swing.border.EmptyBorder;
 
 public class VentanaBPaciente extends JFrame{
 	private JPanel contentPane;
+	
+	//para ir cambiando de una ventana a otra
+	private JFrame ventanaAnterior;
+	private static JFrame ventanaActual;
 
 	
 	public static void main(String[] args) {

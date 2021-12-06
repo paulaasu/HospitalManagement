@@ -38,6 +38,10 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lblImportar;
 	private JLabel lblInicio;
 	private JLabel JLabelImagen2;
+	//para ir cambiando de ventana en ventana
+	private static JFrame ventanaAnterior;
+	private static JFrame ventanaActual;
+	
 	
 
 	private JPanel contentPane;
@@ -49,7 +53,7 @@ public class VentanaPrincipal extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaPrincipal frame = new VentanaPrincipal();
+					VentanaPrincipal frame = new VentanaPrincipal(ventanaAnterior);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -61,8 +65,14 @@ public class VentanaPrincipal extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaPrincipal() {
+	public VentanaPrincipal(JFrame va) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// va a ser la ventana actual
+		ventanaActual = this;
+		ventanaAnterior = va;
+		
+		
+		
 		setBounds(100, 100, 801, 517);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -155,6 +165,7 @@ public class VentanaPrincipal extends JFrame {
 		public Panel1() {
 			setLayout(new BorderLayout());
 			
+			
 			JLabel JLabelImagen = new JLabel();
 			JLabelImagen.setIcon(new ImageIcon("C:\\Users\\Propietario\\Pictures\\Imagenesproyecto\\ImagenLogo.jpg"));
 			add(JLabelImagen, BorderLayout.NORTH);
@@ -173,6 +184,9 @@ public class VentanaPrincipal extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					// PARA CERRAR LA VENTANA
+					
+					ventanaActual.dispose();
+					ventanaAnterior.setVisible(true);
 					
 				}
 			});
@@ -194,6 +208,7 @@ public class VentanaPrincipal extends JFrame {
 				lblInicio.setBorder(new MatteBorder(2, 0, 2, 2, (Color) Color.WHITE));
 				lblInicio.setBackground(Color.LIGHT_GRAY);
 				lblInicio.setOpaque(true);
+				
 				add(lblInicio, BorderLayout.CENTER);
 				
 				lblAgenda = new JLabel("Agenda");
@@ -248,11 +263,16 @@ public class VentanaPrincipal extends JFrame {
 		
 	}
 	
+	
 	class Panel2 extends JPanel{ //PANEL QUE TE APARECE AL PRINCIPIO
 		
 		public Panel2(){
 			PanelInicio panelInicio = new PanelInicio();
 			add(panelInicio);
+			// llamamos a la ventana de inicio
+			
+//			ventanaActual.dispose();
+//			ventanaAnterior.setVisible(true);
 
 			
 

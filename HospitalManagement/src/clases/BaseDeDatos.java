@@ -477,7 +477,9 @@ try {
 			}
 		
 	}
-		
+		public static void añadirCita(Connection con , String fechaYHoraCita) {
+			//M.anadir una cita pasando la fecha y hora
+		}
 		public static void main(String[] args) {
 			try {
 				Connection con = null;

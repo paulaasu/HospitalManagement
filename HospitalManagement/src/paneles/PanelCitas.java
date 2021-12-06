@@ -100,7 +100,7 @@ public class PanelCitas extends JPanel {
 			add(PanelAñadir);
 			VentanaPaciente ventanaPaciente = new VentanaPaciente();
 			botonAñadir.addActionListener(new ActionListener() {
-				
+				//M.metodo añadir una cita al paciente
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					ventanaPaciente.setVisible(true);

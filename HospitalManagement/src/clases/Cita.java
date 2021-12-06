@@ -4,35 +4,30 @@ import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+ // no deberia tener un paciente una cita en vez de el medico?
 public class Cita extends Medico{
 	/*como tenemos un SimpleDateFormat  hay que pase de   date a string*/
 	private static SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yyyy hh:mm" );
-	private Date fechaYHoraCita ;
+	
+	private String fechaYHoraCita ; // no entiendo porque da error
+	
 	TipoCita tipodecita;
 	public Cita(ArrayList<Cita> cita, String fechaYHoraCita, TipoCita tipodecita) {
 		super();
-		try {
-			this.fechaYHoraCita = (Date) sdf.parse(fechaYHoraCita);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
+		this.fechaYHoraCita = sdf.format(fechaYHoraCita);
 		this.tipodecita =tipodecita.CABECERA ;
 	}
 	public Cita() {
 		super();
 	}
-	public Date getFechaYHoraCita() {
+	public String getFechaYHoraCita() {
 		return fechaYHoraCita;
 	}
 	public void setFechaYHoraCita(String fechaYHoraCita) {
-		try {
-			this.fechaYHoraCita =  (Date) sdf.parse(fechaYHoraCita);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	
+			this.fechaYHoraCita =  sdf.format(fechaYHoraCita);
+		
 	}
 	public TipoCita getTipodecita() {
 		return tipodecita;
@@ -46,17 +41,6 @@ public class Cita extends Medico{
 				+ ", tipodecita=" + tipodecita ;
 	}
 	
-<<<<<<< HEAD
-	protected static final SimpleDateFormat fechaYHoraCita = new SimpleDateFormat( "dd/MM/yyyy hh:mm" );
 
-	
-	//Getter fechaYHoraCita
-	public static SimpleDateFormat getFechayhoracita() {
-		return fechaYHoraCita;
-	}
-=======
-	
->>>>>>> branch 'master' of https://github.com/paulaasu/HospitalManagement
-	
 	
 }

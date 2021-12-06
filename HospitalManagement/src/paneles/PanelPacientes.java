@@ -1,6 +1,7 @@
 package paneles;
 
 import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -8,9 +9,13 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -20,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 
 import vistas.VentanaPaciente;
 import clases.BaseDeDatos;
+
 
 
 
@@ -63,7 +69,11 @@ public class PanelPacientes extends JPanel {
 			modelo.addColumn("Dirección");
 			
 			try {
-				BaseDeDatos.actualizaTablaPaciente(modelo);
+				// hay que abrir y cerrar siempre la base de datos
+				BaseDeDatos.initBD("hospitalmanagementBD.db");
+				Connection con = null;
+				BaseDeDatos.actualizaTablaPaciente(con,modelo);
+				BaseDeDatos.closeBD();
 			} catch (Exception e) {
 				System.out.println("No se puede rellenar la tabla");
 				e.printStackTrace();
@@ -78,10 +88,12 @@ public class PanelPacientes extends JPanel {
 	
 	public class PanelAbajo extends JPanel{
 		private JTextField buscar;
-		private JTextField añadir;
+		private JTextField añadir ,txtDni,txtNombre , txtApellidos,txtdir, txttl,txtfecha,txthc;
 		private JButton botonBuscar;
 		private JButton botonAñadir;
 		private JButton botonBorrar;
+		private String dni;
+		
 		public PanelAbajo() {
 			setLayout(new FlowLayout());
 		//	setBackground(Color.BLUE);
@@ -93,7 +105,37 @@ public class PanelPacientes extends JPanel {
 			PanelBuscar.add(buscar);
 			botonBuscar = new JButton("Buscar");
 			PanelBuscar.add(botonBuscar);
+			
 			add(PanelBuscar);
+			// M. recorrer la base de datos de los pacientes y buscarlos mediente el dni
+			botonBuscar.addActionListener(new ActionListener() {
+				
+				String dni = txtDni.getText();
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					String erdni = "[0-9]{8}[A-Z]";
+					String dni = txtDni.getText();
+					boolean correctoDni = Pattern.matches(erdni, dni);
+					if(correctoDni) {
+						Connection con = BaseDeDatos.initBD("hospitalmanagementBD.db");
+						try {
+							BaseDeDatos.buscaUnPacientePorDNI( con, dni );
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						JOptionPane.showMessageDialog(null, "USUARIO ENCONTRADO");
+						
+					}else {
+						JOptionPane.showMessageDialog(null, "ERROR! , NO SE HA ENCONTRADO EL USUARIO ");
+					}
+					
+					BaseDeDatos.closeBD();
+					
+				}
+			}
+			);
 			
 			JPanel PanelVacio = new JPanel();
 			PanelVacio.setLayout(new GridLayout(1, 1));
@@ -122,7 +164,37 @@ public class PanelPacientes extends JPanel {
 			botonBorrar = new JButton("Borrar");
 			PanelBorrar.add(botonBorrar);
 			add(PanelBorrar);
-
+			
+			//M.borrar todos los pacientes por el dni
+			botonBorrar.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					String dni =txtDni.getText();
+					//expresion regular para saber si el dni es correcto y existe podamos eliminar el paciente
+					String erdni = "[0-9]{8}[A-Z]";
+					String n =txtNombre.getText();
+					String a =txtApellidos.getText();
+					int tl = Integer.parseInt(txttl.getText());
+					String dir =txtdir.getText();
+					String f = txtfecha.getText();
+					// lo pongo a null
+					//String hc = txthc.getText();
+					boolean correctoDni = Pattern.matches(erdni, dni);
+					if(correctoDni) {
+						Connection con = BaseDeDatos.initBD("hospitalmanagementBD.db");
+						BaseDeDatos.eliminarPacientePorDni(con, dni,n, a,tl, dir,f, null);
+						BaseDeDatos.closeBD();
+						JOptionPane.showMessageDialog(null, "EL PACIENTE SE HA BORRADO ");
+						
+					}else {
+						JOptionPane.showMessageDialog(null, "EL DNI ES INCORRECTO , ENTONCES NO SE HA BORRADO .");
+						
+						
+					}
+				}
+			});
 
 			
 			
