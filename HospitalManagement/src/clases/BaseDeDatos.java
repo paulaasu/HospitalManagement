@@ -333,6 +333,13 @@ public class BaseDeDatos {
 		
 		}
 	
+	/**
+	 * Metodo que obtiene el usuario 
+	 * @param con Conexion con la tabla
+	 * @param nombre Nombre del paciente/medico
+	 * @param contrasena Contraseña del paciente/medico
+	 * @return devuelve si el usuario es un paciente/medico
+	 */
 	
 	public static Usuario obtenerUsuario(Connection con, String nombre, String contrasena) {
 		String sentSQL = "SELECT * FROM Usuario WHERE nombre='"+nombre+"'AND contrasena='"+contrasena+"'";
@@ -429,6 +436,11 @@ try {
 				return p;
 			
 		}
+		/**
+		 * Metodo que actualiza la tabla de pacientes
+		 * @param con Conexion con la bbdd
+		 * @param tabla El modelo de la tabla paciente
+		 */
 		
 		public static void actualizaTablaPaciente(Connection con,DefaultTableModel tabla) { 
 			
@@ -453,6 +465,11 @@ try {
 			}
 		
 	}
+		/**
+		 * Metodo que añade los pacientes a la tabla en la bbddd
+		 * @param con Conexion con la bbdd
+		 * @param tabla JTable 
+		 */
 		public static void añadirPaciente(Connection con,DefaultTableModel tabla) { 
 			
 			try {
@@ -479,8 +496,12 @@ try {
 		
 	}
 		
-		
-		public static TreeMap<String, Paciente> obtenerMapaPaciente(Connection con, String dni) {
+		/**
+		 * Método que obtiene un mapa con los pacientes de la BBDD
+		 * @param con Conexión con la base de datos
+		 * @return TreeMap String,Pacientes
+		 */
+		public static TreeMap<String, Paciente> obtenerMapaPaciente(Connection con) {
 			TreeMap<String, Paciente>tmPacientes = new TreeMap<>();
 			String sentSQL = "SELECT * FROM paciente";
 			Statement stmt;
@@ -516,25 +537,7 @@ try {
 		public static void añadirCita(Connection con , String fechaYHoraCita) {
 			//M.anadir una cita pasando la fecha y hora
 		}
-		public static void main(String[] args) {
-			try {
-				Connection con = null;
-				con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-				stmt = con.createStatement();
-				 
-				stmt.executeUpdate("drop table if exists paciente");
-				stmt.executeUpdate("create table paciente(nombre string,  apellido string, dni string, fecha_nacimiento string, genero string, telefono integer, direccion string )");
-				stmt.executeUpdate("insert into paciente values('Paula', 'Asua', '79079419Z', '26-07-2001', 'Femenino', 711726903, 'Zabale kalea')");
-				
-				stmt.executeUpdate("drop table if exists Usuario");
-				stmt.executeUpdate("create table Usuario(nombre String, contrasena String )");
-				
-			
-				
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
-		}
+	
 		/**
 		 * Metodo que devuelve el tipo de analisis  del paciente
 		 * @param dni a traves del dni de la tabla paciente sabemos quien es 
@@ -570,7 +573,27 @@ try {
 		}
 		rs.close();
 		return tip;
-	}}
+		
+		
+	}	public static void main(String[] args) {
+			try {
+				Connection con = null;
+				con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+				stmt = con.createStatement();
+				 
+				stmt.executeUpdate("drop table if exists paciente");
+				stmt.executeUpdate("create table paciente(nombre string,  apellido string, dni string, fecha_nacimiento string, genero string, telefono integer, direccion string )");
+				stmt.executeUpdate("insert into paciente values('Paula', 'Asua', '79079419Z', '26-07-2001', 'Femenino', 711726903, 'Zabale kalea')");
+				
+				stmt.executeUpdate("drop table if exists Usuario");
+				stmt.executeUpdate("create table Usuario(nombre String, contrasena String )");
+				
+			
+				
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+		}}
 
 	/*	-CREAR TABLAS (HECHO)
 	 * Logger ( hecho
