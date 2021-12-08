@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.TreeMap;
 import java.util.logging.FileHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -477,6 +478,41 @@ try {
 			}
 		
 	}
+		
+		
+		public static TreeMap<String, Paciente> obtenerMapaPaciente(Connection con, String dni) {
+			TreeMap<String, Paciente>tmPacientes = new TreeMap<>();
+			String sentSQL = "SELECT * FROM paciente";
+			Statement stmt;
+			Paciente paciente;
+			try {
+				stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery(sentSQL);
+				while(rs.next()) {
+					String d = rs.getString("dni");
+					String nom= rs.getString("nom");
+					String apellidos = rs.getString("apellidos");
+					String email = rs.getString("email");
+					String telefono = rs.getString("telefono");
+					String diagnostico = rs.getString("diagnostico");
+					String analisis = rs.getString("analisis");
+					String fnac = rs.getString("fecha_nacimiento");
+					String direccion = rs.getString("direccion");
+					paciente = new Paciente(d, nom, apellidos, (int)0,email, direccion, fnac, (int)0, new HistorialClinico(diagnostico, TipoAnalisis.valueOf(analisis)));
+					tmPacientes.put(d, paciente);
+					
+				}
+				rs.close();
+				stmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+					
+			return tmPacientes;
+			
+		}
 		public static void añadirCita(Connection con , String fechaYHoraCita) {
 			//M.anadir una cita pasando la fecha y hora
 		}
@@ -499,6 +535,12 @@ try {
 				// TODO: handle exception
 			}
 		}
+		/**
+		 * Metodo que devuelve el tipo de analisis  del paciente
+		 * @param dni a traves del dni de la tabla paciente sabemos quien es 
+		 * @return devuelve el tipo de analisis que se realiza el paciente
+		 * @throws SQLException
+		 */
 		public static TipoAnalisis getTipoAnalisis(String dni) throws SQLException {
 			Statement statement = con.createStatement();
 			String sent = "select tipo from paciente where dni="+dni;
@@ -511,7 +553,12 @@ try {
 			rs.close();
 			return tipo;
 		}
-	
+	/**
+	 * Metodo que devuelve el tipo de cita
+	 * @param dni el dni de la tabla medico
+	 * @return devuelve el tipo
+	 * @throws SQLException
+	 */
 	public static TipoCita getTipoCita(String dni) throws SQLException {
 		Statement statement = con.createStatement();
 		String sent = "select tipo from medico where dni="+dni;

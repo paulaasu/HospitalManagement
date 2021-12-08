@@ -153,6 +153,28 @@ public class PanelPacientes extends JPanel {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					String dni =txtDni.getText();
+					//M.expresion regular para saber si el dni es correcto y existe podamos anadir el paciente
+					String erdni = "[0-9]{8}[A-Z]";
+					String n =txtNombre.getText();
+					String a =txtApellidos.getText();
+					int tl = Integer.parseInt(txttl.getText());
+					String dir =txtdir.getText();
+					String f = txtfecha.getText();
+					// lo pongo a null
+					//String hc = txthc.getText();
+					boolean correctoDni = Pattern.matches(erdni, dni);
+					if(correctoDni) {
+						Connection con = BaseDeDatos.initBD("hospitalmanagementBD.db");
+						BaseDeDatos.anadirPaciente(con, dni,n, a,f, dir,tl, null);
+						BaseDeDatos.closeBD();
+						JOptionPane.showMessageDialog(null, "EL PACIENTE SE HA AÑADIDO ");
+						
+					}else {
+						JOptionPane.showMessageDialog(null, "EL DNI ES INCORRECTO , ENTONCES NO SE HA AÑADIDO .");
+						
+						
+					}
 					ventanaPaciente.setVisible(true);
 					
 				}

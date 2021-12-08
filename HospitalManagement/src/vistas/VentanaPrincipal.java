@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.TreeMap;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -22,6 +23,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
+import clases.Paciente;
 import paneles.PanelPacientes;
 import paneles.PanelAgenda;
 import paneles.PanelCitas;
@@ -38,6 +40,8 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lblImportar;
 	private JLabel lblInicio;
 	private JLabel JLabelImagen2;
+	//Creamos un treemap de pacientes
+	public static TreeMap<String,Paciente> tmPacientes;
 	//para ir cambiando de ventana en ventana
 	private static JFrame ventanaAnterior;
 	private static JFrame ventanaActual;

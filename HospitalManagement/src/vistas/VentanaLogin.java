@@ -200,7 +200,7 @@ public class VentanaLogin extends JFrame {
 						String c = String.valueOf(ac);*/
 						
 						Connection con = BaseDeDatos.initBD("hospitalmanagement.db");
-						Usuario u = obtenerUsuario(con, n, c); // porque me da problemas??
+					//	Usuario u = obtenerUsuario(con, n, c); // porque me da problemas??
 //						Persona p = BaseDeDatos. obtenerPersona(con, n, c,t); 
 						BaseDeDatos.closeBD();
 						
