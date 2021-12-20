@@ -11,6 +11,7 @@ import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.DriverManager;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -19,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
@@ -31,14 +33,14 @@ import clases.Usuario;
 
 
 public class VentanaLogin extends JFrame {
+	private JTextField txt_user;
+	private JPasswordField txt_password;
+	private JTextField txt_tipo;
+	private Persona p = null;
+	private Usuario u = null;
+	private JButton botonIniciarSesion, botonRegistrar;
+	
 	private JPanel contentPane;
-	public Connection con;
-	public VentanaPaciente vp;
-	
-	
-	// ventana 
-	private JFrame ventanaAnterior;
-	private static JFrame ventanaActual;
 
 	/**
 	 * Launch the application.
@@ -47,7 +49,7 @@ public class VentanaLogin extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaLogin frame = new VentanaLogin(ventanaActual );
+					VentanaLogin frame = new VentanaLogin();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -56,17 +58,8 @@ public class VentanaLogin extends JFrame {
 		});
 	}
 	
-	public VentanaLogin(JFrame va) {
-//		 llamar a la base de datos
-		
-		BaseDeDatos.initBD( "hospitalManagementBD.db");
-		BaseDeDatos.crearTablas(con);
-		BaseDeDatos.closeBD();
-		
-		ventanaActual = this;
-		ventanaAnterior = va;
-		
-		
+	public VentanaLogin() {
+	
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 941, 558);
 		contentPane = new JPanel();
@@ -82,6 +75,39 @@ public class VentanaLogin extends JFrame {
 		contentPane.add(panel3);
 		
 		contentPane.setBackground(Color.WHITE);
+		 //BOTON PARA INICIAR SESION
+		 botonIniciarSesion.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+					String u = txt_user.getText();
+					String c= txt_password.getText();
+					String t = txt_tipo.getText();
+
+					try {
+						
+					BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+					String sentSQL = "SELECT nombre, contrasena FROM usuario WHERE nombre = '" + u +"' AND contrasena = '" + c + "' ";
+					BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
+					BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
+				
+					
+					if (BaseDeDatos.rs.next()) {
+						setVisible(false);
+						VentanaPrincipal ventana = new VentanaPrincipal();
+						ventana.setVisible(true);
+					}else {
+						JOptionPane.showMessageDialog(contentPane, "Usuario o contraseña incorrecta");
+					}
+					
+					} catch (Exception e1){
+						e1.printStackTrace();
+					}
+					BaseDeDatos.closeBD();
+			
+			}
+		});
 
 	}
 	
@@ -92,7 +118,7 @@ public class VentanaLogin extends JFrame {
 			setLayout(new FlowLayout(FlowLayout.CENTER));
 			
 			JLabel JLabelImagen = new JLabel();
-			JLabelImagen.setIcon(new ImageIcon("C:\\Users\\Propietario\\Pictures\\Imagenesproyecto\\LoginImagen1.jpg"));
+			JLabelImagen.setIcon(new ImageIcon(VentanaLogin.class.getResource("/img/LoginImagen1.jpg")));
 			add(JLabelImagen);
 			
 		//	setBackground(Color.BLUE);
@@ -155,12 +181,6 @@ public class VentanaLogin extends JFrame {
 	}
 	
 	class Panel6 extends JPanel{ //PANEL QUE ORDENA LOS USUARIOS Y CONTRASEÑAS
-		private JTextField txt_user;
-		private JTextField txt_password;
-		private JTextField txt_tipo;
-		private Persona p = null;
-		private Usuario u = null;
-		private JButton botonIniciarSesion, botonRegistrar;
 		
 		private Panel6() {
 			
@@ -173,7 +193,7 @@ public class VentanaLogin extends JFrame {
 			 
 			 JLabel lblPassword = new JLabel("CONTRASEÑA:");
 			 add(lblPassword);
-			 txt_password = new JTextField(10);
+			 txt_password = new JPasswordField(10);
 			 add(txt_password);
 			 
 			 JLabel lblTipo = new JLabel("TIPO:");
@@ -184,60 +204,16 @@ public class VentanaLogin extends JFrame {
 			 botonIniciarSesion = new JButton("INICIAR SESION");
 			 add(botonIniciarSesion);
 			 
-			 //BOTON QUE VA A LA BASE DE DATOS 
-			 botonIniciarSesion.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-					
-						String n = txt_user.getText();
-						String c= txt_password.getText();
-						String t = txt_tipo.getText();
-						
-						
-						/*char [] ac = textContrasenia.getPassword();
-						String c = String.valueOf(ac);*/
-						
-						Connection con = BaseDeDatos.initBD("hospitalmanagement.db");
-					//	Usuario u = obtenerUsuario(con, n, c); // porque me da problemas??
-//						Persona p = BaseDeDatos. obtenerPersona(con, n, c,t); 
-						BaseDeDatos.closeBD();
-						
-						if(u==null) {
-							
-							JOptionPane.showMessageDialog(null, "Para iniciar sesión tienes que registrarte primero");
-							
-						}else if( !u.equals(txt_password)) {
-							JOptionPane.showMessageDialog(null, "ERROR! La contraseña no es correcta");
-						}else {
-							
-								JOptionPane.showMessageDialog(null, "Ongi etorri!");
-								Persona p = BaseDeDatos.obtenerPersona(con, n, c, t);
-							
-							
-							txt_password.setEnabled(false);
-							txt_user.setEnabled(false);
-							txt_tipo.setEnabled(false);
-							vp.setVisible(true);
-							
-						}
-						txt_user.setText("");
-						txt_password.setText("");
-					
-					
-					
-				}
-			});
-			 botonRegistrar.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-					
-					
-				}
-			});
+			
+//			 botonRegistrar.addActionListener(new ActionListener() {
+//				
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//					// TODO Auto-generated method stub
+//					
+//					
+//				}
+//			});
 		
 			
 		}
@@ -249,7 +225,7 @@ public class VentanaLogin extends JFrame {
 			setLayout(new FlowLayout());
 			
 			JLabel JLabelImagen = new JLabel();
-			JLabelImagen.setIcon(new ImageIcon("C:\\Users\\Propietario\\Pictures\\Imagenesproyecto\\UsuarioIcono.png"));
+			JLabelImagen.setIcon(new ImageIcon(VentanaLogin.class.getResource("/img/UsuarioIcono.png")));
 			add(JLabelImagen, BorderLayout.NORTH);
 		}
 	}
@@ -263,7 +239,7 @@ public class VentanaLogin extends JFrame {
 			setLayout(new FlowLayout(FlowLayout.CENTER));
 			
 			JLabel JLabelImagen = new JLabel();
-			JLabelImagen.setIcon(new ImageIcon("C:\\Users\\Propietario\\Pictures\\Imagenesproyecto\\LoginImagen2.jpg"));
+			JLabelImagen.setIcon(new ImageIcon(VentanaLogin.class.getResource("/img/LoginImagen2.jpg")));
 			add(JLabelImagen);
 			
 		//	setBackground(Color.RED);

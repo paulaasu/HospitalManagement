@@ -16,7 +16,6 @@ import java.awt.event.MouseListener;
 import java.util.TreeMap;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -34,9 +33,13 @@ import paneles.PanelInicio;
 
 public class VentanaPrincipal extends JFrame {
 	private boolean paciente = false;
-	JButton btnInicio,btnAgenda,btnPaciente,btnCitas,btnExportar,btnImportar;
-	PanelInicio pi;
-	PanelExportar pe;
+	private JLabel lblPaciente;
+	private JLabel lblCitas;
+	private JLabel lblAgenda;
+	private JLabel lblExportar;
+	private JLabel lblImportar;
+	private JLabel lblInicio;
+	private JLabel JLabelImagen2;
 	//Creamos un treemap de pacientes
 	public static TreeMap<String,Paciente> tmPacientes;
 	//para ir cambiando de ventana en ventana
@@ -54,7 +57,7 @@ public class VentanaPrincipal extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaPrincipal frame = new VentanaPrincipal(ventanaAnterior);
+					VentanaPrincipal frame = new VentanaPrincipal();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -66,19 +69,15 @@ public class VentanaPrincipal extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaPrincipal(JFrame va) {
+	public VentanaPrincipal() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// va a ser la ventana actual
-		ventanaActual = this;
-		ventanaAnterior = va;
-		PanelAgenda pa=new PanelAgenda();
-		PanelCitas pc=new PanelCitas();
-		PanelExportar pe=new PanelExportar();
-		PanelImportar pi=new PanelImportar();
-		//PanelPacientes pp=new PanelPacientes();
+//		ventanaActual = this;
+//		ventanaAnterior = va;
 		
 		
-		setBounds(100, 100, 901, 617);
+		
+		setBounds(100, 100, 801, 517);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -89,72 +88,75 @@ public class VentanaPrincipal extends JFrame {
 		Panel2 panel2 = new Panel2();
 		add(panel2, BorderLayout.CENTER);
 		 //CAMBIO DE PANELES
-		btnInicio.setBackground(new Color(176, 196, 222));
-
-	
 		
-		btnInicio.addActionListener(new ActionListener() {
+		lblInicio.addMouseListener(new MouseAdapter() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				panel2.setVisible(true);
-				pi.setVisible(false);pe.setVisible(false);pc.setVisible(false);//pp.setVisible(false);
-				pa.setVisible(false);
-				add(panel2, BorderLayout.CENTER);
-			}
-			
-		});
-		btnAgenda.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				panel2.setVisible(false);pi.setVisible(false);pe.setVisible(false);pc.setVisible(false);//pp.setVisible(false);
-				pa.setVisible(true);
-				add(pa, BorderLayout.CENTER);
+			public void mouseClicked(MouseEvent e) {
+				panel2.removeAll();
+				panel2.revalidate();
+				add(new PanelInicio(), BorderLayout.CENTER);
 				
 			}
-			
-		});
-		btnPaciente.addActionListener(new ActionListener() {
+		}); 
+		lblAgenda.addMouseListener(new MouseAdapter() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				panel2.setVisible(false);pa.setVisible(false);pi.setVisible(false);pe.setVisible(false);pc.setVisible(false);
-				//pp.setVisible(true);
-				//add(pp, BorderLayout.CENTER);
-			}
-			
-		});
-		btnCitas.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				panel2.setVisible(false);pa.setVisible(false);pi.setVisible(false);pe.setVisible(false);//pp.setVisible(false);
-				
-				pc.setVisible(true);
-				add(pc, BorderLayout.CENTER);
-			}
-			
-		});
-		btnExportar.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				panel2.setVisible(false);pa.setVisible(false);pi.setVisible(false);//pp.setVisible(false);
-				pc.setVisible(false);
-				
-				pe.setVisible(true);
-				add(pe, BorderLayout.CENTER);
+			public void mouseClicked(MouseEvent e) {
+				panel2.removeAll();
+				panel2.revalidate();
+				add(new PanelAgenda(), BorderLayout.CENTER);
 				
 			}
-			
-		});
-		btnImportar.addActionListener(new ActionListener() {
+		}); 
+		
+		lblCitas.addMouseListener(new MouseAdapter() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				panel2.setVisible(false);pa.setVisible(false);//pp.setVisible(false);
-				pe.setVisible(false);pc.setVisible(false);
+			public void mouseClicked(MouseEvent e) {
+				panel2.removeAll();
+				panel2.revalidate();
+				add(new PanelCitas(), BorderLayout.CENTER);
 				
-				pi.setVisible(true);
-				add(pi, BorderLayout.CENTER);
 			}
-			
 		});
+		
+		lblPaciente.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				panel2.removeAll();
+				panel2.revalidate();
+				add(new PanelPacientes(), BorderLayout.CENTER);
+				
+				
+			}
+		});
+		
+		lblExportar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				panel2.removeAll();
+				panel2.revalidate();
+				add(new PanelExportar(), BorderLayout.CENTER);
+				
+			}
+		});
+		
+		lblImportar.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				panel2.removeAll();
+				panel2.revalidate();
+				add(new PanelImportar(), BorderLayout.CENTER);
+				
+			}
+		});
+		
+		JLabelImagen2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				dispose();
+				
+			}
+		});
+		
 	}
 	
 	void paciente(boolean paciente) {
@@ -166,17 +168,10 @@ public class VentanaPrincipal extends JFrame {
 		
 		public Panel1() {
 			setLayout(new BorderLayout());
-			JLabel JLabelImagen = new JLabel();
-			JLabelImagen.setIcon(new ImageIcon("src\\img\\icono3.jpg"));
-			add(JLabelImagen, BorderLayout.NORTH);
-			Panel3 panel3 = new Panel3();
-			add(panel3, BorderLayout.CENTER);
-			/*
-			 * setLayout(new BorderLayout());
 			
 			
 			JLabel JLabelImagen = new JLabel();
-			JLabelImagen.setIcon(new ImageIcon("C:\\Users\\Propietario\\Pictures\\Imagenesproyecto\\ImagenLogo.jpg"));
+			JLabelImagen.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/ImagenLogo.jpg")));
 			add(JLabelImagen, BorderLayout.NORTH);
 			
 			Panel3 panel3 = new Panel3();
@@ -184,7 +179,7 @@ public class VentanaPrincipal extends JFrame {
 			
 			JLabelImagen2 = new JLabel();
 			JLabelImagen2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			JLabelImagen2.setIcon(new ImageIcon("C:\\Users\\Propietario\\Pictures\\Imagenesproyecto\\Logosalir.png"));
+			JLabelImagen2.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/Logosalir.png")));
 			JLabelImagen2.setBorder(new MatteBorder(2, 0, 2, 2, (Color) Color.WHITE));
 			JLabelImagen2.setBackground(Color.LIGHT_GRAY);
 			JLabelImagen2.setOpaque(true);
@@ -193,9 +188,7 @@ public class VentanaPrincipal extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					// PARA CERRAR LA VENTANA
-					
-					ventanaActual.dispose();
-					ventanaAnterior.setVisible(true);
+					dispose();
 					
 				}
 			});
@@ -203,9 +196,6 @@ public class VentanaPrincipal extends JFrame {
 			add(JLabelImagen2, BorderLayout.SOUTH);
 			
 			setBackground(Color.WHITE);
-			*/
-			
-			
 			
 		}
 		
@@ -214,59 +204,57 @@ public class VentanaPrincipal extends JFrame {
 			public Panel3() {
 				setLayout(new GridLayout(6,1));
 				
-				btnInicio=new JButton("INICIO");
+				lblInicio = new JLabel("Inicio");
+				lblInicio.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				lblInicio.setFont(new Font("Verdana", Font.PLAIN, 14));
+				lblInicio.setBorder(new MatteBorder(2, 0, 2, 2, (Color) Color.WHITE));
+				lblInicio.setBackground(Color.LIGHT_GRAY);
+				lblInicio.setOpaque(true);
 				
-				btnInicio.setFont(new Font("Verdana", Font.PLAIN, 14));
-				btnInicio.setBorder(new MatteBorder(2, 0, 2, 2, (Color) Color.WHITE));
-				btnInicio.setBackground(new Color(176, 196, 222));
-				btnInicio.setOpaque(true);
-				add(btnInicio, BorderLayout.CENTER);
+				add(lblInicio, BorderLayout.CENTER);
 				
-				btnAgenda=new JButton("AGENDA");
-				//lblAgenda = new JLabel("Agenda");
-				btnAgenda.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-				btnAgenda.setFont(new Font("Verdana", Font.PLAIN, 14));
-				btnAgenda.setBorder(new MatteBorder(2, 0, 2, 2, (Color) Color.WHITE));
-				btnAgenda.setBackground(new Color(176, 196, 222));
-				btnAgenda.setOpaque(true);
-				add(btnAgenda, BorderLayout.CENTER);
+				lblAgenda = new JLabel("Agenda");
+				lblAgenda.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				lblAgenda.setFont(new Font("Verdana", Font.PLAIN, 14));
+				lblAgenda.setBorder(new MatteBorder(2, 0, 2, 2, (Color) Color.WHITE));
+				lblAgenda.setBackground(Color.LIGHT_GRAY);
+				lblAgenda.setOpaque(true);
+				add(lblAgenda, BorderLayout.CENTER);
 				
-				btnPaciente=new JButton("PACIENTE");
-				//lblPaciente = new JLabel("Pacientes");
-				btnPaciente.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-				btnPaciente.setFont(new Font("Verdana", Font.PLAIN, 14));
-				btnPaciente.setBorder(new MatteBorder(2, 0, 2, 2, (Color) Color.WHITE));
-				btnPaciente.setBackground(new Color(176, 196, 222));
-				btnPaciente.setOpaque(true);
-				add(btnPaciente, BorderLayout.CENTER);
+				lblPaciente = new JLabel("Pacientes");
+				lblPaciente.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				lblPaciente.setFont(new Font("Verdana", Font.PLAIN, 14));
+				lblPaciente.setBorder(new MatteBorder(2, 0, 2, 2, (Color) Color.WHITE));
+				lblPaciente.setBackground(Color.LIGHT_GRAY);
+				lblPaciente.setOpaque(true);
+				add(lblPaciente, BorderLayout.CENTER);
 				
 				
-				btnCitas=new JButton("CITAS");
-				//lblCitas = new JLabel("Citas");
-				btnCitas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-				btnCitas.setFont(new Font("Verdana", Font.PLAIN, 14));
-				btnCitas.setBorder(new MatteBorder(2, 0, 2, 2, (Color) Color.WHITE));
-				btnCitas.setBackground(new Color(176, 196, 222));
-				btnCitas.setOpaque(true);
-				add(btnCitas, BorderLayout.CENTER);
 				
-				btnExportar=new JButton("EXPORTAR DATOS");
-				//lblExportar = new JLabel("Exportar datos");
-				btnExportar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-				btnExportar.setFont(new Font("Verdana", Font.PLAIN, 14));
-				btnExportar.setBorder(new MatteBorder(2, 0, 2, 2, (Color) Color.WHITE));
-				btnExportar.setBackground(new Color(176, 196, 222));
-				btnExportar.setOpaque(true);
-				add(btnExportar, BorderLayout.CENTER);
+				lblCitas = new JLabel("Citas");
+				lblCitas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				lblCitas.setFont(new Font("Verdana", Font.PLAIN, 14));
+				lblCitas.setBorder(new MatteBorder(2, 0, 2, 2, (Color) Color.WHITE));
+				lblCitas.setBackground(Color.LIGHT_GRAY);
+				lblCitas.setOpaque(true);
+				add(lblCitas, BorderLayout.CENTER);
 				
-				btnImportar=new JButton("IMPORTAR DATOS");
-				//btnImportar = new JLabel("Importar datos");
-				btnImportar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-				btnImportar.setFont(new Font("Verdana", Font.PLAIN, 14));
-				btnImportar.setBorder(new MatteBorder(2, 0, 2, 2, (Color) Color.WHITE));
-				btnImportar.setBackground(new Color(176, 196, 222));
-				btnImportar.setOpaque(true);
-				add(btnImportar, BorderLayout.CENTER);
+				lblExportar = new JLabel("Exportar datos");
+				lblExportar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				lblExportar.setFont(new Font("Verdana", Font.PLAIN, 14));
+				lblExportar.setBorder(new MatteBorder(2, 0, 2, 2, (Color) Color.WHITE));
+				lblExportar.setBackground(Color.LIGHT_GRAY);
+				lblExportar.setOpaque(true);
+				add(lblExportar, BorderLayout.CENTER);
+				
+				lblImportar = new JLabel("Importar datos");
+				lblImportar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				lblImportar.setFont(new Font("Verdana", Font.PLAIN, 14));
+				lblImportar.setBorder(new MatteBorder(2, 0, 2, 2, (Color) Color.WHITE));
+				lblImportar.setBackground(Color.LIGHT_GRAY);
+				lblImportar.setOpaque(true);
+				add(lblImportar, BorderLayout.CENTER);
+				
 				
 				
 			}

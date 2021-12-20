@@ -69,15 +69,22 @@ public class PanelPacientes extends JPanel {
 			modelo.addColumn("Dirección");
 			
 			try {
-				// hay que abrir y cerrar siempre la base de datos
-				BaseDeDatos.initBD("hospitalmanagementBD.db");
-				Connection con = null;
-				BaseDeDatos.actualizaTablaPaciente(con,modelo);
-				BaseDeDatos.closeBD();
+				BaseDeDatos.anadirPacienteTabla(modelo);
 			} catch (Exception e) {
 				System.out.println("No se puede rellenar la tabla");
 				e.printStackTrace();
 			}
+			
+//			try {
+//				// hay que abrir y cerrar siempre la base de datos
+//				BaseDeDatos.initBD("BaseDeDatos.db");
+//				Connection con = null;
+//				BaseDeDatos.anadirPacienteTabla(con,modelo);
+//				BaseDeDatos.closeBD();
+//			} catch (Exception e) {
+//				System.out.println("No se puede rellenar la tabla");
+//				e.printStackTrace();
+//			}
 			
 			// JSCROLLPANE Y AÑADIR LA TABLA
 			JScrollPane scrollPane = new JScrollPane(tabla);
@@ -92,14 +99,14 @@ public class PanelPacientes extends JPanel {
 		private JButton botonBuscar;
 		private JButton botonAñadir;
 		private JButton botonBorrar;
+		private JButton botonhistorialClinico;
 		private String dni;
 		
 		public PanelAbajo() {
 			setLayout(new FlowLayout());
-		//	setBackground(Color.BLUE);
 			
 			JPanel PanelBuscar = new JPanel();
-			PanelBuscar.setLayout(new GridLayout(4, 1));
+			PanelBuscar.setLayout(new GridLayout(5, 1));
 			PanelBuscar.add(new JLabel("Busar paciente..."));
 			buscar = new JTextField();
 			PanelBuscar.add(buscar);
@@ -108,34 +115,34 @@ public class PanelPacientes extends JPanel {
 			
 			add(PanelBuscar);
 			// M. recorrer la base de datos de los pacientes y buscarlos mediente el dni
-			botonBuscar.addActionListener(new ActionListener() {
-				
-				String dni = txtDni.getText();
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-					String erdni = "[0-9]{8}[A-Z]";
-					String dni = txtDni.getText();
-					boolean correctoDni = Pattern.matches(erdni, dni);
-					if(correctoDni) {
-						Connection con = BaseDeDatos.initBD("hospitalmanagementBD.db");
-						try {
-							BaseDeDatos.buscaUnPacientePorDNI( con, dni );
-						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-						JOptionPane.showMessageDialog(null, "USUARIO ENCONTRADO");
-						
-					}else {
-						JOptionPane.showMessageDialog(null, "ERROR! , NO SE HA ENCONTRADO EL USUARIO ");
-					}
-					
-					BaseDeDatos.closeBD();
-					
-				}
-			}
-			);
+//			botonBuscar.addActionListener(new ActionListener() {
+//				
+//				String dni = txtDni.getText();
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//					// TODO Auto-generated method stub
+//					String erdni = "[0-9]{8}[A-Z]";
+//					String dni = txtDni.getText();
+//					boolean correctoDni = Pattern.matches(erdni, dni);
+//					if(correctoDni) {
+//						Connection con = BaseDeDatos.initBD("hospitalmanagementBD.db");
+//						try {
+//							BaseDeDatos.buscaUnPacientePorDNI( con, dni );
+//						} catch (SQLException e1) {
+//							// TODO Auto-generated catch block
+//							e1.printStackTrace();
+//						}
+//						JOptionPane.showMessageDialog(null, "USUARIO ENCONTRADO");
+//						
+//					}else {
+//						JOptionPane.showMessageDialog(null, "ERROR! , NO SE HA ENCONTRADO EL USUARIO ");
+//					}
+//					
+//					BaseDeDatos.closeBD();
+//					
+//				}
+//			}
+//			);
 			
 			JPanel PanelVacio = new JPanel();
 			PanelVacio.setLayout(new GridLayout(1, 1));
@@ -153,28 +160,6 @@ public class PanelPacientes extends JPanel {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					String dni =txtDni.getText();
-					//M.expresion regular para saber si el dni es correcto y existe podamos anadir el paciente
-					String erdni = "[0-9]{8}[A-Z]";
-					String n =txtNombre.getText();
-					String a =txtApellidos.getText();
-					int tl = Integer.parseInt(txttl.getText());
-					String dir =txtdir.getText();
-					String f = txtfecha.getText();
-					// lo pongo a null
-					//String hc = txthc.getText();
-					boolean correctoDni = Pattern.matches(erdni, dni);
-					if(correctoDni) {
-						Connection con = BaseDeDatos.initBD("hospitalmanagementBD.db");
-						BaseDeDatos.anadirPaciente(con, dni,n, a,f, dir,tl, null);
-						BaseDeDatos.closeBD();
-						JOptionPane.showMessageDialog(null, "EL PACIENTE SE HA AÑADIDO ");
-						
-					}else {
-						JOptionPane.showMessageDialog(null, "EL DNI ES INCORRECTO , ENTONCES NO SE HA AÑADIDO .");
-						
-						
-					}
 					ventanaPaciente.setVisible(true);
 					
 				}
@@ -188,42 +173,49 @@ public class PanelPacientes extends JPanel {
 			add(PanelBorrar);
 			
 			//M.borrar todos los pacientes por el dni
-			botonBorrar.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-					String dni =txtDni.getText();
-					//expresion regular para saber si el dni es correcto y existe podamos eliminar el paciente
-					String erdni = "[0-9]{8}[A-Z]";
-					String n =txtNombre.getText();
-					String a =txtApellidos.getText();
-					int tl = Integer.parseInt(txttl.getText());
-					String dir =txtdir.getText();
-					String f = txtfecha.getText();
-					// lo pongo a null
-					//String hc = txthc.getText();
-					boolean correctoDni = Pattern.matches(erdni, dni);
-					if(correctoDni) {
-						Connection con = BaseDeDatos.initBD("hospitalmanagementBD.db");
-						BaseDeDatos.eliminarPacientePorDni(con, dni,n, a,tl, dir,f, null);
-						BaseDeDatos.closeBD();
-						JOptionPane.showMessageDialog(null, "EL PACIENTE SE HA BORRADO ");
-						
-					}else {
-						JOptionPane.showMessageDialog(null, "EL DNI ES INCORRECTO , ENTONCES NO SE HA BORRADO .");
-						
-						
-					}
-				}
-			});
+//			botonBorrar.addActionListener(new ActionListener() {
+//				
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//					// TODO Auto-generated method stub
+//					String dni =txtDni.getText();
+//					//expresion regular para saber si el dni es correcto y existe podamos eliminar el paciente
+//					String erdni = "[0-9]{8}[A-Z]";
+//					String n =txtNombre.getText();
+//					String a =txtApellidos.getText();
+//					int tl = Integer.parseInt(txttl.getText());
+//					String dir =txtdir.getText();
+//					String f = txtfecha.getText();
+//					// lo pongo a null
+//					//String hc = txthc.getText();
+//					boolean correctoDni = Pattern.matches(erdni, dni);
+//					if(correctoDni) {
+//						Connection con = BaseDeDatos.initBD("hospitalmanagementBD.db");
+//						BaseDeDatos.eliminarPacientePorDni(con, dni,n, a,tl, dir,f, null);
+//						BaseDeDatos.closeBD();
+//						JOptionPane.showMessageDialog(null, "EL PACIENTE SE HA BORRADO ");
+//						
+//					}else {
+//						JOptionPane.showMessageDialog(null, "EL DNI ES INCORRECTO , ENTONCES NO SE HA BORRADO .");
+//						
+//						
+//					}
+//				}
+//			});
+
 
 			
-			
+			JPanel PanelHistorial = new JPanel();
+			PanelHistorial.setLayout(new GridLayout(2, 1));
+			PanelHistorial.add(new JLabel("Añadir historial clínico..."));
+			botonhistorialClinico = new JButton("Añadir");
+			PanelHistorial.add(botonhistorialClinico);
+			add(PanelHistorial);
 			
 			
 		}
 	}
 
 }
+
 

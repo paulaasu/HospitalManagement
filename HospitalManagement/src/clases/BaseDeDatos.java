@@ -34,23 +34,13 @@ public class BaseDeDatos {
 	private static Logger logger = Logger.getLogger( "BaseDatos" );
 	private static Handler handler ;
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	public static Connection initBD(String hospitalManagementBD) {
+	public static Connection initBD(String HospitalManagementBD) {
 		con = null;
 		try {
-			//Class.forName("org.sqlite.JDBC");
-			//con = DriverManager.getConnection("jdbc:sqlite:"+hospitalManagementBD);
-			logger.log( Level.INFO, "Carga de librería org.sqlite.JDBC" );
-			Class.forName("org.sqlite.JDBC");  // Carga la base de datos en el squliteman
-			logger.log( Level.INFO, "Abriendo conexión con " + hospitalManagementBD );// se habre la conexion con la bbd
-			con = DriverManager.getConnection("jdbc:sqlite:" + hospitalManagementBD );
+			Class.forName("org.sqlite.JDBC");// Carga la base de datos en el squliteman
+//			logger.log( Level.INFO, "Carga de librería org.sqlite.JDBC" );
+//			logger.log( Level.INFO, "Abriendo conexión con " + BaseDeDatos );// se habre la conexion con la bbd
+			con = DriverManager.getConnection("jdbc:sqlite:" + HospitalManagementBD );
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -60,6 +50,10 @@ public class BaseDeDatos {
 		}
 		
 		return con;
+		
+		
+		
+		
 		
 	}
 
@@ -218,6 +212,8 @@ public class BaseDeDatos {
 			e.printStackTrace();
 		}
 	}
+	
+	
 	public static void eliminarMedicoPorDni(Connection con, String dni, String nombre, String apellidos, 
 			Integer telefono, String direccion ,String fecha_nacimiento,Integer salario,HistorialClinico historialClinico) {
 		String sentSQL = "DELETE FROM Medico  WHERE dni ='"+dni+"'";
@@ -436,41 +432,13 @@ try {
 				return p;
 			
 		}
-		/**
-		 * Metodo que actualiza la tabla de pacientes
-		 * @param con Conexion con la bbdd
-		 * @param tabla El modelo de la tabla paciente
-		 */
 		
-		public static void actualizaTablaPaciente(Connection con,DefaultTableModel tabla) { 
-			
-			try {
-				con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-				String sentSQL = "SELECT * FROM paciente";
-				stmt = con.createStatement();
-				rs = stmt.executeQuery(sentSQL); //
-				
-				while (rs.next()) {
-					
-					Object[] fila = new Object[7]; // hay 7 columnas en la tabla paciente
-					//se rellena cada posición del array con una de las columnas de la tabla de bd
-					for (int i=0; i<7; i++) {
-						fila[i] = rs.getObject(i+1);
-					}
-					tabla.addRow(fila);					
-				}
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		
-	}
 		/**
 		 * Metodo que añade los pacientes a la tabla en la bbddd
 		 * @param con Conexion con la bbdd
 		 * @param tabla JTable 
 		 */
-		public static void añadirPaciente(Connection con,DefaultTableModel tabla) { 
+public static void anadirPacienteTabla(DefaultTableModel tabla) { 
 			
 			try {
 				con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
@@ -585,49 +553,19 @@ try {
 				stmt.executeUpdate("create table paciente(nombre string,  apellido string, dni string, fecha_nacimiento string, genero string, telefono integer, direccion string )");
 				stmt.executeUpdate("insert into paciente values('Paula', 'Asua', '79079419Z', '26-07-2001', 'Femenino', 711726903, 'Zabale kalea')");
 				
-				stmt.executeUpdate("drop table if exists Usuario");
-				stmt.executeUpdate("create table Usuario(nombre String, contrasena String )");
+				stmt.executeUpdate("drop table if exists usuario");
+				stmt.executeUpdate("create table usuario(nombre String, contrasena String )");
+				stmt.executeUpdate("insert into usuario values('admin', 'admin')");
+				
+				stmt.executeUpdate("drop table if exists Medico");
+				stmt.executeUpdate("create table Medico( dni String,  nombre String,  apellidos String, telefono Integer, email String,  direccion String , fecha_nacimiento String,salario Integer,cita String)");
 				
 			
 				
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-		}
-	
-	/*
-	 * Metodod obtener los nombres de loa pacientes para comboBox
-	 */
-	public  static  ArrayList<Paciente> ObtenerPacientes(){
-		
-		ArrayList<Paciente> ret = new ArrayList<>();
-		Paciente p=new Paciente();
-		ResultSet rs;
-		try {
-			Statement statement = con.createStatement();
-			String sent = "select * from paciente ";
-			 rs = statement.executeQuery(sent);
-		
-			while(rs.next()) {
-				 
-				p.nombre = rs.getString("nombre");
-				ret.add(p);
-			}
-			rs.close();
-			return ret;
-		} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-		}
-		return ret;
-		
-	}
-		
-		
-	}
-	
-
-
+		}}
 
 	/*	-CREAR TABLAS (HECHO)
 	 * Logger ( hecho
@@ -647,6 +585,10 @@ try {
 	 * 
 	 * 
 	 * */
+	
+	
+	
+
 	
 	
 	

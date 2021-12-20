@@ -180,20 +180,41 @@ public class VentanaPaciente extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// añadir los datos a la BD
-					if (!(nombreTxt.getText().isEmpty() && apellidoTxt.getText().isEmpty() && dniTxt.getText().isEmpty() && fchanacTxt.getText().isEmpty() && telefonoTxt.getText().isEmpty() && dirTxt.getText().isEmpty())) {
-						
-					
-					java.sql.Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
-					// añadir un paciente
-					BaseDeDatos.anadirPaciente(con, nombre, apellido, dni, fchanac, genero1, telefono, dir); //aqui no esta el error
-					logger.log( Level.INFO, "Se ha añadido el paciente" );
-					BaseDeDatos.closeBD();
-					}else {
-						JOptionPane.showMessageDialog( contentPanePaciente, "Debes rellenar todos campos" );
+					if (!nombreTxt.getText().isEmpty() && !apellidoTxt.getText().isEmpty() && !dniTxt.getText().isEmpty() && !fchanacTxt.getText().isEmpty() && !telefonoTxt.getText().isEmpty() && !dirTxt.getText().isEmpty()) {
+					String nombre = nombreTxt.getText();
+					String apellido = apellidoTxt.getText();
+					String dni = dniTxt.getText();
+					String fchanac = fchanacTxt.getText();
+					String dir = dirTxt.getText();
+					int telefono = Integer.parseInt(telefonoTxt.getText());
+					String genero1 = "";
+					if(femenino.isSelected()) {
+						genero1 = "Femenino";
+					}if(masculino.isSelected()) {
+						genero1 = "Masculino";
 					}
 
+			
+					//FALTAN LAS CONDICIONES!!
 					
+					java.sql.Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
+					BaseDeDatos.anadirPaciente(con, nombre, apellido, dni, fchanac, genero1, telefono, dir); //
+					BaseDeDatos.closeBD();
+					}else {
+						JOptionPane.showMessageDialog( contentPanePaciente, "Debes rellenar todos campos");
+					}
+					repaint();
 					dispose(); //para que cierre al darle a añadir
+					
+					//pone en blanco los txtfields denuevo
+					nombreTxt.setText("");
+					apellidoTxt.setText("");
+					dniTxt.setText("");
+					fchanacTxt.setText("");
+					dirTxt.setText("");
+					telefonoTxt.setText("");
+					//COMO SE PONE EN RADIOBUTTON EN BLANCO?
+					
 				}
 			});
 			
@@ -201,4 +222,5 @@ public class VentanaPaciente extends JFrame {
 	}
 }	//AÑADIR UN PACIENTE Y GUARDARLO EN LA BASE DE DATOS(hecho)
 	
+
 
