@@ -25,12 +25,12 @@ public class PanelImportar extends JPanel{
 		
 
 		setLayout(new BorderLayout());
-		setBackground(new Color(0, 206, 209));
+		setBackground(new Color(176, 196, 222));
 		
 		JPanel panel1=new JPanel();
 		panel1.setLayout(new FlowLayout());
 		JLabel lblTitulo=new JLabel("IMPORTAR DATOS", SwingConstants.CENTER);
-		lblTitulo.setFont(new Font("Tahoma", Font.BOLD, 18));
+		lblTitulo.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		//panel1.add(lblTitulo,FlowLayout.CENTER);
 		add(lblTitulo,BorderLayout.NORTH);
 		
@@ -50,17 +50,15 @@ public class PanelImportar extends JPanel{
 		n.setPreferredSize(new Dimension(200, 200));
 		panelT.add(n);
 		*/
-		btnAceptar = new JButton("ACEPTAR");
 		
-		btnAceptar.setFont(new Font("Tahoma", Font.BOLD, 13));
-		btnAceptar.getBackground();
-		add(btnAceptar, BorderLayout.SOUTH);
+		
 
 	}
 	private void CrearPaneles() {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setBackground(new Color(255, 228, 181));
 		panelT.add(tabbedPane, BorderLayout.CENTER);
+		
 		
 		/*
 		 * PESTAÑA PACIENTE IMPORTAR

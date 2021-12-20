@@ -593,7 +593,41 @@ try {
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-		}}
+		}
+	
+	/*
+	 * Metodod obtener los nombres de loa pacientes para comboBox
+	 */
+	public  static  ArrayList<Paciente> ObtenerPacientes(){
+		
+		ArrayList<Paciente> ret = new ArrayList<>();
+		Paciente p=new Paciente();
+		ResultSet rs;
+		try {
+			Statement statement = con.createStatement();
+			String sent = "select * from paciente ";
+			 rs = statement.executeQuery(sent);
+		
+			while(rs.next()) {
+				 
+				p.nombre = rs.getString("nombre");
+				ret.add(p);
+			}
+			rs.close();
+			return ret;
+		} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		}
+		return ret;
+		
+	}
+		
+		
+	}
+	
+
+
 
 	/*	-CREAR TABLAS (HECHO)
 	 * Logger ( hecho

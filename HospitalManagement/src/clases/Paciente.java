@@ -12,6 +12,11 @@ public class Paciente extends Persona{
 		this.historialClinico = historialClinico;
 	}
 
+	//constructor vacio
+	public Paciente() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public HistorialClinico getHistorialClinico() {
 		return historialClinico;
 	}
@@ -25,6 +30,10 @@ public class Paciente extends Persona{
 		return "Paciente [nombre=" + nombre + ", apellidos=" + apellidos + ", telefono=" + telefono + ", email=" + email
 				+ ", direccion=" + direccion + ", fechaNac=" + fechaNac + ", historialClinico=" + historialClinico
 				+ "]";
+	}
+	
+	public String getNombre() {
+		return nombre;
 	}
 
 	
