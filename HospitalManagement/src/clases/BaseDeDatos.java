@@ -524,6 +524,8 @@ public static void anadirPacienteTabla(DefaultTableModel tabla) {
 			rs.close();
 			return tipo;
 		}
+
+		
 	/**
 	 * Metodo que devuelve el tipo de cita
 	 * @param dni el dni de la tabla medico
