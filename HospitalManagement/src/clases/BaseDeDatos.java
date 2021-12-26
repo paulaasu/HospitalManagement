@@ -96,15 +96,50 @@ public class BaseDeDatos {
 	 */
 	public static void crearTablas(Connection con) {
 		String sent1= "CREATE TABLE IF NOT EXISTS Paciente(nombre string,  apellido string, dni string, fecha_nacimiento string, genero string, telefono integer, direccion string )";
+		/*String sent1= "CREATE TABLE Paciente(Dni VARCHAR(20) PRIMARY KEY, 
+		      Nombre VARCHAR(20),
+		      Apellidos VARCHAR(40),
+		      Telefono INTEGER,
+		      Email VARCHAR(40),
+		      Direccion VARCHAR(40),
+		      Fecha_Nac VARCHAR(20),
+		      IdHistorial INTEGER,
+		      FOREIGN KEY(IdHistorial) REFERENCES HistorialClinico (id)
+			);";*/
 		
 		String sent2 = "CREATE TABLA IF NOT EXISTS Medico( dni String,  nombre String,  apellidos String,"
 				+ " telefono Integer, email String,  direccion String , fecha_nacimiento String,salario Integer,cita String)" ;
+		/*String sent2 = "CREATE TABLE HistorialClinico 
+			(id INTEGER PRIMARY KEY AUTOINCREMENT,
+			Dni_paciente VARCHAR(20),
+			Diagnostico VARCHAR(200),
+			Analisis VARCHAR(50),
+ 			FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni));" ;*/
 		
 		String sent3 ="CREATE TABLA IF NOT EXISTS Persona(dni String,  nombre String,  apellidos String, "
 				+ "telefono Integer, email String,  direccion String , fecha_nacimiento Date, salario Intenger)";
+		
+		/*String sent3 ="CREATE TABLE Usuario
+			(
+			Id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
+			user VARCHAR(20),
+			password VARCHAR(30),
+			Rol INTEGER
+
+			);";*/
+		
 	
 		String sent4 ="CREATE TABLA IF NOT EXITS Usuario( nombre String,  contrasena String,  )";
+		/*String sent4 ="CREATE TABLE Cita
+			(
+			Id_cita INTEGER PRIMARY KEY AUTOINCREMENT,
+			Fecha VARCHAR(20),
+			Dni_paciente VARCHAR(20),
+			Tipo VARCHAR(20),
+			FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni)
+			);";*/
 		Statement st = null;
+		
 		
 		try {
 			st = con.createStatement();
