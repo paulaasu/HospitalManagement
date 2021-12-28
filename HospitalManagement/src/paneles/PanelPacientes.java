@@ -10,6 +10,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.regex.Pattern;
 
@@ -23,6 +24,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import vistas.VentanaBorrarPaciente;
+import vistas.VentanaHistorial;
 import vistas.VentanaPaciente;
 import clases.BaseDeDatos;
 
@@ -30,15 +33,19 @@ import clases.BaseDeDatos;
 
 
 public class PanelPacientes extends JPanel {
+	public static DefaultTableModel modelo;
+	public static JTable tabla;
 	
 	public PanelPacientes() {
 		setLayout(new BorderLayout());
 		JLabel datos = new JLabel("LISTADO DE PACIENTES");
 		datos.setHorizontalAlignment(SwingConstants.CENTER);
 		datos.setFont(new Font("Sherif", Font.PLAIN, 24));
+		setBackground(new Color(176, 196, 222));
 		add(datos, BorderLayout.NORTH);
 		Panel4 panel4 = new Panel4();
 		add(panel4, BorderLayout.CENTER);
+		
 		
 	}
 	
@@ -57,8 +64,8 @@ public class PanelPacientes extends JPanel {
 			setLayout(new BorderLayout());
 ;
 			//Creamos la JTable
-			DefaultTableModel modelo = new DefaultTableModel();
-			JTable tabla = new JTable(modelo);
+			modelo = new DefaultTableModel();
+			tabla = new JTable(modelo);
 			//Creamos las columnas
 			modelo.addColumn("Nombre");
 			modelo.addColumn("Apellido");
@@ -67,24 +74,9 @@ public class PanelPacientes extends JPanel {
 			modelo.addColumn("Género");
 			modelo.addColumn("Teléfono");
 			modelo.addColumn("Dirección");
+			modelo.addColumn("Nª Historial");
 			
-			try {
-				BaseDeDatos.anadirPacienteTabla(modelo);
-			} catch (Exception e) {
-				System.out.println("No se puede rellenar la tabla");
-				e.printStackTrace();
-			}
-			
-//			try {
-//				// hay que abrir y cerrar siempre la base de datos
-//				BaseDeDatos.initBD("BaseDeDatos.db");
-//				Connection con = null;
-//				BaseDeDatos.anadirPacienteTabla(con,modelo);
-//				BaseDeDatos.closeBD();
-//			} catch (Exception e) {
-//				System.out.println("No se puede rellenar la tabla");
-//				e.printStackTrace();
-//			}
+			actualizaTablaPaciente();
 			
 			// JSCROLLPANE Y AÑADIR LA TABLA
 			JScrollPane scrollPane = new JScrollPane(tabla);
@@ -115,6 +107,26 @@ public class PanelPacientes extends JPanel {
 			
 			add(PanelBuscar);
 			// M. recorrer la base de datos de los pacientes y buscarlos mediente el dni
+			botonBuscar.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					String dniBuscar = buscar.getText();
+					
+					try {
+						BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+						String sentSQL = "SELECT * FROM paciente WHERE dni = '" + dniBuscar + "' ";
+						BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
+						BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
+						
+						BaseDeDatos.closeBD();
+					} catch (Exception e2) {
+						// TODO: handle exception
+					}
+					
+				}
+			});
+			
 //			botonBuscar.addActionListener(new ActionListener() {
 //				
 //				String dni = txtDni.getText();
@@ -172,50 +184,51 @@ public class PanelPacientes extends JPanel {
 			PanelBorrar.add(botonBorrar);
 			add(PanelBorrar);
 			
+			
+			
 			//M.borrar todos los pacientes por el dni
-//			botonBorrar.addActionListener(new ActionListener() {
-//				
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//					// TODO Auto-generated method stub
-//					String dni =txtDni.getText();
-//					//expresion regular para saber si el dni es correcto y existe podamos eliminar el paciente
-//					String erdni = "[0-9]{8}[A-Z]";
-//					String n =txtNombre.getText();
-//					String a =txtApellidos.getText();
-//					int tl = Integer.parseInt(txttl.getText());
-//					String dir =txtdir.getText();
-//					String f = txtfecha.getText();
-//					// lo pongo a null
-//					//String hc = txthc.getText();
-//					boolean correctoDni = Pattern.matches(erdni, dni);
-//					if(correctoDni) {
-//						Connection con = BaseDeDatos.initBD("hospitalmanagementBD.db");
-//						BaseDeDatos.eliminarPacientePorDni(con, dni,n, a,tl, dir,f, null);
-//						BaseDeDatos.closeBD();
-//						JOptionPane.showMessageDialog(null, "EL PACIENTE SE HA BORRADO ");
-//						
-//					}else {
-//						JOptionPane.showMessageDialog(null, "EL DNI ES INCORRECTO , ENTONCES NO SE HA BORRADO .");
-//						
-//						
-//					}
-//				}
-//			});
+			
+			botonBorrar.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					VentanaBorrarPaciente ventanaBorrar = new VentanaBorrarPaciente();
+					ventanaBorrar.setVisible(true);
+					
+				}
+			});
+
 
 
 			
-			JPanel PanelHistorial = new JPanel();
-			PanelHistorial.setLayout(new GridLayout(2, 1));
-			PanelHistorial.add(new JLabel("Añadir historial clínico..."));
-			botonhistorialClinico = new JButton("Añadir");
-			PanelHistorial.add(botonhistorialClinico);
-			add(PanelHistorial);
-			
+		
 			
 		}
 	}
+	
+	public static void actualizaTablaPaciente(){
+		try {
+			BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+			BaseDeDatos.anadirPacienteTabla(modelo);
+			BaseDeDatos.closeBD();
+		} catch (Exception e) {
+			System.out.println("No se puede rellenar la tabla");
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	public static void eliminaTablaPaciente(){
+		int rowCount = modelo.getRowCount();
+		//Elimina las filas uno a uno desde el final de la tabla
+		for (int i = rowCount - 1; i >= 0; i--) {
+		    modelo.removeRow(i);
+		}
+		
+	}
 
 }
+
 
 

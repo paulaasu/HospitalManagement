@@ -30,12 +30,13 @@ import paneles.PanelPacientes;
 import paneles.PanelAgenda;
 import paneles.PanelCitas;
 import paneles.PanelExportar;
+import paneles.PanelHistorial;
 import paneles.PanelImportar;
 import paneles.PanelInicio;
 
 public class VentanaPrincipal extends JFrame {
 	private boolean paciente = false;
-	JButton btnInicio,btnAgenda,btnPaciente,btnCitas,btnExportar,btnImportar;
+	JButton btnInicio,btnAgenda,btnPaciente,btnCitas,btnExportar,btnImportar, btnHistorial;
 	//Creamos un treemap de pacientes
 	public static TreeMap<String,Paciente> tmPacientes;
 	//para ir cambiando de ventana en ventana
@@ -74,6 +75,8 @@ public class VentanaPrincipal extends JFrame {
 		PanelCitas pc=new PanelCitas();
 		PanelExportar pe=new PanelExportar();
 		PanelImportar pi=new PanelImportar();
+		PanelPacientes pp= new PanelPacientes();
+		PanelHistorial ph= new PanelHistorial();
 		
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -114,8 +117,19 @@ public class VentanaPrincipal extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				panel2.setVisible(false);pa.setVisible(false);pi.setVisible(false);pe.setVisible(false);pc.setVisible(false);
-				//pp.setVisible(true);
-				//add(pp, BorderLayout.CENTER);
+				
+				pp.setVisible(true);
+				add(pp, BorderLayout.CENTER);
+			}
+			
+		});
+		btnHistorial.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				panel2.setVisible(false);pa.setVisible(false);pi.setVisible(false);pe.setVisible(false);pc.setVisible(false);
+				
+				ph.setVisible(true);
+				add(ph, BorderLayout.CENTER);
 			}
 			
 		});
@@ -175,17 +189,18 @@ class Panel2 extends JPanel{ //PANEL QUE TE APARECE AL PRINCIPIO
 		public Panel1() {
 			setLayout(new BorderLayout());
 			JLabel JLabelImagen = new JLabel();
-			JLabelImagen.setIcon(new ImageIcon("src\\img\\icono3.jpg"));
+			JLabelImagen.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/ImagenLogo.jpg")));
 			add(JLabelImagen, BorderLayout.NORTH);
 			Panel3 panel3 = new Panel3();
 			add(panel3, BorderLayout.CENTER);
+			setBackground(Color.WHITE);
 			
 		}
 		
 		class Panel3 extends JPanel{
 	
 			public Panel3() {
-				setLayout(new GridLayout(6,1));
+				setLayout(new GridLayout(7,1));
 				
 
 				btnInicio=new JButton("INICIO");
@@ -214,6 +229,14 @@ class Panel2 extends JPanel{ //PANEL QUE TE APARECE AL PRINCIPIO
 				btnPaciente.setOpaque(true);
 				add(btnPaciente, BorderLayout.CENTER);
 				
+				
+				btnHistorial=new JButton("HISTORIAL CLINICO");
+				btnHistorial.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+				btnHistorial.setFont(new Font("Verdana", Font.PLAIN, 14));
+				btnHistorial.setBorder(new MatteBorder(2, 0, 2, 2, (Color) Color.WHITE));
+				btnHistorial.setBackground(new Color(176, 196, 222));
+				btnHistorial.setOpaque(true);
+				add(btnHistorial, BorderLayout.CENTER);
 				
 				btnCitas=new JButton("CITAS");
 				//lblCitas = new JLabel("Citas");

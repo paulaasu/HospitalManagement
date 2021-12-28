@@ -30,6 +30,7 @@ public class PanelCitas extends JPanel {
 		JLabel datos = new JLabel("CITAS");
 		datos.setHorizontalAlignment(SwingConstants.CENTER);
 		datos.setFont(new Font("Sherif", Font.PLAIN, 24));
+		setBackground(new Color(176, 196, 222));
 		add(datos, BorderLayout.NORTH);
 		Panel4 panel4 = new Panel4();
 		add(panel4, BorderLayout.CENTER);

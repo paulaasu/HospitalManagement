@@ -178,10 +178,10 @@ public class BaseDeDatos {
 	 * @param fecha_nacimiento
 	 * @param historialClinico
 	 */
-	public static void anadirPaciente(Connection con ,String nombre,String apellido , String dni , //FALTA EL HISTORIAL CLINICO
-			String fecha_nacimiento, String genero, Integer telefono, String direccion) {
+	public static void anadirPaciente(Connection con ,String nombre,String apellido , String dni , 
+			String fecha_nacimiento, String genero, Integer telefono, String direccion, Integer numHistorial) {
 		String sentSQL = "INSERT INTO paciente VALUES('"+nombre+"','"+apellido+"','"+dni+
-				"','"+fecha_nacimiento+"','"+genero+"','"+telefono+"','"+direccion+"')";
+				"','"+fecha_nacimiento+"','"+genero+"','"+telefono+"','"+direccion+"','"+numHistorial+"')";
 		
 		try {
 			Statement stmt =null;
@@ -427,7 +427,7 @@ try {
 							String analisis = rs.getString("analisis");
 							String fnac = rs.getString("fecha_nacimiento");
 							String direccion = rs.getString("direccion");
-							p= new Paciente(dni, nombre, apellidos, (int)0,email, direccion, fnac, (int)0, new HistorialClinico(diagnostico, TipoAnalisis.valueOf(analisis)));
+	//						p= new Paciente(dni, nombre, apellidos, (int)0,email, direccion, fnac, (int)0, new HistorialClinico(diagnostico, TipoAnalisis.valueOf(analisis)));
 								
 							}
 						}
@@ -485,9 +485,9 @@ public static void anadirPacienteTabla(DefaultTableModel tabla) {
 				
 				while (rs.next()) {
 					
-					Object[] fila = new Object[7]; // hay 7 columnas en la tabla paciente
+					Object[] fila = new Object[8]; // hay 7 columnas en la tabla paciente
 					//se rellena cada posición del array con una de las columnas de la tabla de bd
-					for (int i=0; i<7; i++) {
+					for (int i=0; i<8; i++) {
 						fila[i] = rs.getObject(i+1);
 					}
 					tabla.addRow(fila);					
@@ -496,9 +496,55 @@ public static void anadirPacienteTabla(DefaultTableModel tabla) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		
 	}
+
+public static void anadirHistorialTabla(DefaultTableModel tabla) { 
+	
+	try {
+		con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+		String sentSQL = "SELECT * FROM historial";
+		stmt = con.createStatement();
+		rs = stmt.executeQuery(sentSQL); //
 		
+		
+		
+		while (rs.next()) {
+			
+			Object[] fila = new Object[7]; // hay 8 columnas en la tabla paciente
+			//se rellena cada posición del array con una de las columnas de la tabla de bd
+			for (int i=0; i<7; i++) {
+				fila[i] = rs.getObject(i+1);
+			}
+			tabla.addRow(fila);					
+		}
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+
+}
+
+//CARGA EL HISTORIAL
+public static ArrayList<HistorialClinico> cargarHistorial(String hc) throws SQLException{
+	ArrayList<HistorialClinico> historial = new ArrayList<HistorialClinico>();
+
+	try {
+		con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+		String sentSQL = "SELECT * from historial";
+		stmt = con.createStatement();
+		rs = stmt.executeQuery(sentSQL);
+		
+		while(rs.next()) {
+			HistorialClinico h = new HistorialClinico(rs.getInt("numHistorial"), rs.getString("enfermedad"), rs.getString("sintoma"), rs.getString("tiempo"), rs.getString("sed"),rs.getString("sueño"),rs.getString("miccion"));
+			historial.add(h);
+		}
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+	return historial;
+	
+	
+}
 		/**
 		 * Método que obtiene un mapa con los pacientes de la BBDD
 		 * @param con Conexión con la base de datos
@@ -522,8 +568,8 @@ public static void anadirPacienteTabla(DefaultTableModel tabla) {
 					String analisis = rs.getString("analisis");
 					String fnac = rs.getString("fecha_nacimiento");
 					String direccion = rs.getString("direccion");
-					paciente = new Paciente(d, nom, apellidos, (int)0,email, direccion, fnac, (int)0, new HistorialClinico(diagnostico, TipoAnalisis.valueOf(analisis)));
-					tmPacientes.put(d, paciente);
+//					paciente = new Paciente(d, nom, apellidos, (int)0,email, direccion, fnac, (int)0, new HistorialClinico(diagnostico, TipoAnalisis.valueOf(analisis)));
+//					tmPacientes.put(d, paciente);
 					
 				}
 				rs.close();
@@ -587,8 +633,8 @@ public static void anadirPacienteTabla(DefaultTableModel tabla) {
 				stmt = con.createStatement();
 				 
 				stmt.executeUpdate("drop table if exists paciente");
-				stmt.executeUpdate("create table paciente(nombre string,  apellido string, dni string, fecha_nacimiento string, genero string, telefono integer, direccion string )");
-				stmt.executeUpdate("insert into paciente values('Paula', 'Asua', '79079419Z', '26-07-2001', 'Femenino', 711726903, 'Zabale kalea')");
+				stmt.executeUpdate("create table paciente(nombre string,  apellido string, dni string, fecha_nacimiento string, genero string, telefono integer, direccion string, numHistorial integer)");
+				stmt.executeUpdate("insert into paciente values('Paula', 'Asua', '79079419Z', '26-07-2001', 'Femenino', 711726903, 'Zabale kalea', 1)");
 				
 				stmt.executeUpdate("drop table if exists usuario");
 				stmt.executeUpdate("create table usuario(nombre String, contrasena String )");
@@ -597,35 +643,13 @@ public static void anadirPacienteTabla(DefaultTableModel tabla) {
 				stmt.executeUpdate("drop table if exists Medico");
 				stmt.executeUpdate("create table Medico( dni String,  nombre String,  apellidos String, telefono Integer, email String,  direccion String , fecha_nacimiento String,salario Integer,cita String)");
 				
+				stmt.executeUpdate("drop table if exists historial");
+				stmt.executeUpdate("create table historial(numHistorial integer, enfermedad String,  sintoma String, tiempo String, sed String, sueño String, miccion String, FOREIGN KEY(numHistorial) REFERENCES paciente(numHistorial))");
+				stmt.executeUpdate("insert into historial values(1, 'Amigdalitis', 'dolor de garganta, dolor al tragar, fiebre, mal aliento', '3 días', 'normal','normal','normal')");
+				
 			
 				
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
 		}}
-
-	/*	-CREAR TABLAS (HECHO)
-	 * Logger ( hecho
-	 * -AÑADIR UN PACIENTE A LA BASE DE DATOS (HECH0)
-	 * -ELIMINAR UN PACIENTE DE LA BASE DE DATOS
-	 *  -MODIFICAR UN PACIENTE DE LA BASE DE DATOS
-	 *  
-	 * 	-AÑADIR UN MEDICO NUEVO A LA BASE DE DATOS
-	 * 
-	 * 	
-	 * -ELIMINAR UN PACIENTE DE LA BASE DE DATOS 
-	 * -GUARDAR UN USUARIO
-	 * -OBTENER UN USUARIO
-	 * 	-MODIFICAR UN PACIENTE
-	 * - MOFICIAR UN MEDICO
-	 * 
-	 * 
-	 * 
-	 * */
-	
-	
-	
-
-	
-	
-	
