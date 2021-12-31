@@ -28,6 +28,7 @@ import vistas.VentanaBorrarPaciente;
 import vistas.VentanaHistorial;
 import vistas.VentanaPaciente;
 import clases.BaseDeDatos;
+import clases.Pacientte;
 
 
 
@@ -120,6 +121,66 @@ public class PanelPacientes extends JPanel {
 						BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
 						
 						BaseDeDatos.closeBD();
+					} catch (Exception e2) {
+						// TODO: handle exception
+					}
+					
+				}
+			});
+			// Buscar paciente por DNI
+			botonBuscar.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					String dniB = buscar.getText();
+					try {
+						BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+						String sentSQL = "SELECT * FROM paciente WHERE dni = '" + dniB + "' ";
+						BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
+						BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
+						
+						
+						if(BaseDeDatos.rs.next()) {
+							int rowCount = modelo.getRowCount();
+							//Elimina las filas uno a uno desde el final de la tabla
+							for (int i = rowCount - 1; i >= 0; i--) {
+							    modelo.removeRow(i);
+							}
+							
+							
+							Object[] fila = new Object[8]; // hay 7 columnas en la tabla paciente
+							//se rellena cada posición del array con una de las columnas de la tabla de bd
+							for (int i=0; i<8; i++) {
+								fila[i] = BaseDeDatos.rs.getObject(i+1);
+							}
+							modelo.addRow(fila);
+						}else {
+							int rowCount = modelo.getRowCount();
+							//Elimina las filas uno a uno desde el final de la tabla
+							for (int i = rowCount - 1; i >= 0; i--) {
+							    modelo.removeRow(i);
+							}
+							BaseDeDatos.anadirPacienteTabla(modelo);
+					
+						}
+//						while(BaseDeDatos.rs.next()) {
+//							int rowCount = modelo.getRowCount();
+//							//Elimina las filas uno a uno desde el final de la tabla
+//							for (int i = rowCount - 1; i >= 0; i--) {
+//							    modelo.removeRow(i);
+//							}
+//							
+//							Pacientte pacienteB = new Pacientte(BaseDeDatos.rs.getString("nombre"), BaseDeDatos.rs.getString("apellido"), BaseDeDatos.rs.getString("dni"), BaseDeDatos.rs.getString("fecha_nacimiento"), BaseDeDatos.rs.getString("genero"),BaseDeDatos.rs.getInt("telefono"),BaseDeDatos.rs.getString("direccion"),BaseDeDatos.rs.getInt("numHistorial"));
+//							Object[] fila = new Object[8]; // hay 7 columnas en la tabla paciente
+//							//se rellena cada posición del array con una de las columnas de la tabla de bd
+//							for (int i=0; i<8; i++) {
+//								fila[i] = BaseDeDatos.rs.getObject(i+1);
+//							}
+//							modelo.addRow(fila);	
+//						}
+						
+						BaseDeDatos.closeBD();
+						
 					} catch (Exception e2) {
 						// TODO: handle exception
 					}

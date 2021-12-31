@@ -71,6 +71,7 @@ public class VentanaPrincipal extends JFrame {
 		// va a ser la ventana actual
 //		ventanaActual = this;
 //		ventanaAnterior = va;
+		PanelInicio pii = new PanelInicio();
 		PanelAgenda pa=new PanelAgenda();
 		PanelCitas pc=new PanelCitas();
 		PanelExportar pe=new PanelExportar();
@@ -88,26 +89,36 @@ public class VentanaPrincipal extends JFrame {
 		Panel1 panel1 = new Panel1();
 		add(panel1, BorderLayout.WEST);
 		Panel2 panel2 = new Panel2();
-		add(panel2, BorderLayout.CENTER);
+		add(panel2); //borderlayout.center
 		 //CAMBIO DE PANELES
 		
 		
 		btnInicio.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				panel2.setVisible(true);
-				pi.setVisible(false);pe.setVisible(false);pc.setVisible(false);//pp.setVisible(false);
-				pa.setVisible(false);
-				add(panel2, BorderLayout.CENTER);
+//				panel2.setVisible(true);
+//				pi.setVisible(false);pe.setVisible(false);pc.setVisible(false);//pp.setVisible(false);
+//				pa.setVisible(false);
+//				add(panel2, BorderLayout.CENTER);
+
+				panel2.removeAll();
+				panel2.add(pii);
+				panel2.updateUI();
+				
 			}
 			
 		});
 		btnAgenda.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				panel2.setVisible(false);pi.setVisible(false);pe.setVisible(false);pc.setVisible(false);//pp.setVisible(false);
-				pa.setVisible(true);
-				add(pa, BorderLayout.CENTER);
+//				panel2.setVisible(false);pi.setVisible(false);pe.setVisible(false);pc.setVisible(false);//pp.setVisible(false);
+//				pa.setVisible(true);
+//				add(pa, BorderLayout.CENTER);
+				
+				panel2.removeAll();
+				panel2.add(pa);
+				panel2.updateUI();
+				
 
 			}
 
@@ -116,41 +127,58 @@ public class VentanaPrincipal extends JFrame {
 		btnPaciente.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				panel2.setVisible(false);pa.setVisible(false);pi.setVisible(false);pe.setVisible(false);pc.setVisible(false);
+//				panel2.setVisible(false);pa.setVisible(false);pi.setVisible(false);pe.setVisible(false);pc.setVisible(false);
+//				
+//				pp.setVisible(true);
+//				add(pp, BorderLayout.CENTER);
 				
-				pp.setVisible(true);
-				add(pp, BorderLayout.CENTER);
+				panel2.removeAll();
+				panel2.add(pp);
+				panel2.updateUI();
+				
 			}
 			
 		});
 		btnHistorial.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				panel2.setVisible(false);pa.setVisible(false);pi.setVisible(false);pe.setVisible(false);pc.setVisible(false);
+//				panel2.setVisible(false);pa.setVisible(false);pi.setVisible(false);pe.setVisible(false);pc.setVisible(false);
+//				
+//				ph.setVisible(true);
+//				add(ph, BorderLayout.CENTER);
 				
-				ph.setVisible(true);
-				add(ph, BorderLayout.CENTER);
+				panel2.removeAll();
+				panel2.add(ph);
+				panel2.updateUI();
 			}
 			
 		});
 		btnCitas.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				panel2.setVisible(false);pa.setVisible(false);pi.setVisible(false);pe.setVisible(false);//pp.setVisible(false);
-
-				pc.setVisible(true);
-				add(pc, BorderLayout.CENTER);
+//				panel2.setVisible(false);pa.setVisible(false);pi.setVisible(false);pe.setVisible(false);//pp.setVisible(false);
+//
+//				pc.setVisible(true);
+//				add(pc, BorderLayout.CENTER);
+				
+				panel2.removeAll();
+				panel2.add(pc);
+				panel2.updateUI();
 			}
 			
 		});
 		btnExportar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				panel2.setVisible(false);pa.setVisible(false);pi.setVisible(false);//pp.setVisible(false);
-				pc.setVisible(false);
-
-				pe.setVisible(true);
-				add(pe, BorderLayout.CENTER);
+//				panel2.setVisible(false);pa.setVisible(false);pi.setVisible(false);//pp.setVisible(false);
+//				pc.setVisible(false);
+//
+//				pe.setVisible(true);
+//				add(pe, BorderLayout.CENTER);
+				
+				panel2.removeAll();
+				panel2.add(pe);
+				panel2.updateUI();
 
 			}
 			
@@ -158,11 +186,15 @@ public class VentanaPrincipal extends JFrame {
 		btnImportar.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				panel2.setVisible(false);pa.setVisible(false);//pp.setVisible(false);
-				pe.setVisible(false);pc.setVisible(false);
-
-				pi.setVisible(true);
-				add(pi, BorderLayout.CENTER);
+//				panel2.setVisible(false);pa.setVisible(false);//pp.setVisible(false);
+//				pe.setVisible(false);pc.setVisible(false);
+//
+//				pi.setVisible(true);
+//				add(pi, BorderLayout.CENTER);
+				
+				panel2.removeAll();
+				panel2.add(pi);
+				panel2.updateUI();
 			}
 			
 		});
@@ -172,6 +204,7 @@ public class VentanaPrincipal extends JFrame {
 class Panel2 extends JPanel{ //PANEL QUE TE APARECE AL PRINCIPIO
 		
 		public Panel2(){
+			setLayout(new GridLayout(1,1));
 			PanelInicio panelInicio = new PanelInicio();
 			add(panelInicio);
 			// llamamos a la ventana de inicio
@@ -204,7 +237,7 @@ class Panel2 extends JPanel{ //PANEL QUE TE APARECE AL PRINCIPIO
 				
 
 				btnInicio=new JButton("INICIO");
-				
+				btnInicio.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 				btnInicio.setFont(new Font("Verdana", Font.PLAIN, 14));
 				btnInicio.setBorder(new MatteBorder(2, 0, 2, 2, (Color) Color.WHITE));
 				btnInicio.setBackground(new Color(176, 196, 222));
