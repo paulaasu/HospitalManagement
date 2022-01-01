@@ -541,9 +541,7 @@ public static ArrayList<HistorialClinico> cargarHistorial(String hc) throws SQLE
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
-	return historial;
-	
-	
+	return historial;	
 }
 		/**
 		 * Método que obtiene un mapa con los pacientes de la BBDD
