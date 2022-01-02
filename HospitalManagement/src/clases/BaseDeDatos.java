@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import vistas.VentanaPaciente; // importamos el panel pacientes
 
@@ -360,6 +361,45 @@ public class BaseDeDatos {
 		rs.close();
 		
 	}
+	
+	
+	/**
+	 * Buscar pacientes en bbd
+	 * metodo usado en exportar datos a un .csv
+	 * @param con conexion con la bbdd
+	 * @throws SQLException
+	 */
+	public  static ArrayList<Paciente> getPaciente(Connection con) {
+		ArrayList <Paciente> lista=new ArrayList<Paciente>();
+		ResultSet rs;
+		try {
+		Statement statement = con.createStatement();
+		String sent = "select * from paciente";
+		 rs = statement.executeQuery(sent);
+		Paciente p=new Paciente();
+		
+			while (rs.next()) {
+				p.dni = rs.getString("Dni");
+				p.nombre = rs.getString("Nombre");
+				p.apellidos =rs.getString("Apellido"); 
+				p.telefono  =rs.getInt("Telefono");
+				//p.g  =rs.getString("Email");
+				p.direccion  =rs.getString("Direccion");
+				p.fechaNac= rs.getString("Fecha_nacimiento");
+			
+				lista.add(p);
+				 
+				
+			}
+			rs.close();
+		} catch (SQLException e) {
+			JOptionPane.showOptionDialog(null, "Se ha producido un error en la busqueda de pacientes", null, 0, 0, null, null, e);
+			e.printStackTrace();
+		}
+		return lista;
+		
+	}
+	
 	/***
 	 * Metodo que guarda los usuarios que se han registrado 
 	 * @param con conexion de la base de datos

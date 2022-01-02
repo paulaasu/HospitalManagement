@@ -8,13 +8,18 @@ import java.awt.Font;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
@@ -119,7 +124,7 @@ public class PanelExportar extends JPanel  {
 		btnBuscarFP.setBackground(new Color(211, 211, 211));
 		btnBuscarFP.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				BuscarFichero();
+				ExportarFicheroCsv();
 			}
 
 			
@@ -156,7 +161,7 @@ public class PanelExportar extends JPanel  {
 		btnBuscarFH.setBackground(new Color(211, 211, 211));
 		btnBuscarFH.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				BuscarFichero();
+				ExportarFicheroCsv();
 			}
 
 			
@@ -170,13 +175,49 @@ public class PanelExportar extends JPanel  {
 		panelAgenda.setBackground(new Color(240, 240, 240));
 	}
 	
-	private void BuscarFichero() {
-		JFileChooser j=new JFileChooser();
-		int opcion=j.showOpenDialog(this);
-		File fichero=j.getSelectedFile();
-		
-		/*-------------CODIGO---------------*/
-		//CONTROLAR FICHEOR NO NULO...
+	private void ExportarFicheroCsv() {
+		//Abrir explorador de archivo
+				JFileChooser j = Explorador();
+				
+				
+				ArrayList<Paciente> ret = new ArrayList<>();
+				Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
+				ret=BaseDeDatos.getPaciente(con);
+				FileWriter fw;
+				;
+				try {
+					fw=new FileWriter(j.getSelectedFile()+".csv");
+					BufferedWriter bw=new BufferedWriter(fw);
+					String cabecera="DNI"+";"+"NOMBRE"+";"+"APELLIDOS"+";"+"TELEFONO"+";"+"EMAIL"+";"+"DIRECCION"+";"+"FECHA"+"\n";
+					bw.write(cabecera);
+					for(Paciente p:ret){
+						String dni = String.valueOf(p.getDni());
+						String nombre=p.getNombre();
+						String apellidos= p.getApellidos();
+						String tel=  String.valueOf(p.getTelefono());
+						String email= p.getEmail();
+						String dir= p.getDireccion();
+						String fecha= p.getFechaNac();
+						String t=dni+";"+nombre+";"+apellidos+";"+tel+";"+email+";"+dir+";"+fecha+"\n";
+						bw.write(t);
+					}
+					bw.flush();
+					bw.close();
+					fw.close();
+					
+				} catch (IOException e) {
+					// TODO Bloque catch generado automáticamente
+					JOptionPane.showOptionDialog(null, "SE HA PRODUCIDO UN ERROR AL EXPORTAR LO DATOS", null, 0, 0, null, null, e);
+					e.printStackTrace();
+				}
+				//JOptionPane.("SE HA COMPLETADO CORRECTAMENTE");
+				
+	}
+	private JFileChooser Explorador() {
+		JFileChooser j = new JFileChooser();
+		j.setApproveButtonText("Guardar");
+		j.showSaveDialog(null);
+		return j;
 	}
 
 }

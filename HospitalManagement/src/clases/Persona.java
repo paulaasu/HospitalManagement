@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.regex.Pattern;
 
 public class Persona extends Usuario {
-	private String dni;
+	 String dni;
 	
 	String nombre;
 	String apellidos;
