@@ -7,6 +7,13 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -17,13 +24,35 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import clases.BaseDeDatos;
+import clases.Cita;
+import clases.TipoCita;
 import paneles.PanelPacientes.Panel4;
 import paneles.PanelPacientes.PanelAbajo;
 import paneles.PanelPacientes.PanelArriba;
+import vistas.VentanaCitas;
 import vistas.VentanaPaciente;
 
 public class PanelCitas extends JPanel {
-
+	//nuevo
+	Connection con;
+	public static DefaultTableModel modelo = new DefaultTableModel();
+	public static JTable tabla = new JTable(modelo);
+	private ArrayList<Cita> listaCitas;
+	protected VentanaCitas ventanacitas;
+	
+// ver las citas que hay en la tabla
+	private void verCitas() throws SQLException {
+	
+		//Vector<String> cabeceras = new Vector<String>( Arrays.asList( "Cod", "Prod", "Cliente", "Fecha", "Cant" ) );
+		String cc =null;
+		ArrayList<Cita> listaCitas = BaseDeDatos.cargarCitas( cc );
+		for (Cita c : listaCitas) {
+			
+			modelo.addRow( new Object[] {  } );
+		}
+		tabla.setModel( modelo );
+	}
 	public PanelCitas() {
 		setLayout(new BorderLayout());
 		setLayout(new BorderLayout());
@@ -54,10 +83,20 @@ public class PanelCitas extends JPanel {
 			//Creamos la JTable
 			DefaultTableModel modelo = new DefaultTableModel();
 			JTable tabla = new JTable(modelo);
+			
+//			//Creamos la JTable
+//			DefaultTableModel modelo = new DefaultTableModel();
+//			JTable tabla = new JTable(modelo);
+			
 			//Creamos las columnas
+	//nuevo
+			modelo.addColumn("Dni"); 
 			modelo.addColumn("Nombre"); //nombre del paciente??
-			modelo.addColumn("Fecha");
-			modelo.addColumn("Hora");
+			modelo.addColumn("Apellido");
+			modelo.addColumn("Fecha y Hora");
+	//nuevo
+			modelo.addColumn("Tipo cita");
+			
 
 		
 			
@@ -87,6 +126,29 @@ public class PanelCitas extends JPanel {
 			botonBuscar = new JButton("Buscar");
 			PanelBuscar.add(botonBuscar);
 			add(PanelBuscar);
+			// nuevo
+						botonBuscar.addActionListener(new ActionListener() {
+							
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								// TODO Auto-generated method stub
+								String dni= buscar.getText() ;
+								
+								try {
+									BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+									String sentSQL = "SELECT * FROM cita WHERE dni = '" + dni + "' ";
+									BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
+									BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
+									
+									BaseDeDatos.closeBD();
+								} catch (Exception e2) {
+									// TODO: handle exception
+								}
+								
+							}
+								
+							
+						});
 			
 			JPanel PanelVacio = new JPanel();
 			PanelVacio.setLayout(new GridLayout(1, 1));
@@ -104,7 +166,18 @@ public class PanelCitas extends JPanel {
 				//M.metodo añadir una cita al paciente
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					ventanaPaciente.setVisible(true);
+
+					try {
+						BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+						ventanacitas.setVisible(true);
+						BaseDeDatos.anadirPacienteTabla(modelo );
+						
+					
+					BaseDeDatos.closeBD();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					
 				}
 			});
@@ -115,13 +188,56 @@ public class PanelCitas extends JPanel {
 			botonBorrar = new JButton("Borrar");
 			PanelBorrar.add(botonBorrar);
 			add(PanelBorrar);
-
-
-			
-			
-			
-			
+			//preguntar
+//			botonBorrar.addMouseListener(new MouseAdapter() {
+//				@Override
+//				public void mouseClicked(MouseEvent e) {
+//					
+//					int columna = tabla.getRowCount();
+//					// TODO Auto-generated method stub
+//					try {
+//						
+//						Connection con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+//					String dni = null;;
+//					String nombre = null;
+//					String apellido=null;
+//					String fechayhora=null;
+//					BaseDeDatos.elimiarCitaPorDni( con,dni, nombre, apellido, fechayhora, TipoCita.CABECERA);
+//					BaseDeDatos.closeBD();				
+//					} catch (SQLException e1) {
+//						// TODO Auto-generated catch block
+//						e1.printStackTrace();
+//					}
+//				}
+//					
+//			});
+//			
+				
+			}
 		}
+	
+	public static void eliminaTablaCita(){
+		int rowCount = modelo.getRowCount();
+		//Elimina las filas uno a uno desde el final de la tabla
+		for (int i = rowCount - 1; i >= 0; i--) {
+		    modelo.removeRow(i);
+		}
+		
 	}
+	public static void actualizarTablaCita() {
+		try {
+			BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+			BaseDeDatos.anadirCitaTabla(modelo);
+			BaseDeDatos.closeBD();
+		} catch (Exception e) {
+			System.out.println("No se puede rellenar la tabla");
+			e.printStackTrace();
+		}
+		
+		
+	
+		
+	}
+	
 
 }

@@ -12,12 +12,12 @@ public class Cita extends Medico{
 	private String fechaYHoraCita ; // no entiendo porque da error
 	
 	TipoCita tipodecita;
-	public Cita(ArrayList<Cita> cita, String fechaYHoraCita, TipoCita tipodecita) {
+	public Cita(String dni, String nombre , String apellidos, String fechaYHoraCita, TipoCita tipodecita) {
 		super();
-	
 		this.fechaYHoraCita = sdf.format(fechaYHoraCita);
-		this.tipodecita =tipodecita.CABECERA ;
+		this.tipodecita = tipodecita.CABECERA;
 	}
+
 	public Cita() {
 		super();
 	}

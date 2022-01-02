@@ -641,9 +641,7 @@ public static ArrayList<HistorialClinico> cargarHistorial(String hc) throws SQLE
 			return tmPacientes;
 			
 		}
-		public static void añadirCita(Connection con , String fechaYHoraCita) {
-			//M.anadir una cita pasando la fecha y hora
-		}
+		
 	
 		/**
 		 * Metodo que devuelve el tipo de analisis  del paciente
@@ -663,6 +661,108 @@ public static ArrayList<HistorialClinico> cargarHistorial(String hc) throws SQLE
 			rs.close();
 			return tipo;
 		}
+		
+		//nuevo
+		/**
+		 * Metodo de añadir una cita 
+		 * @param con conexión con la bd
+		 * @param dni dni paciente
+		 * @param nombre nombre paciente
+		 * @param apellido apellido paciente
+		 * @param fechayhora fecha de la cita 
+		 * @param tipocita tipo de cita
+		 */
+	public static void anadirCita(Connection con, String dni, String nombre, String apellido, String fechayhora,
+				String tipocita) {
+			// TODO Auto-generated method stub
+			String sentSQL = "INSERT INTO cita VALUES('"+dni+"','"+nombre+"','"+apellido+
+					"','"+fechayhora+"','"+tipocita+"')";
+			
+			try {
+				Statement stmt =null;
+				stmt= con.createStatement();
+				stmt.executeUpdate(sentSQL);
+				stmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+		//nuevo añadir cita a la tabla
+	/**
+	 * Metodo que añade las citas la tabla en la bbddd
+	 * @param con Conexion con la bbdd
+	 * @param tabla JTable 
+	 * @throws SQLException
+	 */
+	public static void anadirCitaTabla(DefaultTableModel  tabla) throws SQLException {
+		
+		con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+		String sentSQL = "SELECT * FROM cita";
+		stmt = con.createStatement();
+		rs = stmt.executeQuery(sentSQL); //
+		while (rs.next()) {
+			
+			Object[] fila = new Object[4]; // hay 8 columnas en la tabla paciente
+			//se rellena cada posición del array con una de las columnas de la tabla de bd
+			for (int i=0; i<4; i++) {
+				fila[i] = rs.getObject(i+1);
+			}
+			tabla.addRow(fila);					
+		}
+		
+		
+	}
+	//eliminar cita nuevo
+	public static void elimiarCitaPorDni(Connection con, String dni, String nombre, String apellido, String fechayhora,
+			TipoCita cabecera) {
+		String sentSQL = "DELETE FROM Cita  WHERE dni ='"+dni+"'";
+		 
+		try {
+			Statement stmt = null;
+			stmt= con.createStatement();
+			stmt.executeUpdate(sentSQL);
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+		//CARGAR CITAS nuevo
+	/**
+	 * Cargar las citas
+	 * @param cc un string de cargar citas
+	 * @return devuelve la arralist
+	 * @throws SQLException
+	 */
+		public static ArrayList<Cita>cargarCitas(String cc) throws SQLException{
+			 String[] nombrecolumna = { "dni", "nombre", "apellidos", "fecha y hora ", "Tipo cita"};
+//			ArrayList<Cita>citas= new ArrayList<>();
+			Object[][]cita = new Object[4][4];
+			
+			con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+			String sentSQL = "SELECT * from Cita";
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(sentSQL);
+			int i = 0;
+			if(cargarCitas(cc).size()!=0) {
+				for(Cita c : cargarCitas(cc)) {
+					cita [i][0]= c.getDni();
+					cita [i][1]= c.getNombre();
+					cita[i][2]= c.getApellidos();
+					cita[i][3]=c.getFechaYHoraCita();
+					cita[i][4]= c.getTipodecita();
+					i++;
+					
+					cargarCitas(cc).add(c);
+					
+					
+				}}
+			return cargarCitas(cc);
+			}
 
 		
 	/**
