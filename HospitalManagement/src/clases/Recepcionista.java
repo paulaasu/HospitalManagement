@@ -8,7 +8,7 @@ public class Recepcionista extends Persona {
 
 	public Recepcionista(String dni, String nombre, String apellidos, int telefono, String email, String direccion,
 			String fechaNac, int salario, ArrayList<String> funciones) {
-		super(dni, nombre, apellidos, telefono, email, direccion, fechaNac, salario);
+		super(dni, nombre, apellidos, telefono, email, direccion, fechaNac);
 		this.funciones = funciones;
 	}
 	public Recepcionista() {
@@ -25,6 +25,6 @@ public class Recepcionista extends Persona {
 	@Override
 	public String toString() {
 		return "Nombre=" + nombre + ", Apellidos=" + apellidos + ", Telefono=" + telefono + ", Email="
-				+ email + ", Direccion=" + direccion + ", Salario=" + salario + ", Funciones=" + funciones ;
+				+ email + ", Direccion=" + direccion + ", Salario=" + ", Funciones=" + funciones ;
 	}
 }

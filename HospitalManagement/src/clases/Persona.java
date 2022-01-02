@@ -13,10 +13,10 @@ public class Persona extends Usuario {
 	String direccion;
 	 static SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yyyy" );
 	String fechaNac;
-	int salario;
+
 	
 	public Persona(String dni, String nombre, String apellidos, int telefono, String email, String direccion,
-			String fechaNac, int salario) {
+			String fechaNac) {
 		super();
 		this.dni = dni;
 		String erdni = "[0-9]{8}[A-Z]";
@@ -31,7 +31,6 @@ public class Persona extends Usuario {
 		this.email = email;
 		this.direccion = direccion;
 		this.fechaNac =sdf.format(fechaNac);
-		this.salario = salario;
 	}
 	public Persona() {
 		super();
@@ -42,7 +41,7 @@ public class Persona extends Usuario {
 		this.email = "";
 		this.direccion = "";
 		fechaNac = "00-00-0000";
-		this.salario =0;
+
 	}
 	public String getDni() {
 		return dni;
@@ -86,18 +85,12 @@ public class Persona extends Usuario {
 	public void setFechaNac(String fechaNac) {
 		this.fechaNac = sdf.format(fechaNac);
 	}
-	public int getSalario() {
-		return salario;
-	}
-	public void setSalario(int salario) {
-		this.salario = salario;
-	}
+	
 	@Override
 	public String toString() {
 		return "Persona Dni=" +dni+ ", nombre=" + nombre + ", apellidos=" + apellidos + ", telefono=" + telefono
-				+ ", email=" + email + ", direccion=" + direccion + ", FechaNacimiento=" + fechaNac
-				+ ", salario=" + salario ;
+				+ ", email=" + email + ", direccion=" + direccion + ", FechaNacimiento=" + fechaNac;
+			
 	}
 	
 }
-

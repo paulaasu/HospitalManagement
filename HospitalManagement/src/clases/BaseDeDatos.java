@@ -52,7 +52,7 @@ public class BaseDeDatos {
 		return con;
 		
 		
-		//PRUEBA
+		
 		
 		
 	}
@@ -110,36 +110,52 @@ public class BaseDeDatos {
 		String sent2 = "CREATE TABLA IF NOT EXISTS Medico( dni String,  nombre String,  apellidos String,"
 				+ " telefono Integer, email String,  direccion String , fecha_nacimiento String,salario Integer,cita String)" ;
 		/*String sent2 = "CREATE TABLE HistorialClinico 
-			(id INTEGER PRIMARY KEY AUTOINCREMENT,
+			(
+			id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 			Dni_paciente VARCHAR(20),
 			Diagnostico VARCHAR(200),
 			Analisis VARCHAR(50),
- 			FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni));" ;*/
+ 			FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE);
+				*/
+		
 		
 		String sent3 ="CREATE TABLA IF NOT EXISTS Persona(dni String,  nombre String,  apellidos String, "
 				+ "telefono Integer, email String,  direccion String , fecha_nacimiento Date, salario Intenger)";
 		
 		/*String sent3 ="CREATE TABLE Usuario
 			(
-			Id_usuario INTEGER PRIMARY KEY AUTOINCREMENT,
+			Id_usuario INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 			user VARCHAR(20),
 			password VARCHAR(30),
-			Rol INTEGER
-
-			);";*/
+			Rol VARCHAR(20)
+			);
+		 		*/
 		
 	
 		String sent4 ="CREATE TABLA IF NOT EXITS Usuario( nombre String,  contrasena String,  )";
 		/*String sent4 ="CREATE TABLE Cita
 			(
-			Id_cita INTEGER PRIMARY KEY AUTOINCREMENT,
+			Id_cita INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 			Fecha VARCHAR(20),
 			Dni_paciente VARCHAR(20),
+			Id_medico INTEGER,
 			Tipo VARCHAR(20),
-			FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni)
-			);";*/
-		Statement st = null;
+			FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE,
+			FOREIGN KEY(Id_medico) REFERENCES Medico(Id)
+			)*/
+
 		
+		
+		String sent5 ="CREATE TABLA IF NOT EXITS Medico( nombre String,  contrasena String,  )";
+		/*String sent4 ="CREATE TABLE Medico
+			(
+			Dni_medico INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+			Nombre VARCHAR(20),
+			Apellidos VARCHAR(30),
+			Direccion VARCHAR(40),
+			Especialidad VARCHAR(30)
+			);*/
+		Statement st = null;
 		
 		try {
 			st = con.createStatement();
@@ -337,7 +353,8 @@ public class BaseDeDatos {
 			String genero  =rs.getString("genero");
 			Integer telefono  =rs.getInt("telefono");
 			String direccion  =rs.getString("direccion");
-			pac = new Paciente(dni, nombre, apellido, 0, genero, direccion, fecha_nacimiento, 0, null);
+			// comentado lo de abajo pq al cambiar la clase persona da error
+			//pac = new Paciente(dni, nombre, apellido, 0, genero, direccion, fecha_nacimiento, 0, null);
 			
 		}
 		rs.close();
@@ -443,7 +460,8 @@ try {
 								String fnac = rst.getString("fecha_nacimiento");
 								String direccion = rst.getString("direccion");
 								String cita = rst.getString("cita");
-								p = new Medico(dni, nombre, apellidos, (int)0, email, direccion, fnac, (int)0,new ArrayList<Cita>());
+// comentado lo de abajo pq al cambiar la clase persona da error
+								// p = new Medico(dni, nombre, apellidos, (int)0, email, direccion, fnac, (int)0,new ArrayList<Cita>());
 									
 								}
 							}
@@ -541,7 +559,9 @@ public static ArrayList<HistorialClinico> cargarHistorial(String hc) throws SQLE
 	} catch (Exception e) {
 		e.printStackTrace();
 	}
-	return historial;	
+	return historial;
+	
+	
 }
 		/**
 		 * Método que obtiene un mapa con los pacientes de la BBDD

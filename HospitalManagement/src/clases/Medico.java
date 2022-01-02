@@ -8,8 +8,8 @@ public class Medico extends Persona {
 
 		
 		public Medico(String dni, String nombre, String apellidos, int telefono, String email, String direccion,
-				String fechaNac, int salario, ArrayList<Cita> cita) {
-			super(dni, nombre, apellidos, telefono, email, direccion, fechaNac, salario);
+				String fechaNac, ArrayList<Cita> cita) {
+			super(dni, nombre, apellidos, telefono, email, direccion, fechaNac);
 			this.cita = new ArrayList<>();
 		}
 		public Medico() {
@@ -27,7 +27,7 @@ public class Medico extends Persona {
 		@Override
 		public String toString() {
 			return "Medico [nombre=" + nombre + ", apellidos=" + apellidos + ", telefono=" + telefono + ", email="
-					+ email + ", direccion=" + direccion + ", salario=" + salario + ", cita=" + cita + "]";
+					+ email + ", direccion=" + direccion + ", salario=" + ", cita=" + cita + "]";
 		}
 
 }

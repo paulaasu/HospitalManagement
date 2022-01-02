@@ -7,8 +7,8 @@ public class Paciente extends Persona{
 
 	
 	public Paciente(String dni, String nombre, String apellidos, int telefono, String email, String direccion,
-			String fechaNac, int salario, HistorialClinico historialClinico) {
-		super(dni, nombre, apellidos, telefono, email, direccion, fechaNac, salario);
+			String fechaNac, HistorialClinico historialClinico) {
+		super(dni, nombre, apellidos, telefono, email, direccion, fechaNac);
 		this.historialClinico = historialClinico;
 	}
 
