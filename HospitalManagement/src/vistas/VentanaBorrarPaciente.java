@@ -92,12 +92,20 @@ public class VentanaBorrarPaciente extends JFrame{
 						JOptionPane.showMessageDialog(contentPane, "Tiene que insertar un dni");
 					}else {
 						BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-						String sentSQL = "DELETE FROM paciente WHERE dni = '" + dni + "' ";
+						String sentSQL2 = "SELECT * FROM paciente WHERE dni = '" + dni + "' ";
 						BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
-	//For INSERT, UPDATE or DELETE use the executeUpdate() method and for SELECT use the executeQuery() method which returns the ResultSet.
-						int filasEliminadas = BaseDeDatos.stmt.executeUpdate(sentSQL);
-						PanelPacientes.eliminaTablaPaciente();
-						PanelPacientes.actualizaTablaPaciente();
+						BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL2);
+						if(BaseDeDatos.rs.next()) {
+							String sentSQL = "DELETE FROM paciente WHERE dni = '" + dni + "' ";
+						//	BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
+		//For INSERT, UPDATE or DELETE use the executeUpdate() method and for SELECT use the executeQuery() method which returns the ResultSet.
+							int filasEliminadas = BaseDeDatos.stmt.executeUpdate(sentSQL); // con esto se borra al paciente de la bd
+							PanelPacientes.eliminaTablaPaciente();
+							PanelPacientes.actualizaTablaPaciente();
+						} else {
+							JOptionPane.showMessageDialog(contentPane, "El dni insertado no existe");
+						}
+						
 						BaseDeDatos.closeBD();
 					}
 					

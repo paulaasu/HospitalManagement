@@ -196,6 +196,8 @@ public class VentanaPaciente extends JFrame {
 //						}
 //						System.out.println(historial);
 						int historial = 2;
+						
+						
 						BaseDeDatos.anadirPaciente(con, nombre, apellido, dni, fchanac, genero1, telefono, dir, historial); //
 						PanelPacientes.eliminaTablaPaciente();
 						PanelPacientes.actualizaTablaPaciente();

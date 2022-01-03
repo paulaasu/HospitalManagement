@@ -13,6 +13,7 @@ import java.sql.DriverManager;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -94,19 +95,25 @@ public class VentanaAñadirHist extends JFrame{ //QUEDAN LAS CONDICIONES
 				 String sueño = PanelHistorial.devuelveSueño();
 				 String miccion = PanelHistorial.devuelveMiccion();
 				 
-				try {
-					BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-					BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
-					BaseDeDatos.stmt.executeUpdate("insert into historial values("+num+", '"+enfermedad+"', '"+sintomas+"', '"+tiempo+"', '"+sed+"', '"+sueño+"', '"+miccion+"')");
+				 if (enfermedad!=null && sintomas!=null && tiempo!=null && sed!=null && sueño!=null && miccion!=null) {
+					 try {
+							BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+							BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
+							BaseDeDatos.stmt.executeUpdate("insert into historial values("+num+", '"+enfermedad+"', '"+sintomas+"', '"+tiempo+"', '"+sed+"', '"+sueño+"', '"+miccion+"')");
+							
+							PanelHistorial.eliminaTablaHistorial();
+							PanelHistorial.actualizaTablaHistorial();
+							
+							BaseDeDatos.closeBD();
+						} catch (Exception e2) {
+							e2.printStackTrace();
+						}
+						dispose();
+				 }else {
+					 JOptionPane.showMessageDialog(btnAñadir, "Debes rellenar todos campos");
 					
-					PanelHistorial.eliminaTablaHistorial();
-					PanelHistorial.actualizaTablaHistorial();
-					
-					BaseDeDatos.closeBD();
-				} catch (Exception e2) {
-					e2.printStackTrace();
-				}
-				dispose();
+				 }
+				
 			}
 		});
 		
