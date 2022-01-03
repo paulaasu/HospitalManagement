@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -38,6 +39,13 @@ public class VentanaCitas extends JFrame{
 	JPanel contentPaneCitas;
 	JLabel datos ;
 	PanelCita2 panelComponentes;
+	private JTextField txtdni,txtnombre,txtapellidos,txtfechayhora;
+	private JButton btnanadir, btncerrar;
+	public SimpleDateFormat sdf1 = new SimpleDateFormat( "dd/MM/yyyy HH:mm:ss" );
+	private Object[] addCita;
+	 private JComboBox ctipoCita;
+	 private TipoCita tp;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -116,25 +124,30 @@ public class VentanaCitas extends JFrame{
 			txtfechayhora=new JTextField("dd/MM/yyyy HH:mm:ss") ;
 			add(txtfechayhora);
 			
-			add(new JLabel("TIPO: "));
-			ButtonGroup bg = new ButtonGroup(); 
-			JPanel tipo= new JPanel();
-			JRadioButton CABECERA = new JRadioButton("CABECERA");
-			JRadioButton GINECOLOGO = new JRadioButton("GINECOLOGO");
-			JRadioButton OTRO = new JRadioButton("OTRO");
 
-			bg.add(CABECERA);
-			bg.add(GINECOLOGO);
-			bg.add(OTRO);
+			ctipoCita = new JComboBox<>();
+			add(ctipoCita);
 			
 			
-			
-			tipo.add(CABECERA);
-			tipo.add(GINECOLOGO);
-			tipo.add(OTRO);
-			
-			add(tipo);
-		
+//			add(new JLabel("TIPO: "));
+//			ButtonGroup bg = new ButtonGroup(); 
+//			JPanel tipo= new JPanel();
+//			JRadioButton CABECERA = new JRadioButton("CABECERA");
+//			JRadioButton GINECOLOGO = new JRadioButton("GINECOLOGO");
+//			JRadioButton OTRO = new JRadioButton("OTRO");
+//
+//			bg.add(CABECERA);
+//			bg.add(GINECOLOGO);
+//			bg.add(OTRO);
+//			
+//			
+//			
+//			tipo.add(CABECERA);
+//			tipo.add(GINECOLOGO);
+//			tipo.add(OTRO);
+//			
+//			add(tipo);
+//		
 			
 
 			add(new JLabel(" "));
@@ -153,24 +166,18 @@ public class VentanaCitas extends JFrame{
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
 					JOptionPane.showMessageDialog( contentPaneCitas, "Debes rellenar todos campos");
-					if (!txtdni.getText().isEmpty() && !txtnombre.getText().isEmpty() && !txtapellido.getText().isEmpty() && txttipoCita.getText().isEmpty()  ) {
+					if (!txtdni.getText().isEmpty() && !txtnombre.getText().isEmpty() && !txtapellido.getText().isEmpty()   ) {
 						String dni = txtdni.getText();
 						String nombre = txtnombre.getText();
 						String apellido = txtapellido.getText();
 						String fechayhora = sdf1.format(txtfechayhora.getText());
-						String tipocita = "";
-						if(CABECERA.isSelected()) {
-							tipocita = "CABECERA";
-						}if(GINECOLOGO.isSelected()) {
-							tipocita = "GINECOLOGO";
-						}if (OTRO.isSelected()) {
-							
-						}
+						TipoCita t = (TipoCita) ctipoCita.getSelectedItem();
+						
 						try {
 						Connection con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
 						BaseDeDatos.initBD("BaseDeDatos");
 						
-						BaseDeDatos.anadirCita(con, dni,nombre, apellido,fechayhora, tipocita); //
+						BaseDeDatos.anadirCita(con, dni,nombre, apellido,fechayhora, String.valueOf(ctipoCita)); //
 						PanelCitas.eliminaTablaCita();
 						PanelCitas.actualizarTablaCita();
 						BaseDeDatos.closeBD();	

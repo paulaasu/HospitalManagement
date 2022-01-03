@@ -8,25 +8,25 @@ import java.util.ArrayList;
 public class Cita extends Medico{
 	/*como tenemos un SimpleDateFormat  hay que pase de   date a string*/
 	private static SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yyyy hh:mm" );
-	
-	private String fechaYHoraCita ; // no entiendo porque da error
+	//nuevo
+	private Date fechaYHoraCita ; // no entiendo porque da error
 	
 	TipoCita tipodecita;
-	public Cita(String dni, String nombre , String apellidos, String fechaYHoraCita, TipoCita tipodecita) {
+	public Cita(String dni, String nombre , String apellidos, Date fechaYHoraCita, TipoCita tipodecita) {
 		super();
-		this.fechaYHoraCita = sdf.format(fechaYHoraCita);
+		this.fechaYHoraCita = fechaYHoraCita;
 		this.tipodecita = tipodecita.CABECERA;
 	}
 
 	public Cita() {
 		super();
 	}
-	public String getFechaYHoraCita() {
+	public Date getFechaYHoraCita() {
 		return fechaYHoraCita;
 	}
-	public void setFechaYHoraCita(String fechaYHoraCita) {
+	public void setFechaYHoraCita(Date fechaYHoraCita) {
 	
-			this.fechaYHoraCita =  sdf.format(fechaYHoraCita);
+			this.fechaYHoraCita =  fechaYHoraCita;
 		
 	}
 	public TipoCita getTipodecita() {

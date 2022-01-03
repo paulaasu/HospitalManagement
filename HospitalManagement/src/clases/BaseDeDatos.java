@@ -32,16 +32,16 @@ public class BaseDeDatos {
 	public static char[] com;
 	public static Connection con;
 
-	private static Logger logger = Logger.getLogger( "BaseDatos" );
+	private static Logger logger = Logger.getLogger( "BaseDeDatos.db" );
 	private static Handler handler ;
 	
-	public static Connection initBD(String HospitalManagementBD) {
+	public static Connection initBD(String BaseDeDatos) {
 		con = null;
 		try {
 			Class.forName("org.sqlite.JDBC");// Carga la base de datos en el squliteman
-//			logger.log( Level.INFO, "Carga de librería org.sqlite.JDBC" );
-//			logger.log( Level.INFO, "Abriendo conexión con " + BaseDeDatos );// se habre la conexion con la bbd
-			con = DriverManager.getConnection("jdbc:sqlite:" + HospitalManagementBD );
+			logger.log( Level.INFO, "Carga de librería org.sqlite.JDBC" );
+			logger.log( Level.INFO, "Abriendo conexión con " + BaseDeDatos );// se habre la conexion con la bbd
+			con = DriverManager.getConnection("jdbc:sqlite:" + BaseDeDatos );
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -156,6 +156,8 @@ public class BaseDeDatos {
 			Direccion VARCHAR(40),
 			Especialidad VARCHAR(30)
 			);*/
+		String sent6 ="CREATE TABLA IF NOT EXITS Cita( dni String,nombre String,  apellido String, fechayhora String, TipoCita String  )";
+		
 		Statement st = null;
 		
 		try {
@@ -164,7 +166,8 @@ public class BaseDeDatos {
 			st.executeUpdate(sent2);
 			st.executeUpdate(sent3);
 			st.executeUpdate(sent4);
-			
+			st.executeUpdate(sent5);
+			st.executeUpdate(sent6);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -771,6 +774,7 @@ public static ArrayList<HistorialClinico> cargarHistorial(String hc) throws SQLE
 	 * @return devuelve el tipo
 	 * @throws SQLException
 	 */
+		//hay que terminar
 	public static TipoCita getTipoCita(String dni) throws SQLException {
 		Statement statement = con.createStatement();
 		String sent = "select tipo from medico where dni="+dni;

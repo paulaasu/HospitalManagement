@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -126,29 +127,50 @@ public class PanelCitas extends JPanel {
 			botonBuscar = new JButton("Buscar");
 			PanelBuscar.add(botonBuscar);
 			add(PanelBuscar);
-			// nuevo
-						botonBuscar.addActionListener(new ActionListener() {
-							
-							@Override
-							public void actionPerformed(ActionEvent e) {
-								// TODO Auto-generated method stub
-								String dni= buscar.getText() ;
-								
-								try {
-									BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-									String sentSQL = "SELECT * FROM cita WHERE dni = '" + dni + "' ";
-									BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
-									BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
-									
-									BaseDeDatos.closeBD();
-								} catch (Exception e2) {
-									// TODO: handle exception
-								}
-								
+			botonBuscar.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					String dni= buscar.getText() ;
+				//nuevo
+					try {
+						BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+						String sentSQL = "SELECT * FROM cita WHERE dni = '" + dni + "' ";
+						BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
+						BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
+						
+						if(BaseDeDatos.rs.next()) {
+							int rowCount = modelo.getRowCount();
+							//Elimina las filas uno a uno desde el final de la tabla
+							for (int i = rowCount - 1; i >= 0; i--) {
+							    modelo.removeRow(i);
 							}
-								
 							
-						});
+							
+							Object[] fila = new Object[3]; // hay 4 columnas en la tabla cita
+							//se rellena cada posición del array con una de las columnas de la tabla de bd
+							for (int i=0; i<3; i++) {
+								fila[i] = BaseDeDatos.rs.getObject(i+1);
+							}
+							modelo.addRow(fila);
+						}else {
+							JOptionPane.showMessageDialog(PanelBuscar, "Dni incorrecto, no existe en la base de datos");
+							int rowCount = modelo.getRowCount();
+							//Elimina las filas uno a uno desde el final de la tabla
+							for (int i = rowCount - 1; i >= 0; i--) {
+							    modelo.removeRow(i);
+							}
+							BaseDeDatos.anadirCitaTabla(modelo);
+						}					
+							BaseDeDatos.closeBD();
+							
+						} catch (Exception e2) {
+							// TODO: handle exception
+						}
+						
+					}
+				});
 			
 			JPanel PanelVacio = new JPanel();
 			PanelVacio.setLayout(new GridLayout(1, 1));
