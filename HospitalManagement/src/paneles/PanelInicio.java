@@ -21,11 +21,13 @@ public class PanelInicio extends JPanel {
 //		add(lblTitulo,BorderLayout.NORTH);
 		
 		setLayout(new BorderLayout());
-		ImageIcon img=new ImageIcon("src/img/DeustoHospital.png");
-		JLabel lbl_imagen=new JLabel(img);
+		ImageIcon img = new ImageIcon("src/img/DeustoHospital.png");
+		JLabel lbl_imagen = new JLabel(img);
+		//lbl_imagen.setSize(1900, 1500);;
 	
 		add(lbl_imagen,BorderLayout.CENTER);
-
 	}
-
+	
 }
+
+

@@ -12,9 +12,12 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Pattern;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -34,9 +37,13 @@ import clases.Pacientte;
 
 
 
+
 public class PanelPacientes extends JPanel {
 	public static DefaultTableModel modelo;
 	public static JTable tabla;
+	public static JLabel jLabelTemporizador;
+	
+	
 	
 	public PanelPacientes() {
 		setLayout(new BorderLayout());
@@ -47,6 +54,11 @@ public class PanelPacientes extends JPanel {
 		add(datos, BorderLayout.NORTH);
 		Panel4 panel4 = new Panel4();
 		add(panel4, BorderLayout.CENTER);
+		jLabelTemporizador = new JLabel("Tiempo restante: ");
+		//JPanel panelTemporizador = new JPanel();
+		//panelTemporizador.add(jLabelTemporizador);
+		add(jLabelTemporizador, BorderLayout.SOUTH);
+		
 		
 		
 	}
@@ -96,6 +108,7 @@ public class PanelPacientes extends JPanel {
 		private JButton botonhistorialClinico;
 		private String dni;
 		
+			
 		public PanelAbajo() {
 			setLayout(new FlowLayout());
 			
@@ -131,6 +144,7 @@ public class PanelPacientes extends JPanel {
 			// Buscar paciente por DNI
 			botonBuscar.addActionListener(new ActionListener() {
 				
+				
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					String dniB = buscar.getText();
@@ -154,14 +168,52 @@ public class PanelPacientes extends JPanel {
 								fila[i] = BaseDeDatos.rs.getObject(i+1);
 							}
 							modelo.addRow(fila);
+
+							/* Al buscar el DNI del paciente, aparece solamente ese por pantalla. En ese momento, al darle a buscar, se
+							 * inicializa una cuenta atrás de 15 segundos. Al acabarse el tiempo, toda la lista de pacientes vuelve a 
+							 * cómo estaba al comienzo, para que se pueda realizar otra consulta  nueva sin necesidad de cerrar la ventana
+							 * y volver a entrar. 
+							 */
+							jLabelTemporizador.setText("");
+							Timer timer = new Timer();
+
+					        timer.scheduleAtFixedRate(new TimerTask() {
+					            int i = 15;
+
+					            public void run() {
+
+					            	jLabelTemporizador.setText("Tiempo restante: " + i);
+					                i--;
+
+					                if (i < 0) {
+					                    timer.cancel();
+					                    jLabelTemporizador.setText("");
+					                    int rowCount = modelo.getRowCount();
+										//Elimina las filas uno a uno desde el final de la tabla
+										for (int i = rowCount - 1; i >= 0; i--) {
+										    modelo.removeRow(i);
+										}
+										BaseDeDatos.anadirPacienteTabla(modelo);
+					                   
+					                }
+					            }
+					        }, 0, 1000);
+					        
+					        
+					    
+							
+							
 						}else {
 							JOptionPane.showMessageDialog(PanelBuscar, "El dni insertado no existe");
+							
 							int rowCount = modelo.getRowCount();
 							//Elimina las filas uno a uno desde el final de la tabla
 							for (int i = rowCount - 1; i >= 0; i--) {
 							    modelo.removeRow(i);
 							}
 							BaseDeDatos.anadirPacienteTabla(modelo);
+							
+							//Iniciar un contador
 						}
 
 						
@@ -236,6 +288,8 @@ public class PanelPacientes extends JPanel {
 				}
 			});
 			
+			
+			//Borrar paciente
 			JPanel PanelBorrar = new JPanel();
 			PanelBorrar.setLayout(new GridLayout(2, 1));
 			PanelBorrar.add(new JLabel("Borrar paciente..."));
@@ -288,6 +342,3 @@ public class PanelPacientes extends JPanel {
 	}
 
 }
-
-
-
