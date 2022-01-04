@@ -96,67 +96,60 @@ public class BaseDeDatos {
 	 * @param con Pasamos la conexion 
 	 */
 	public static void crearTablas(Connection con) {
-		String sent1= "CREATE TABLE IF NOT EXISTS Paciente(nombre string,  apellido string, dni string, fecha_nacimiento string, genero string, telefono integer, direccion string )";
-		/*String sent1= "CREATE TABLE Paciente(Dni VARCHAR(20) PRIMARY KEY, 
-		      Nombre VARCHAR(20),
-		      Apellidos VARCHAR(40),
-		      Telefono INTEGER,
-		      Email VARCHAR(40),
-		      Direccion VARCHAR(40),
-		      Fecha_Nac VARCHAR(20),
-		      IdHistorial INTEGER,
-		      FOREIGN KEY(IdHistorial) REFERENCES HistorialClinico (id)
-			);";*/
+		String sent1= "CREATE TABLE IF NOT EXISTS Paciente(dni Integer, nombre string,  apellidos string, telefono Integer, email string, direccion string, fecha_nacimiento string, genero string )";
+		/*String sent1= "CREATE TABLE Paciente(
+			Dni VARCHAR(20) PRIMARY KEY NOT NULL, 
+		    Nombre VARCHAR(20),
+		    Apellidos VARCHAR(40),
+		    Telefono INTEGER,
+		    Email VARCHAR(40),
+		    Direccion VARCHAR(40),
+		    Fecha_Nac Date,
+		    Genero VARCHAR(9)
+		    );*/
 		
-		String sent2 = "CREATE TABLA IF NOT EXISTS Medico( dni String,  nombre String,  apellidos String,"
-				+ " telefono Integer, email String,  direccion String , fecha_nacimiento String,salario Integer,cita String)" ;
-		/*String sent2 = "CREATE TABLE HistorialClinico 
-			(
+		String sent2 = "CREATE TABLA IF NOT EXISTS Medico( dni Integer,  nombre String,  apellidos String, telefono Integer, email String,  direccion String , fecha_nacimiento String, Especialidad string)" ;
+		/*String sent2 = "CREATE TABLE Medico(
+			Dni_medico INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+			Nombre VARCHAR(20),
+			Apellidos VARCHAR(30),
+			Telefono INTEGER(9),
+			Email VARCHAR(40),
+			Direccion VARCHAR(40),
+			Fecha_nac Date
+			Especialidad VARCHAR(30)
+		);*/
+		
+		
+		String sent3 ="CREATE TABLA IF NOT EXISTS Historial(id Integer, Diagnostico String, Analisis String, Dni_paciente Integer )";
+		/*String sent3 = "CREATE TABLE Historial(
 			id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-			Dni_paciente VARCHAR(20),
 			Diagnostico VARCHAR(200),
 			Analisis VARCHAR(50),
- 			FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE);
-				*/
+			Dni_paciente INTEGER,
+		 	FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE
+		 );*/
 		
 		
-		String sent3 ="CREATE TABLA IF NOT EXISTS Persona(dni String,  nombre String,  apellidos String, "
-				+ "telefono Integer, email String,  direccion String , fecha_nacimiento Date, salario Intenger)";
-		
-		/*String sent3 ="CREATE TABLE Usuario
-			(
+		String sent4 ="CREATE TABLA IF NOT EXITS Usuario( nombre String,  contrasena String,  )";
+		/*String sent4 = "CREATE TABLE Usuario(
 			Id_usuario INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 			user VARCHAR(20),
 			password VARCHAR(30),
 			Rol VARCHAR(20)
-			);
-		 		*/
-		
-	
-		String sent4 ="CREATE TABLA IF NOT EXITS Usuario( nombre String,  contrasena String,  )";
-		/*String sent4 ="CREATE TABLE Cita
-			(
-			Id_cita INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-			Fecha VARCHAR(20),
-			Dni_paciente VARCHAR(20),
-			Id_medico INTEGER,
-			Tipo VARCHAR(20),
-			FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE,
-			FOREIGN KEY(Id_medico) REFERENCES Medico(Id)
-			)*/
+		)*/
 
 		
-		
-		String sent5 ="CREATE TABLA IF NOT EXITS Medico( nombre String,  contrasena String,  )";
-		/*String sent4 ="CREATE TABLE Medico
-			(
-			Dni_medico INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-			Nombre VARCHAR(20),
-			Apellidos VARCHAR(30),
-			Direccion VARCHAR(40),
-			Especialidad VARCHAR(30)
-			);*/
-		String sent6 ="CREATE TABLA IF NOT EXITS Cita( dni String,nombre String,  apellido String, fechayhora String, TipoCita String  )";
+		String sent5 ="CREATE TABLA IF NOT EXITS Cita( dni String,nombre String,  apellido String, fechayhora String, TipoCita String  )";
+		/*String sent5 = "CREATE TABLE Cita(
+				Id_cita INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+				Fecha VARCHAR(20),
+				Dni_paciente VARCHAR(20),
+				Id_medico INTEGER,
+				Tipo VARCHAR(20),
+				FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE,
+				FOREIGN KEY(Id_medico) REFERENCES Medico(Id)
+				)*/
 		
 		Statement st = null;
 		
@@ -167,7 +160,6 @@ public class BaseDeDatos {
 			st.executeUpdate(sent3);
 			st.executeUpdate(sent4);
 			st.executeUpdate(sent5);
-			st.executeUpdate(sent6);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -487,7 +479,7 @@ try {
 							String analisis = rs.getString("analisis");
 							String fnac = rs.getString("fecha_nacimiento");
 							String direccion = rs.getString("direccion");
-	//						p= new Paciente(dni, nombre, apellidos, (int)0,email, direccion, fnac, (int)0, new HistorialClinico(diagnostico, TipoAnalisis.valueOf(analisis)));
+	//					p= new Paciente(dni, nombre, apellidos, (int)0,email, direccion, fnac, (int)0, new HistorialClinico(diagnostico, TipoAnalisis.valueOf(analisis)));
 								
 							}
 						}
