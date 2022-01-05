@@ -88,7 +88,7 @@ public class PanelPacientes extends JPanel {
 			modelo.addColumn("Género");
 			modelo.addColumn("Teléfono");
 			modelo.addColumn("Dirección");
-			modelo.addColumn("Nª Historial");
+
 			
 			actualizaTablaPaciente();
 			
@@ -213,7 +213,7 @@ public class PanelPacientes extends JPanel {
 							}
 							BaseDeDatos.anadirPacienteTabla(modelo);
 							
-							//Iniciar un contador
+							
 						}
 
 						
@@ -327,9 +327,7 @@ public class PanelPacientes extends JPanel {
 		} catch (Exception e) {
 			System.out.println("No se puede rellenar la tabla");
 			e.printStackTrace();
-		}
-		
-		
+		}	
 	}
 	
 	public static void eliminaTablaPaciente(){

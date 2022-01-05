@@ -77,7 +77,8 @@ public class VentanaHistorial extends JFrame {
 			JLabel datos = new JLabel("Enfermedad actual:");
 			datos.setHorizontalAlignment(SwingConstants.CENTER);
 			datos.setFont(new Font("Sherif", Font.PLAIN, 24));
-			add(datos, BorderLayout.NORTH);
+			setBackground(new Color(176, 196, 222));
+			add(datos, BorderLayout.NORTH);			
 			
 			Panel3 panel3 = new Panel3();
 			add(panel3, BorderLayout.CENTER);
@@ -99,19 +100,17 @@ public class VentanaHistorial extends JFrame {
 		private JTextField miccionTxt;
 
 		public Panel3() {
-			setLayout(new GridLayout(9, 2));
+			setLayout(new GridLayout(7, 2));
 
 			
 			try {
 				BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-				String sentSQL = "SELECT * FROM historial WHERE numHistorial = '" + VentanaVisualizarHist.devuelveDni() + "' ";
+				String sentSQL = "SELECT * FROM historial WHERE dni = '" + VentanaVisualizarHist.devuelveDni() + "' ";
 				BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
 				BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
 				
-				
-				
-				while(BaseDeDatos.rs.next()) {
-					HistorialClinico h = new HistorialClinico(BaseDeDatos.rs.getInt("numHistorial"), BaseDeDatos.rs.getString("enfermedad"), BaseDeDatos.rs.getString("sintoma"), BaseDeDatos.rs.getString("tiempo"), BaseDeDatos.rs.getString("sed"),BaseDeDatos.rs.getString("sueño"),BaseDeDatos.rs.getString("miccion"));
+				if(BaseDeDatos.rs.next()) {
+					HistorialClinico h = new HistorialClinico(BaseDeDatos.rs.getInt("dni"), BaseDeDatos.rs.getString("enfermedad"), BaseDeDatos.rs.getString("sintoma"), BaseDeDatos.rs.getString("tiempo"), BaseDeDatos.rs.getString("sed"),BaseDeDatos.rs.getString("sueño"),BaseDeDatos.rs.getString("miccion"));
 					JLabel motivo = new JLabel("Enfermedad: "); // ESTO ES LO QUE HACE QUE EL FON
 					add(motivo);
 					JLabel motivoHist = new JLabel(h.getEnfermedad());
@@ -170,22 +169,18 @@ public class VentanaHistorial extends JFrame {
 					
 				
 					
-					add(new JLabel(" "));
-					add(new JLabel(" "));
-					editar = new JButton("Editar historial");
-					add(editar);
-					add(new JLabel(" "));
+//					add(new JLabel(" "));
+//					add(new JLabel(" "));
+//					editar = new JButton("Editar historial");
+//					add(editar);
+//					add(new JLabel(" "));
 					
 					BaseDeDatos.closeBD();
 					
-					editar.addActionListener(new ActionListener() {
-						
-						@Override
-						public void actionPerformed(ActionEvent e) {
-							
-							
-						}
-					});
+				
+				}else {
+					JOptionPane.showMessageDialog(apetitoTxt, "El dni insertado no existe");
+					
 				}
 				
 				
@@ -202,6 +197,7 @@ public class VentanaHistorial extends JFrame {
 			
 		}
 	}
+	
 }
 	
 	

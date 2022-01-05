@@ -53,7 +53,7 @@ class Panel1 extends JPanel{ //panel que contiene la INFORMACION
 		
 		public Panel1() {
 			setLayout(new BorderLayout());
-			JLabel datos = new JLabel("Enfermedad actual:");
+			JLabel datos = new JLabel("HISTORIAL CLÍNICO");
 			datos.setHorizontalAlignment(SwingConstants.CENTER);
 			datos.setFont(new Font("Sherif", Font.PLAIN, 24));
 			setBackground(new Color(176, 196, 222));
@@ -160,7 +160,7 @@ class Panel2 extends JPanel{ //panel que contiene la TABLA PACIENTES
 			 modelo = new DefaultTableModel();
 			 tabla = new JTable(modelo);
 			//Creamos las columnas
-			modelo.addColumn("nª historial");
+			modelo.addColumn("Dni");
 			modelo.addColumn("Enfermedad");
 			modelo.addColumn("Síntomas");
 			modelo.addColumn("Tiempo");
@@ -168,9 +168,7 @@ class Panel2 extends JPanel{ //panel que contiene la TABLA PACIENTES
 			modelo.addColumn("Sueño");
 			modelo.addColumn("Micción");
 			try {
-				BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-				BaseDeDatos.anadirHistorialTabla(modelo);
-				BaseDeDatos.closeBD();
+				actualizarTablaHistorial();
 			} catch (Exception e) {
 				System.out.println("No se puede rellenar la tabla");
 				e.printStackTrace();
@@ -183,13 +181,8 @@ class Panel2 extends JPanel{ //panel que contiene la TABLA PACIENTES
 		}
 }
 
-public static String devuelveEnfermedad(){
-	String enfermedad = enfermedadTxt.getText();
-	return enfermedad;
-	
-}
 
-public static void actualizaTablaHistorial(){
+public static void nuevaTablaHistorial(){
 	try {
 		BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
 		BaseDeDatos.anadirHistorialTabla(modelo);
@@ -201,7 +194,6 @@ public static void actualizaTablaHistorial(){
 	
 	
 }
-
 public static void eliminaTablaHistorial(){
 	int rowCount = modelo.getRowCount();
 	//Elimina las filas uno a uno desde el final de la tabla
@@ -210,28 +202,42 @@ public static void eliminaTablaHistorial(){
 	}
 	
 }
+public static JTextField devuelveEnfermedad(){
+	return enfermedadTxt;	
+}
 
-public static String devuelveSintomas(){
-	String sintomas = sintomasTxt.getText();
-	return sintomas;
+
+public static JTextField devuelveSintomas(){
+	return sintomasTxt;	
+}
+
+public static JTextField devuelveTiempo(){
+	return tiempoTxt;
+}
+public static JTextField devuelveSed(){
+	return sedTxt;
+}
+public static JTextField devuelveSueño(){
+	return sueñoTxt;
+}
+public static JTextField devuelveMiccion(){
+	return miccionTxt;
+}
+
+public static void actualizarTablaHistorial() {
+	int rowCount = modelo.getRowCount();
+	//Elimina las filas uno a uno desde el final de la tabla
+	for (int i = rowCount - 1; i >= 0; i--) {
+	    modelo.removeRow(i);
+	}
+	try {
+		BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+		BaseDeDatos.anadirHistorialTabla(modelo);
+		BaseDeDatos.closeBD();
+	} catch (Exception e) {
+		// TODO: handle exception
+	}
 	
-}
-
-public static String devuelveTiempo(){
-	String tiempo = tiempoTxt.getText();
-	return tiempo;
-}
-public static String devuelveSed(){
-	String sed = sedTxt.getText();
-	return sed;
-}
-public static String devuelveSueño(){
-	String sueño = sueñoTxt.getText();
-	return sueño;
-}
-public static String devuelveMiccion(){
-	String miccion = miccionTxt.getText();
-	return miccion;
 }
 
 }

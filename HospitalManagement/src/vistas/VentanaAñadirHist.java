@@ -67,7 +67,7 @@ public class VentanaAñadirHist extends JFrame{ //QUEDAN LAS CONDICIONES
 		panel_2.setBackground(new Color(0, 206, 209));
 		contentPane.add(panel_2, BorderLayout.NORTH);
 		
-		JLabel lblInsertePaciente = new JLabel("INSERTE NÚMERO DE HISTORIAL");
+		JLabel lblInsertePaciente = new JLabel("INSERTE NÚMERO DNI DEL PACIENTE");
 		lblInsertePaciente.setFont(new Font("Tahoma", Font.BOLD, 18));
 		panel_2.add(lblInsertePaciente);
 		
@@ -87,28 +87,48 @@ public class VentanaAñadirHist extends JFrame{ //QUEDAN LAS CONDICIONES
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				 int num = VentanaAñadirHist.devuelveDni();
-				 String enfermedad = PanelHistorial.devuelveEnfermedad();
-				 String sintomas = PanelHistorial.devuelveSintomas();
-				 String tiempo = PanelHistorial.devuelveTiempo();
-				 String sed = PanelHistorial.devuelveSed();
-				 String sueño = PanelHistorial.devuelveSueño();
-				 String miccion = PanelHistorial.devuelveMiccion();
+				 int dni = VentanaAñadirHist.devuelveDni();
+				 String enfermedad = PanelHistorial.devuelveEnfermedad().getText();
+				 String sintomas = PanelHistorial.devuelveSintomas().getText();
+				 String tiempo = PanelHistorial.devuelveTiempo().getText();
+				 String sed = PanelHistorial.devuelveSed().getText();
+				 String sueño = PanelHistorial.devuelveSueño().getText();
+				 String miccion = PanelHistorial.devuelveMiccion().getText();
 				 
 				 if (enfermedad!=null && sintomas!=null && tiempo!=null && sed!=null && sueño!=null && miccion!=null) {
 					 try {
+						BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+						String sentSQL3 = "SELECT * FROM paciente WHERE dni = '" + dni + "' ";
+						BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
+						BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL3);
+						
+						if(BaseDeDatos.rs.next()) {
+							BaseDeDatos.closeBD();
 							BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
 							BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
-							BaseDeDatos.stmt.executeUpdate("insert into historial values("+num+", '"+enfermedad+"', '"+sintomas+"', '"+tiempo+"', '"+sed+"', '"+sueño+"', '"+miccion+"')");
+							BaseDeDatos.stmt.executeUpdate("insert into historial values("+dni+", '"+enfermedad+"', '"+sintomas+"', '"+tiempo+"', '"+sed+"', '"+sueño+"', '"+miccion+"')");
 							
-							PanelHistorial.eliminaTablaHistorial();
-							PanelHistorial.actualizaTablaHistorial();
+							PanelHistorial.actualizarTablaHistorial();
 							
 							BaseDeDatos.closeBD();
-						} catch (Exception e2) {
-							e2.printStackTrace();
+							
+							
+							PanelHistorial.devuelveEnfermedad().setText("");
+							PanelHistorial.devuelveSintomas().setText("");
+							PanelHistorial.devuelveTiempo().setText("");
+							PanelHistorial.devuelveSed().setText("");
+							PanelHistorial.devuelveSueño().setText("");
+							PanelHistorial.devuelveMiccion().setText("");
+							dispose();
+							
+						}else {
+							JOptionPane.showMessageDialog(btnAñadir, "El dni insertado no existe");
+							
 						}
-						dispose();
+					} catch (Exception e2) {
+						
+					}
+			
 				 }else {
 					 JOptionPane.showMessageDialog(btnAñadir, "Debes rellenar todos campos");
 					

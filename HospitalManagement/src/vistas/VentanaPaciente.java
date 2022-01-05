@@ -186,23 +186,22 @@ public class VentanaPaciente extends JFrame {
 					try {
 						java.sql.Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
 						//para aumentar el nª historial cada vez que se añade un paciente --> HAY QUE CORREGIR, DA ERROR
-//						String sentSQL = "SELECT max(numHistorial) FROM paciente";
+//						String sentSQL = "SELECT nombre, apellido, dni, fecha_nacimiento, genero, telefono, direccion, max(numHistorial) FROM paciente";
 //						BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
 //						BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
 //						int historial=1;
 //						while(BaseDeDatos.rs.next()) {
-//							historial = BaseDeDatos.rs.getInt(9) + 1;
+//							historial = BaseDeDatos.rs.getInt(8) + 1;
 ////							historial = historial + 1;
 //						}
 //						System.out.println(historial);
-						int historial = 2;
 						
 						
-						BaseDeDatos.anadirPaciente(con, nombre, apellido, dni, fchanac, genero1, telefono, dir, historial); //
+						
+						BaseDeDatos.anadirPaciente(con, nombre, apellido, dni, fchanac, genero1, telefono, dir); //
 						PanelPacientes.eliminaTablaPaciente();
 						PanelPacientes.actualizaTablaPaciente();
 						BaseDeDatos.closeBD();	
-						System.out.println(historial);
 					} catch (Exception e2) {
 						e2.printStackTrace();
 					}

@@ -61,7 +61,7 @@ public class VentanaVisualizarHist extends JFrame{
 		panel_2.setBackground(new Color(0, 206, 209));
 		contentPane.add(panel_2, BorderLayout.NORTH);
 		
-		JLabel lblInsertePaciente = new JLabel("INSERTE NÚMERO DE HISTORIAL");
+		JLabel lblInsertePaciente = new JLabel("INSERTE DNI PACIENTE");
 		lblInsertePaciente.setFont(new Font("Tahoma", Font.BOLD, 18));
 		panel_2.add(lblInsertePaciente);
 		
@@ -94,9 +94,10 @@ public class VentanaVisualizarHist extends JFrame{
 		
 	}
 
-	public static int devuelveDni(){
-		int dni = Integer.parseInt(txt_dni.getText());
-		return dni;
+	public static String devuelveDni(){
+//		int dni = Integer.parseInt(txt_dni.getText());
+//		return dni;
+		return txt_dni.getText();
 		// asi te devuelve lo que ha puesto en el texto
 	}
 }

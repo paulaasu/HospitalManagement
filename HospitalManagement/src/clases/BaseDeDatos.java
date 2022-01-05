@@ -96,16 +96,17 @@ public class BaseDeDatos {
 	 * @param con Pasamos la conexion 
 	 */
 	public static void crearTablas(Connection con) {
-		String sent1= "CREATE TABLE IF NOT EXISTS Paciente(dni Integer, nombre string,  apellidos string, telefono Integer, email string, direccion string, fecha_nacimiento string, genero string )";
+		String sent1= "CREATE TABLE IF NOT EXISTS Paciente(nombre String,  apellido string, dni String, fecha_nacimiento string, genero string, telefono integer, direccion string)";
 		/*String sent1= "CREATE TABLE Paciente(
 			Dni VARCHAR(20) PRIMARY KEY NOT NULL, 
 		    Nombre VARCHAR(20),
 		    Apellidos VARCHAR(40),
 		    Telefono INTEGER,
-		    Email VARCHAR(40),
+		    Genero VARCHAR(9),
 		    Direccion VARCHAR(40),
-		    Fecha_Nac Date,
-		    Genero VARCHAR(9)
+		    Fecha_Nacimiento Date,  
+		    numHistorial Integer;
+		    FOREIGN KEY(num_Historial) REFERENCES Historial(num_Historial) ON DELETE CASCADE
 		    );*/
 		
 		String sent2 = "CREATE TABLA IF NOT EXISTS Medico( dni Integer,  nombre String,  apellidos String, telefono Integer, email String,  direccion String , fecha_nacimiento String, Especialidad string)" ;
@@ -121,11 +122,15 @@ public class BaseDeDatos {
 		);*/
 		
 		
-		String sent3 ="CREATE TABLA IF NOT EXISTS Historial(id Integer, Diagnostico String, Analisis String, Dni_paciente Integer )";
+		String sent3 ="CREATE TABLA IF NOT EXISTS Historial(dni String, enfermedad String,  sintoma String, tiempo String, sed String, sueño String, miccion String, FOREIGN KEY(dni) REFERENCES paciente(dni) ON DELETE CASCADE)";
 		/*String sent3 = "CREATE TABLE Historial(
-			id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-			Diagnostico VARCHAR(200),
-			Analisis VARCHAR(50),
+			numHistorial INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+			enfermedad VARCHAR(200),
+			sintoma VARCHAR(50),
+			tiempo VARCHAR(15),
+			sed VARCHAR(15),
+			sueño VARCHAR(15),
+			miccion VARCHAR(15),
 			Dni_paciente INTEGER,
 		 	FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE
 		 );*/
@@ -191,9 +196,9 @@ public class BaseDeDatos {
 	 * @param historialClinico
 	 */
 	public static void anadirPaciente(Connection con ,String nombre,String apellido , String dni , 
-			String fecha_nacimiento, String genero, Integer telefono, String direccion, Integer numHistorial) {
+			String fecha_nacimiento, String genero, Integer telefono, String direccion) {
 		String sentSQL = "INSERT INTO paciente VALUES('"+nombre+"','"+apellido+"','"+dni+
-				"','"+fecha_nacimiento+"','"+genero+"','"+telefono+"','"+direccion+"','"+numHistorial+"')";
+				"','"+fecha_nacimiento+"','"+genero+"','"+telefono+"','"+direccion+"')";
 		
 		try {
 			Statement stmt =null;
@@ -538,9 +543,9 @@ public static void anadirPacienteTabla(DefaultTableModel tabla) {
 				
 				while (rs.next()) {
 					
-					Object[] fila = new Object[8]; // hay 7 columnas en la tabla paciente
+					Object[] fila = new Object[7]; // hay 7 columnas en la tabla paciente
 					//se rellena cada posición del array con una de las columnas de la tabla de bd
-					for (int i=0; i<8; i++) {
+					for (int i=0; i<7; i++) {
 						fila[i] = rs.getObject(i+1);
 					}
 					tabla.addRow(fila);					
@@ -787,8 +792,8 @@ public static ArrayList<HistorialClinico> cargarHistorial(String hc) throws SQLE
 				stmt = con.createStatement();
 				 
 				stmt.executeUpdate("drop table if exists paciente");
-				stmt.executeUpdate("create table paciente(nombre string,  apellido string, dni string, fecha_nacimiento string, genero string, telefono integer, direccion string, numHistorial integer)");
-				stmt.executeUpdate("insert into paciente values('Paula', 'Asua', '79079419Z', '26-07-2001', 'Femenino', 711726903, 'Zabale kalea', 1)");
+				stmt.executeUpdate("create table paciente(nombre String,  apellido string, dni String, fecha_nacimiento string, genero string, telefono integer, direccion string)");
+				stmt.executeUpdate("insert into paciente values('Paula', 'Asua', '79079419Z', '26-07-2001', 'Femenino', 711726903, 'Zabale kalea')");
 				
 				stmt.executeUpdate("drop table if exists usuario");
 				stmt.executeUpdate("create table usuario(nombre String, contrasena String )");
@@ -798,8 +803,8 @@ public static ArrayList<HistorialClinico> cargarHistorial(String hc) throws SQLE
 				stmt.executeUpdate("create table Medico( dni String,  nombre String,  apellidos String, telefono Integer, email String,  direccion String , fecha_nacimiento String,salario Integer,cita String)");
 				
 				stmt.executeUpdate("drop table if exists historial");
-				stmt.executeUpdate("create table historial(numHistorial integer, enfermedad String,  sintoma String, tiempo String, sed String, sueño String, miccion String, FOREIGN KEY(numHistorial) REFERENCES paciente(numHistorial))");
-				stmt.executeUpdate("insert into historial values(1, 'Amigdalitis', 'dolor de garganta, dolor al tragar, fiebre, mal aliento', '3 días', 'normal','normal','normal')");
+				stmt.executeUpdate("create table historial(dni String, enfermedad String,  sintoma String, tiempo String, sed String, sueño String, miccion String, FOREIGN KEY(dni) REFERENCES paciente(dni) ON DELETE CASCADE)");
+				stmt.executeUpdate("insert into historial values('79079419Z', 'Amigdalitis', 'dolor de garganta, dolor al tragar, fiebre, mal aliento', '3 días', 'normal','normal','normal')");
 				
 			
 				

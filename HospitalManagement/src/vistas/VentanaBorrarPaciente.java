@@ -20,6 +20,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import clases.BaseDeDatos;
+import paneles.PanelHistorial;
 import paneles.PanelPacientes;
 
 
@@ -96,17 +97,29 @@ public class VentanaBorrarPaciente extends JFrame{
 						BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
 						BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL2);
 						if(BaseDeDatos.rs.next()) {
-							String sentSQL = "DELETE FROM paciente WHERE dni = '" + dni + "' ";
+							String borrarPaciente = "DELETE FROM paciente WHERE dni = '" + dni + "' ";
 						//	BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
 		//For INSERT, UPDATE or DELETE use the executeUpdate() method and for SELECT use the executeQuery() method which returns the ResultSet.
-							int filasEliminadas = BaseDeDatos.stmt.executeUpdate(sentSQL); // con esto se borra al paciente de la bd
+							int filasEliminadas = BaseDeDatos.stmt.executeUpdate(borrarPaciente); // con esto se borra al paciente de la bd
 							PanelPacientes.eliminaTablaPaciente();
 							PanelPacientes.actualizaTablaPaciente();
+							BaseDeDatos.closeBD();
+							
+							BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+							String sentSQL3 = "SELECT * FROM historial WHERE dni = '" + dni + "' ";
+							BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
+							BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL3);
+							if(BaseDeDatos.rs.next()) {
+								String borrarHistorial = "DELETE FROM historial WHERE dni = '" + dni + "' ";
+								int filasEliminadas2 = BaseDeDatos.stmt.executeUpdate(borrarHistorial); 
+								PanelHistorial.actualizarTablaHistorial();
+							}
+							BaseDeDatos.closeBD();
 						} else {
-							JOptionPane.showMessageDialog(contentPane, "El dni insertado no existe");
+							JOptionPane.showMessageDialog(contentPane, "El dni insertado no existe");		
 						}
 						
-						BaseDeDatos.closeBD();
+						
 					}
 					
 				} catch (Exception e1) {
