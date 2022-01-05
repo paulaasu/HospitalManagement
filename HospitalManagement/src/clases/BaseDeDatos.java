@@ -242,6 +242,34 @@ public class BaseDeDatos {
 		}
 	
 	}
+	/**
+	 * Metodo que añade un medico usando los siguientes parametros:
+	 * @param con
+	 * @param objeto tipo Paciente 
+	 * 
+	 */
+
+	public static void insertarPaciente(Connection con, Paciente p) {
+	
+		
+		String sentSQL = "INSERT INTO paciente VALUES('"+p.getDni()+"','"+p.getNombre()+"','"+p.getApellidos()+
+				"',"+p.getTelefono()+",'"+p.getDireccion()+"','"+p.getFechaNac()+"','"+p.getGenero()+"')";
+		
+		try {
+			Statement stmt =null;
+			stmt= con.createStatement();
+			stmt.executeUpdate(sentSQL);
+			stmt.close();
+		} catch (org.sqlite.SQLiteException e) {
+			
+			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR COMPRUEBE QUE EL FCIHERO ESTE BIEN FORMADO");
+			e.printStackTrace();
+		}catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+	}
 	/***
 	 * Metodo que elimina un paciente de la base de datos  mediante el dni 
 	 *@param con La conexion con la base de datos
@@ -650,18 +678,7 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 		Statement statement = con.createStatement();
 		String sent = "select * from Historial where Dni_paciente='"+dni+"' ";
 		 rs = statement.executeQuery(sent);
-		 /*CREATE TABLE Historial(
-			ID_historial INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-			Enfermedad VARCHAR(50),
-			Sintoma VARCHAR(50),
-			Tiempo VARCHAR(15),
-			Sed VARCHAR(15),
-			Sueño VARCHAR(15),
-			Miccion VARCHAR(15),
-			Dni_paciente CHAR(9),
-		 	FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE
-		 )
-*/
+
 		if(rs.next()) {
 			h.numHistorial = rs.getInt("ID_historial");
 			h.enfermedad =rs.getString("Enfermedad"); 
@@ -686,8 +703,45 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 
 }
 
-
-
+	/*
+	 * Metodod obtener las citas para exportar a fichero .csv
+	 *  @param conexion a la bbdd
+	 * @throws SQLException
+	 */
+	public static ArrayList<Cita> ObtenerCitas(Connection con2) {
+		ArrayList<Cita> ret = new ArrayList<>();
+		Cita c=new Cita();
+		ResultSet rs;
+		try {
+			
+			Statement statement = con.createStatement();
+			String sent = "select * from cita ";
+			 rs = statement.executeQuery(sent);
+	
+			if(rs.next()) {
+				/*
+			c.f= rs.getInt("ID_historial");
+				h.enfermedad =rs.getString("Enfermedad"); 
+				h.sintomas  =rs.getString("Sintoma");
+				h.tiempo  =rs.getString("Tiempo");
+				h.sed= rs.getString("Sed");
+				h.sueño= rs.getString("Sueño");
+				h.miccion= rs.getString("Miccion");
+				h.dni_p= rs.getString("Dni_paciente");
+				ret.add(h);ç*/
+			}else {
+				JOptionPane.showMessageDialog(null, "NO SE HA ENCONTRADO NINGUN HISTORIAL");
+			}
+			rs.close();
+			return ret;
+		} catch (SQLException e) {
+				// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR ");
+				e.printStackTrace();
+		}
+		return null;
+	}
+	
 
 /**
 		 * Método que obtiene un mapa con los pacientes de la BBDD
@@ -897,4 +951,6 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-		}}
+		}
+
+}

@@ -6,14 +6,24 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.sql.Connection;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
+
+import clases.BaseDeDatos;
+import clases.Paciente;
 
 public class PanelImportar extends JPanel{
 	private JButton btnAceptar;
@@ -69,11 +79,12 @@ public class PanelImportar extends JPanel{
 		panelPaciente.setLayout(new FlowLayout(FlowLayout.CENTER));
 		
 		
-		JLabel lblNewLabel = new JLabel("El fichero debe de estar compuesto por todos los atributos de paciente ");
+		JLabel lblNewLabel = new JLabel("El fichero debe de estar compuesto por todos los atributos de paciente: ");
 		lblNewLabel.setFont(new Font("Tahoma", Font.ITALIC, 12));
 		panelPaciente.add(lblNewLabel);
 		//colocar todos los atributos que contine ela tabla paciente
-		JLabel lblNewLabel1 = new JLabel("\t(nombre,dni,fecha_nacimiento,domicilio,ciudad,provincia)");
+
+		JLabel lblNewLabel1 = new JLabel("\t(dni,nombre,apellidos,telefono,direccion,fecha nacimiento,genero)");
 		lblNewLabel1.setFont(new Font("Tahoma", Font.ITALIC, 12));
 		panelPaciente.add(lblNewLabel1);
 		
@@ -81,8 +92,11 @@ public class PanelImportar extends JPanel{
 		btnBuscarFP.setBackground(new Color(192, 192, 192));
 		btnBuscarFP.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				BuscarFichero();
+				ImportarFicheroCsvP();
+				
 			}
+
+			
 
 			
 		});
@@ -118,13 +132,60 @@ public class PanelImportar extends JPanel{
 		
 		panelHistorial.add(btnBuscarFH);
 	}
-	private void BuscarFichero() {
+	
+	private void ImportarFicheroCsvP() {
+		File fichero=BuscarFichero();
+		Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
+		if(fichero!=null) {
+			
+			FileReader fr;
+			BufferedReader bw;
+			String [] lista = null;
+			String [] campos = null;
+			
+			try {
+				Paciente p=new Paciente();
+	
+				
+				 bw =new BufferedReader(new FileReader(fichero));
+		         String line;
+		         while ((line = bw.readLine()) != null ){
+		             campos = line.split(";");
+		            p.dni=campos[0];
+		            p.nombre=campos[1];
+		            p.apellidos=campos[2];
+		            p.telefono=Integer.parseInt(campos[3]);
+		            p.direccion=campos[4];
+		            p.fechaNac=campos[5];
+		            p.genero=campos[6];
+		            
+		           
+		            BaseDeDatos.insertarPaciente(con,p);
+		          
+		         }
+		            
+			
+				bw.close();
+				
+				
+				
+			} catch (IOException e) {
+				// TODO Bloque catch generado automáticamente
+				JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR ");
+				e.printStackTrace();
+			}
+		}else {
+		
+			JOptionPane.showMessageDialog(null, "DEBES DE SELECCIONAR UN FICHERO VALIDO ");
+		}
+	}
+	
+	private File BuscarFichero() {
 		JFileChooser j=new JFileChooser();
 		int opcion=j.showOpenDialog(this);
 		File fichero=j.getSelectedFile();
 		
-		/*-------------CODIGO---------------*/
-		//CONTROLAR FICHEOR NO NULO...
+		return fichero;
 	}
 
 }
