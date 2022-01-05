@@ -13,7 +13,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -25,12 +27,15 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
 import clases.BaseDeDatos;
+import clases.HistorialClinico;
 import clases.Paciente;
+import datechooser.beans.DateChooserCombo;
+
 
 public class PanelExportar extends JPanel  {
 	private JButton btnAceptar;
 	JPanel panelT;
-	
+	JComboBox comboBox_1 ;
 	
 	public PanelExportar() {
 		
@@ -87,17 +92,15 @@ public class PanelExportar extends JPanel  {
 	
 	//MEJORAR--RELLENAR CON CONSULTA A BBDD
 	private JComboBox AgregarCombo(JComboBox comboBox) {
-		//lista de pacientes
-		/*
-		*COMENTADO DE MOMENTO BBDD NO FUNCIONA
-		/*
-		String tablas[]={"pacientes","medicos","planificacion"};
-		ArrayList<Paciente> ret = new ArrayList<>();
-		ret=BaseDeDatos.ObtenerPacientes();
-		for(Paciente item:ret){
-			comboBox.addItem(item.getNombre());			
+		ArrayList<String> dni =new ArrayList<>();
+		Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
+		dni=BaseDeDatos.ObtenerPacientes(con);
+		
+	
+		for(String item:dni){
+			comboBox.addItem(item);			
 		}
-		*/
+		
 		return comboBox;
 		
 	}
@@ -115,7 +118,7 @@ public class PanelExportar extends JPanel  {
 		panelPaciente.setLayout(new FlowLayout(FlowLayout.CENTER));
 		
 		
-		JLabel lblNewLabel = new JLabel("Se exportar\u00E1 los pacientes con todos sus datos");
+		JLabel lblNewLabel = new JLabel("Se exportan los pacientes con todos sus datos");
 		lblNewLabel.setFont(new Font("Tahoma", Font.ITALIC, 12));
 		panelPaciente.add(lblNewLabel);
 		
@@ -138,22 +141,15 @@ public class PanelExportar extends JPanel  {
 		 * */
 		JPanel panelHistorial = new JPanel();
 		tabbedPane.addTab("HISTORIAL", null, panelHistorial, null);
-		JLabel lbl1 = new JLabel("Se exportar el historial de un paciente.");
+		JLabel lbl1 = new JLabel("Se exportan el historial de un paciente.");
 		lbl1.setFont(new Font("Tahoma", Font.ITALIC, 12));
 		
 		panelHistorial.add(lbl1);
 		
-		/*
-		 * FALTA COLOCAR TODOS LOS ATRIBUTOS DE LA TABLA
-		 */
-		JLabel lbl2 = new JLabel("\t(nombre_p,hiStorial...)  ");
-		lbl2.setFont(new Font("Tahoma", Font.ITALIC, 12));
-		panelHistorial.add(lbl2);
-		
-		JLabel lblNombrePaciente = new JLabel("NOMBRE PACIENTE:");
+		JLabel lblNombrePaciente = new JLabel(" DNI PACIENTE:");
 		panelHistorial.add(lblNombrePaciente);
 		
-		JComboBox comboBox_1 = new JComboBox();
+		 comboBox_1 = new JComboBox();
 		panelHistorial.add(comboBox_1);
 		comboBox_1.setPreferredSize(new Dimension(150,20));
 		AgregarCombo(comboBox_1);
@@ -161,8 +157,9 @@ public class PanelExportar extends JPanel  {
 		btnBuscarFH.setBackground(new Color(211, 211, 211));
 		btnBuscarFH.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ExportarFicheroCsv();
+				ExportarFicheroCsvH();
 			}
+
 
 			
 		});
@@ -170,15 +167,112 @@ public class PanelExportar extends JPanel  {
 		
 		panelHistorial.add(btnBuscarFH);
 		
-		Panel panelAgenda = new Panel();
-		tabbedPane.addTab("AGENDA", null, panelAgenda, null);
-		panelAgenda.setBackground(new Color(240, 240, 240));
+		Panel panelCitas = new Panel();
+		tabbedPane.addTab("CITAS", null, panelCitas, null);
+		panelCitas.setBackground(new Color(240, 240, 240));
+		
+		JLabel lblNewLabel1 = new JLabel("Se exportan las citas con todos sus datos  ");
+		lblNewLabel1.setFont(new Font("Tahoma", Font.ITALIC, 12));
+		panelCitas.add(lblNewLabel1);
+		JLabel lblNewLabel2 = new JLabel("FECHA INICIO:");
+		lblNewLabel2.setFont(new Font("Tahoma", Font.ITALIC, 12));
+		panelCitas.add(lblNewLabel2);
+		DateChooserCombo dateChooserCombo1 = new DateChooserCombo();
+		panelCitas.add(dateChooserCombo1);
+		JLabel lblNewLabel3 = new JLabel("FECHA FIN:");
+		lblNewLabel3.setFont(new Font("Tahoma", Font.ITALIC, 12));
+		panelCitas.add(lblNewLabel3);
+		/*
+		DateChooserPanel dateChooserPanel = new DateChooserPanel();
+		dateChooserPanel.setBounds(12, 36, 250, 180);
+		panelCitas.add(dateChooserPanel);
+		*/
+		
+		DateChooserCombo dateChooserCombo2 = new DateChooserCombo();
+		panelCitas.add(dateChooserCombo2);
+		
+		JButton btnBuscarFA = new JButton("EXPORTAR FICHERO");
+		btnBuscarFA.setBackground(new Color(211, 211, 211));
+		btnBuscarFA.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Calendar cal = dateChooserCombo2.getSelectedDate();
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				String date = sdf.format(cal.getTime());
+				System.out.println(date);
+			//System.out.println(f);
+				//ExportarFicheroCsvA();
+			}
+
+			
+		});
+		btnBuscarFA.setFont(new Font("Tahoma", Font.BOLD, 13));
+		panelCitas.add(btnBuscarFA);
+		
 	}
 	
+	/*
+	 *  Metdodo exportar Citas de bbdd a fichero .csv
+	 *  @throws SQLException
+	 */
+	private void ExportarFicheroCsvA() {
+		// TODO Auto-generated method stub
+		JFileChooser j = Explorador();
+	}
+	/*
+	 *  Metdodo exportar Historial de bbdd a fichero .csv
+	 *  @throws SQLException
+	 */
+	private void ExportarFicheroCsvH() {
+		
+		JFileChooser j = Explorador();
+		
+		String dni=(String) comboBox_1.getSelectedItem();
+		System.out.println(dni);
+		
+		ArrayList<HistorialClinico> ret = new ArrayList<>();
+		Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
+		ret=BaseDeDatos.ObtenerHistorialDni(con,dni);
+		FileWriter fw;
+		
+		try {
+			fw=new FileWriter(j.getSelectedFile()+".csv");
+			BufferedWriter bw=new BufferedWriter(fw);
+			String cabecera="NUM HISTORIAL"+";"+"ENFERMEDAD"+";"+"SINTOMAS"+";"+"TIEMPO"+";"+"SED"+";"+"SUEÑO"+";"+"MICCION"+"DNI PACIENTE"+"\n";
+			bw.write(cabecera);
+			for(HistorialClinico h:ret){
+				String numHistorial = String.valueOf(h.getNumHistorial());
+				String enfermedad=h.getEnfermedad();
+				String sintomas= h.getSintomas();
+				String tiempo=  h.getTiempo();
+				String sed= h.getSed();
+				String sueño= h.getSueño();
+				String miccion= h.getMiccion();
+				String dni_p= h.getDni();
+				String t=numHistorial+";"+enfermedad+";"+sintomas+";"+tiempo+";"+sed+";"+sueño+";"+miccion+";"+dni_p+"\n";
+				bw.write(t);
+			}
+			bw.flush();
+			bw.close();
+			fw.close();
+			
+		} catch (IOException e) {
+			// TODO Bloque catch generado automáticamente
+			JOptionPane.showOptionDialog(null, "SE HA PRODUCIDO UN ERROR AL EXPORTAR LO DATOS", null, 0, 0, null, null, e);
+			e.printStackTrace();
+		}
+		
+		//JOptionPane.("SE HA COMPLETADO CORRECTAMENTE");
+		
+	}
+	
+	
+	/*
+	 * Metdodo exportar paciente de bbdd a fichero .csv
+	 *  @throws SQLException
+	 */
 	private void ExportarFicheroCsv() {
 		//Abrir explorador de archivo
 				JFileChooser j = Explorador();
-				
 				
 				ArrayList<Paciente> ret = new ArrayList<>();
 				Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
@@ -188,17 +282,17 @@ public class PanelExportar extends JPanel  {
 				try {
 					fw=new FileWriter(j.getSelectedFile()+".csv");
 					BufferedWriter bw=new BufferedWriter(fw);
-					String cabecera="DNI"+";"+"NOMBRE"+";"+"APELLIDOS"+";"+"TELEFONO"+";"+"EMAIL"+";"+"DIRECCION"+";"+"FECHA"+"\n";
+					String cabecera="DNI"+";"+"NOMBRE"+";"+"APELLIDOS"+";"+"TELEFONO"+";"+"DIRECCION"+";"+"FECHA"+";"+"GENERO"+"\n";
 					bw.write(cabecera);
 					for(Paciente p:ret){
 						String dni = String.valueOf(p.getDni());
 						String nombre=p.getNombre();
 						String apellidos= p.getApellidos();
 						String tel=  String.valueOf(p.getTelefono());
-						String email= p.getEmail();
 						String dir= p.getDireccion();
 						String fecha= p.getFechaNac();
-						String t=dni+";"+nombre+";"+apellidos+";"+tel+";"+email+";"+dir+";"+fecha+"\n";
+						String genero=p.getGenero();
+						String t=dni+";"+nombre+";"+apellidos+";"+tel+";"+dir+";"+fecha+";"+genero+"\n";
 						bw.write(t);
 					}
 					bw.flush();

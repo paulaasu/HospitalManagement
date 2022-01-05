@@ -4,12 +4,13 @@ import java.text.SimpleDateFormat;
 
 public class Paciente extends Persona{
 	private HistorialClinico historialClinico;
-
+	String genero;
 	
 	public Paciente(String dni, String nombre, String apellidos, int telefono, String email, String direccion,
-			String fechaNac, HistorialClinico historialClinico) {
+			String fechaNac, HistorialClinico historialClinico,String genero) {
 		super(dni, nombre, apellidos, telefono, email, direccion, fechaNac);
 		this.historialClinico = historialClinico;
+		this.genero = genero;
 	}
 
 	//constructor vacio
@@ -34,6 +35,9 @@ public class Paciente extends Persona{
 	
 	public String getNombre() {
 		return nombre;
+	}
+	public String getGenero() {
+		return genero;
 	}
 
 	

@@ -1,13 +1,14 @@
 package clases;
 
 public class HistorialClinico {
-	private int numHistorial;
-	private String enfermedad;
-	private String sintomas;
-	private String tiempo;
-	private String sed;
-	private String sueño;
-	private String miccion;
+	 int numHistorial;
+	 String enfermedad;
+	 String sintomas;
+	 String tiempo;
+	 String sed;
+	 String sueño;
+	 String miccion;
+	 String dni_p;
 	
 	public HistorialClinico(int numHistorial, String enfermedad, String sintomas, String tiempo, String sed,
 			String sueño, String miccion) {
@@ -19,6 +20,23 @@ public class HistorialClinico {
 		this.sed = sed;
 		this.sueño = sueño;
 		this.miccion = miccion;
+	}
+
+	public HistorialClinico(int numHistorial, String enfermedad, String sintomas, String tiempo, String sed,
+			String sueño, String miccion,String dni_p) {
+		super();
+		this.numHistorial = numHistorial;
+		this.enfermedad = enfermedad;
+		this.sintomas = sintomas;
+		this.tiempo = tiempo;
+		this.sed = sed;
+		this.sueño = sueño;
+		this.miccion = miccion;
+		this.dni_p = dni_p;
+	}
+
+	public HistorialClinico() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public int getNumHistorial() {
@@ -75,6 +93,13 @@ public class HistorialClinico {
 
 	public void setMiccion(String miccion) {
 		this.miccion = miccion;
+	}
+	public String getDni() {
+		return dni_p;
+	}
+
+	public void setDni(String dni_p) {
+		this.dni_p = dni_p;
 	}
 
 	@Override

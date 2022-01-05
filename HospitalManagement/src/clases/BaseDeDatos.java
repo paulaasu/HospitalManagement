@@ -17,6 +17,8 @@ import java.util.logging.SimpleFormatter;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
+
 import vistas.VentanaPaciente; // importamos el panel pacientes
 
 
@@ -97,7 +99,7 @@ public class BaseDeDatos {
 	 */
 	public static void crearTablas(Connection con) {
 		String sent1= "CREATE TABLE IF NOT EXISTS Paciente(nombre String,  apellido string, dni String, fecha_nacimiento string, genero string, telefono integer, direccion string)";
-		/*String sent1= "REATE TABLE Paciente(
+		/*String sent1= "CREATE TABLE Paciente(
 			Dni VARCHAR(20) PRIMARY KEY NOT NULL, 
 		    Nombre VARCHAR(20),
 		    Apellidos VARCHAR(40),
@@ -382,18 +384,18 @@ public class BaseDeDatos {
 			while (rs.next()) {
 				p.dni = rs.getString("Dni");
 				p.nombre = rs.getString("Nombre");
-				p.apellidos =rs.getString("Apellido"); 
+				p.apellidos =rs.getString("Apellidos"); 
 				p.telefono  =rs.getInt("Telefono");
-				//p.g  =rs.getString("Email");
 				p.direccion  =rs.getString("Direccion");
-				p.fechaNac= rs.getString("Fecha_nacimiento");
-			
+				p.fechaNac= rs.getString("Fecha_Nac");
+				p.genero= rs.getString("Genero");
 				lista.add(p);
 				 
 				
 			}
 			rs.close();
 		} catch (SQLException e) {
+			System.out.println(e);
 			JOptionPane.showOptionDialog(null, "Se ha producido un error en la busqueda de pacientes", null, 0, 0, null, null, e);
 			e.printStackTrace();
 		}
@@ -604,7 +606,90 @@ public static ArrayList<HistorialClinico> cargarHistorial(String hc) throws SQLE
 	
 	
 }
-		/**
+	
+/*
+ * Metodod obtener los nombres de los pacientes para comboBox
+ *  @param conexion a la bbdd
+ * @throws SQLException
+ */
+public  static  ArrayList<String> ObtenerPacientes(Connection con){
+
+	ArrayList<String> ret = new ArrayList<>();
+	
+	ResultSet rs;
+	try {
+		Statement statement = con.createStatement();
+		String sent = "select * from paciente ";
+		 rs = statement.executeQuery(sent);
+
+		while(rs.next()) {
+
+			String dni = rs.getString("dni");
+			ret.add(dni);
+		}
+		rs.close();
+		return ret;
+	} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+	}
+	return ret;
+
+}
+/*
+ * Metodod obtener los nombres de los pacientes para comboBox
+ *  @param conexion a la bbdd
+ * @throws SQLException
+ */
+public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,String dni){
+
+	ArrayList<HistorialClinico> ret = new ArrayList<>();
+	HistorialClinico h=new HistorialClinico();
+	ResultSet rs;
+	try {
+		Statement statement = con.createStatement();
+		String sent = "select * from Historial where Dni_paciente='"+dni+"' ";
+		 rs = statement.executeQuery(sent);
+		 /*CREATE TABLE Historial(
+			ID_historial INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+			Enfermedad VARCHAR(50),
+			Sintoma VARCHAR(50),
+			Tiempo VARCHAR(15),
+			Sed VARCHAR(15),
+			Sueño VARCHAR(15),
+			Miccion VARCHAR(15),
+			Dni_paciente CHAR(9),
+		 	FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE
+		 )
+*/
+		if(rs.next()) {
+			h.numHistorial = rs.getInt("ID_historial");
+			h.enfermedad =rs.getString("Enfermedad"); 
+			h.sintomas  =rs.getString("Sintoma");
+			h.tiempo  =rs.getString("Tiempo");
+			h.sed= rs.getString("Sed");
+			h.sueño= rs.getString("Sueño");
+			h.miccion= rs.getString("Miccion");
+			h.dni_p= rs.getString("Dni_paciente");
+			ret.add(h);
+		}else {
+			JOptionPane.showMessageDialog(null, "NO SE HA ENCONTRADO NINGUN HISTORIAL");
+		}
+		rs.close();
+		return ret;
+	} catch (SQLException e) {
+			// TODO Auto-generated catch block
+		JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR ");
+			e.printStackTrace();
+	}
+	return ret;
+
+}
+
+
+
+
+/**
 		 * Método que obtiene un mapa con los pacientes de la BBDD
 		 * @param con Conexión con la base de datos
 		 * @return TreeMap String,Pacientes
@@ -791,7 +876,7 @@ public static ArrayList<HistorialClinico> cargarHistorial(String hc) throws SQLE
 				Connection con = null;
 				con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
 				stmt = con.createStatement();
-				 
+				/* 
 				stmt.executeUpdate("drop table if exists paciente");
 				stmt.executeUpdate("create table paciente(nombre String,  apellido string, dni String, fecha_nacimiento string, genero string, telefono integer, direccion string)");
 				stmt.executeUpdate("insert into paciente values('Paula', 'Asua', '79079419Z', '26-07-2001', 'Femenino', 711726903, 'Zabale kalea')");
@@ -807,7 +892,7 @@ public static ArrayList<HistorialClinico> cargarHistorial(String hc) throws SQLE
 				stmt.executeUpdate("create table historial(dni String, enfermedad String,  sintoma String, tiempo String, sed String, sueño String, miccion String, FOREIGN KEY(dni) REFERENCES paciente(dni) ON DELETE CASCADE)");
 				stmt.executeUpdate("insert into historial values('79079419Z', 'Amigdalitis', 'dolor de garganta, dolor al tragar, fiebre, mal aliento', '3 días', 'normal','normal','normal')");
 				
-			
+			*/
 				
 			} catch (Exception e) {
 				// TODO: handle exception
