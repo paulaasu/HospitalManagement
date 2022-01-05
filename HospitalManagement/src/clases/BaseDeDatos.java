@@ -97,21 +97,21 @@ public class BaseDeDatos {
 	 */
 	public static void crearTablas(Connection con) {
 		String sent1= "CREATE TABLE IF NOT EXISTS Paciente(nombre String,  apellido string, dni String, fecha_nacimiento string, genero string, telefono integer, direccion string)";
-		/*String sent1= "CREATE TABLE Paciente(
+		/*String sent1= "REATE TABLE Paciente(
 			Dni VARCHAR(20) PRIMARY KEY NOT NULL, 
 		    Nombre VARCHAR(20),
 		    Apellidos VARCHAR(40),
 		    Telefono INTEGER,
-		    Genero VARCHAR(9),
+
 		    Direccion VARCHAR(40),
-		    Fecha_Nacimiento Date,  
-		    numHistorial Integer;
-		    FOREIGN KEY(num_Historial) REFERENCES Historial(num_Historial) ON DELETE CASCADE
-		    );*/
+		    Fecha_Nac Date,
+		    Genero VARCHAR(9)
+		    )
+;*/
 		
 		String sent2 = "CREATE TABLA IF NOT EXISTS Medico( dni Integer,  nombre String,  apellidos String, telefono Integer, email String,  direccion String , fecha_nacimiento String, Especialidad string)" ;
 		/*String sent2 = "CREATE TABLE Medico(
-			Dni_medico INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+			ID_medico INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 			Nombre VARCHAR(20),
 			Apellidos VARCHAR(30),
 			Telefono INTEGER(9),
@@ -124,25 +124,26 @@ public class BaseDeDatos {
 		
 		String sent3 ="CREATE TABLA IF NOT EXISTS Historial(dni String, enfermedad String,  sintoma String, tiempo String, sed String, sueño String, miccion String, FOREIGN KEY(dni) REFERENCES paciente(dni) ON DELETE CASCADE)";
 		/*String sent3 = "CREATE TABLE Historial(
-			numHistorial INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-			enfermedad VARCHAR(200),
-			sintoma VARCHAR(50),
-			tiempo VARCHAR(15),
-			sed VARCHAR(15),
-			sueño VARCHAR(15),
-			miccion VARCHAR(15),
-			Dni_paciente INTEGER,
+			ID_historial INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+			Enfermedad VARCHAR(50),
+			Sintoma VARCHAR(50),
+			Tiempo VARCHAR(15),
+			Sed VARCHAR(15),
+			Sueño VARCHAR(15),
+			Miccion VARCHAR(15),
+			Dni_paciente CHAR(9),
 		 	FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE
 		 );*/
 		
 		
 		String sent4 ="CREATE TABLA IF NOT EXITS Usuario( nombre String,  contrasena String,  )";
 		/*String sent4 = "CREATE TABLE Usuario(
-			Id_usuario INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+			ID_usuario INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 			user VARCHAR(20),
 			password VARCHAR(30),
 			Rol VARCHAR(20)
-		)*/
+		)
+*/
 
 		
 		String sent5 ="CREATE TABLA IF NOT EXITS Cita( dni String,nombre String,  apellido String, fechayhora String, TipoCita String  )";
