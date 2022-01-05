@@ -27,6 +27,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
 import clases.BaseDeDatos;
+import clases.Cita;
 import clases.HistorialClinico;
 import clases.Paciente;
 import datechooser.beans.DateChooserCombo;
@@ -177,8 +178,8 @@ public class PanelExportar extends JPanel  {
 		JLabel lblNewLabel2 = new JLabel("FECHA INICIO:");
 		lblNewLabel2.setFont(new Font("Tahoma", Font.ITALIC, 12));
 		panelCitas.add(lblNewLabel2);
-		DateChooserCombo dateChooserCombo1 = new DateChooserCombo();
-		panelCitas.add(dateChooserCombo1);
+	//	DateChooserCombo dateChooserCombo1 = new DateChooserCombo();
+	//	panelCitas.add(dateChooserCombo1);
 		JLabel lblNewLabel3 = new JLabel("FECHA FIN:");
 		lblNewLabel3.setFont(new Font("Tahoma", Font.ITALIC, 12));
 		panelCitas.add(lblNewLabel3);
@@ -188,19 +189,27 @@ public class PanelExportar extends JPanel  {
 		panelCitas.add(dateChooserPanel);
 		*/
 		
-		DateChooserCombo dateChooserCombo2 = new DateChooserCombo();
-		panelCitas.add(dateChooserCombo2);
+		//DateChooserCombo dateChooserCombo2 = new DateChooserCombo();
+		//panelCitas.add(dateChooserCombo2);
 		
 		JButton btnBuscarFA = new JButton("EXPORTAR FICHERO");
 		btnBuscarFA.setBackground(new Color(211, 211, 211));
 		btnBuscarFA.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Calendar cal = dateChooserCombo2.getSelectedDate();
+				//MEJORA
+				/*
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				String date = sdf.format(cal.getTime());
-				System.out.println(date);
+				//fecha 1
+				Calendar cal = dateChooserCombo1.getSelectedDate();
+				String date1 = sdf.format(cal.getTime());
+				//fecha 2
+				Calendar cal1 = dateChooserCombo1.getSelectedDate();
+				String date2 = sdf.format(cal.getTime());
+				//System.out.println(date);
+				 * 
+				 */
 			//System.out.println(f);
-				//ExportarFicheroCsvA();
+				ExportarFicheroCsvA();
 			}
 
 			
@@ -217,6 +226,12 @@ public class PanelExportar extends JPanel  {
 	private void ExportarFicheroCsvA() {
 		// TODO Auto-generated method stub
 		JFileChooser j = Explorador();
+		ArrayList<Cita> ret = new ArrayList<>();
+		Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
+		ret=BaseDeDatos.ObtenerCitas(con);
+		FileWriter fw;
+		
+		//************TERMINAR************
 	}
 	/*
 	 *  Metdodo exportar Historial de bbdd a fichero .csv
@@ -237,7 +252,7 @@ public class PanelExportar extends JPanel  {
 		try {
 			fw=new FileWriter(j.getSelectedFile()+".csv");
 			BufferedWriter bw=new BufferedWriter(fw);
-			String cabecera="NUM HISTORIAL"+";"+"ENFERMEDAD"+";"+"SINTOMAS"+";"+"TIEMPO"+";"+"SED"+";"+"SUEÑO"+";"+"MICCION"+"DNI PACIENTE"+"\n";
+			String cabecera="NUM HISTORIAL"+";"+"ENFERMEDAD"+";"+"SINTOMAS"+";"+"TIEMPO"+";"+"SED"+";"+"SUEÑO"+";"+"MICCION"+";"+"DNI PACIENTE"+"\n";
 			bw.write(cabecera);
 			for(HistorialClinico h:ret){
 				String numHistorial = String.valueOf(h.getNumHistorial());
@@ -278,7 +293,7 @@ public class PanelExportar extends JPanel  {
 				Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
 				ret=BaseDeDatos.getPaciente(con);
 				FileWriter fw;
-				;
+				
 				try {
 					fw=new FileWriter(j.getSelectedFile()+".csv");
 					BufferedWriter bw=new BufferedWriter(fw);
@@ -307,12 +322,12 @@ public class PanelExportar extends JPanel  {
 				//JOptionPane.("SE HA COMPLETADO CORRECTAMENTE");
 				
 	}
+
 	private JFileChooser Explorador() {
 		JFileChooser j = new JFileChooser();
 		j.setApproveButtonText("Guardar");
 		j.showSaveDialog(null);
 		return j;
 	}
-
 }
 

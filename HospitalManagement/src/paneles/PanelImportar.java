@@ -23,6 +23,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingConstants;
 
 import clases.BaseDeDatos;
+import clases.HistorialClinico;
 import clases.Paciente;
 
 public class PanelImportar extends JPanel{
@@ -79,7 +80,7 @@ public class PanelImportar extends JPanel{
 		panelPaciente.setLayout(new FlowLayout(FlowLayout.CENTER));
 		
 		
-		JLabel lblNewLabel = new JLabel("El fichero debe de estar compuesto por todos los atributos de paciente: ");
+		JLabel lblNewLabel = new JLabel("El fichero SIN ENCABEZADO debe de estar compuesto por todos los atributos de paciente: ");
 		lblNewLabel.setFont(new Font("Tahoma", Font.ITALIC, 12));
 		panelPaciente.add(lblNewLabel);
 		//colocar todos los atributos que contine ela tabla paciente
@@ -109,13 +110,12 @@ public class PanelImportar extends JPanel{
 		 * */
 		JPanel panelHistorial = new JPanel();
 		tabbedPane.addTab("HISTORIAL", null, panelHistorial, null);
-		JLabel lbl1 = new JLabel("El fichero debe de estar compuesto por todos los atributos de historial ");
+		JLabel lbl1 = new JLabel("El fichero SIN ENCABEZADO debe de estar compuesto por todos los atributos de historial  ");
 		lbl1.setFont(new Font("Tahoma", Font.ITALIC, 12));
 		panelPaciente.setBackground(new Color(220, 220, 220));
 		panelHistorial.add(lbl1);
 		
-		//colocar todos los atributos que contine ela tabla historial
-		JLabel lbl2 = new JLabel("\t(nombre_p,hitorial...)");
+		JLabel lbl2 = new JLabel("\t(Enfermedad,Sintoma,Tiempo,Sed,Sueño,Miccion,Dni_paciente)");
 		lbl2.setFont(new Font("Tahoma", Font.ITALIC, 12));
 		panelHistorial.add(lbl2);
 		
@@ -123,7 +123,8 @@ public class PanelImportar extends JPanel{
 		btnBuscarFH.setBackground(new Color(192, 192, 192));
 		btnBuscarFH.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				BuscarFichero();
+				ImportarFicheroCsvH(); 
+				
 			}
 
 			
@@ -132,6 +133,52 @@ public class PanelImportar extends JPanel{
 		
 		panelHistorial.add(btnBuscarFH);
 	}
+	private void ImportarFicheroCsvH() {
+		File fichero=BuscarFichero();
+		Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
+		if(fichero!=null) {
+			
+			FileReader fr;
+			BufferedReader bw;
+			String [] lista = null;
+			String [] campos = null;
+			
+			try {
+				HistorialClinico h=new HistorialClinico();
+	
+				 bw =new BufferedReader(new FileReader(fichero));
+		         String line;
+		         while ((line = bw.readLine()) != null ){
+		             campos = line.split(";");
+		            h.enfermedad=campos[0];
+		            h.sintomas=campos[1];
+		            h.tiempo=campos[2];
+		            h.sed=campos[3];
+		            h.miccion=campos[4];
+		            h.dni_p=campos[5];
+		           
+		            
+		           
+		            BaseDeDatos.insertarHistorial(con,h);
+		          
+		         }
+		            
+			
+				bw.close();
+				
+				
+				
+			} catch (IOException e) {
+				// TODO Bloque catch generado automáticamente
+				JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR ");
+				e.printStackTrace();
+			}
+		}else {
+		
+			JOptionPane.showMessageDialog(null, "DEBES DE SELECCIONAR UN FICHERO VALIDO ");
+		}
+	}
+
 	
 	private void ImportarFicheroCsvP() {
 		File fichero=BuscarFichero();

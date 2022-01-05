@@ -1,14 +1,14 @@
 package clases;
 
 public class HistorialClinico {
-	 int numHistorial;
-	 String enfermedad;
-	 String sintomas;
-	 String tiempo;
-	 String sed;
-	 String sueño;
-	 String miccion;
-	 String dni_p;
+	public int numHistorial;
+	 public String enfermedad;
+	 public String sintomas;
+	 public String tiempo;
+	 public String sed;
+	 public String sueño;
+	 public String miccion;
+	 public String dni_p;
 	
 	public HistorialClinico(int numHistorial, String enfermedad, String sintomas, String tiempo, String sed,
 			String sueño, String miccion) {
