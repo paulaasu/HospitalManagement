@@ -63,9 +63,6 @@ public class VentanaHistorial extends JFrame {
 		
 		Panel1 panel1 = new Panel1();
 		contentPanePaciente.add(panel1, BorderLayout.CENTER);
-
-		
-		
 		contentPanePaciente.setBackground(Color.WHITE);
 	}
 	
@@ -105,87 +102,55 @@ public class VentanaHistorial extends JFrame {
 			
 			try {
 				BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-				String sentSQL = "SELECT * FROM historial WHERE dni = '" + VentanaVisualizarHist.devuelveDni() + "' ";
-				BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
-				BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
+				HistorialClinico h = BaseDeDatos.visualizarHistorial(VentanaVisualizarHist.devuelveDni());
 				
-				if(BaseDeDatos.rs.next()) {
-					HistorialClinico h = new HistorialClinico(BaseDeDatos.rs.getInt("dni"), BaseDeDatos.rs.getString("enfermedad"), BaseDeDatos.rs.getString("sintoma"), BaseDeDatos.rs.getString("tiempo"), BaseDeDatos.rs.getString("sed"),BaseDeDatos.rs.getString("sueño"),BaseDeDatos.rs.getString("miccion"));
-					JLabel motivo = new JLabel("Enfermedad: "); // ESTO ES LO QUE HACE QUE EL FON
-					add(motivo);
-					JLabel motivoHist = new JLabel(h.getEnfermedad());
-					motivoHist.setBackground(Color.WHITE);
-					motivoHist.setOpaque(true);
-					add(motivoHist);
-//					motivoTxt= new JTextField(20);
-//					add(motivoTxt);
+				JLabel motivo = new JLabel("Enfermedad: "); // ESTO ES LO QUE HACE QUE EL FON
+				add(motivo);
+				JLabel motivoHist = new JLabel(h.getEnfermedad());
+				motivoHist.setBackground(Color.WHITE);
+				motivoHist.setOpaque(true);
+				add(motivoHist);
+
 					
-					add(new JLabel("Signos y síntomas: "));
-					JLabel sintomasHist = new JLabel(h.getSintomas());
-					sintomasHist.setBackground(Color.WHITE);
-					sintomasHist.setOpaque(true);
-					add(sintomasHist);
-//					sintomasTxt= new JTextField(20);
-//					add(sintomasTxt);
+				add(new JLabel("Signos y síntomas: "));
+				JLabel sintomasHist = new JLabel(h.getSintomas());
+				sintomasHist.setBackground(Color.WHITE);
+				sintomasHist.setOpaque(true);
+				add(sintomasHist);
 					
-					add(new JLabel("Tiempo de enfermedad"));
-					JLabel tiempoHist = new JLabel(h.getTiempo());
-					tiempoHist.setBackground(Color.WHITE);
-					tiempoHist.setOpaque(true);
-					add(tiempoHist);
-//					tiempoTxt = new JTextField(20);
-//					add(tiempoTxt);
+				add(new JLabel("Tiempo de enfermedad"));
+				JLabel tiempoHist = new JLabel(h.getTiempo());
+				tiempoHist.setBackground(Color.WHITE);
+				tiempoHist.setOpaque(true);
+				add(tiempoHist);
 					
-					JLabel funcion = new JLabel("Funciones biológicas:");
-					funcion.setFont(new Font("Sherif", Font.BOLD, 15));
-					add(funcion);
-					add(new JLabel(" "));
+				JLabel funcion = new JLabel("Funciones biológicas:");
+				funcion.setFont(new Font("Sherif", Font.BOLD, 15));
+				add(funcion);
+				add(new JLabel(" "));
 					
 				
 					
-					add(new JLabel("Sed: "));
-					JLabel sedHist = new JLabel(h.getSed());
-					sedHist.setBackground(Color.WHITE);
-					sedHist.setOpaque(true);
-					add(sedHist);
-//					sedTxt = new JTextField(20);
-//					add(sedTxt);
+				add(new JLabel("Sed: "));
+				JLabel sedHist = new JLabel(h.getSed());
+				sedHist.setBackground(Color.WHITE);
+				sedHist.setOpaque(true);
+				add(sedHist);
+
 					
-					add(new JLabel("Sueño: "));
-					JLabel sueñoHist = new JLabel(h.getSueño());
-					sueñoHist.setBackground(Color.WHITE);
-					sueñoHist.setOpaque(true);
-					add(sueñoHist);
-//					sueñoTxt = new JTextField(20);
-//					add(sueñoTxt);
+				add(new JLabel("Sueño: "));
+				JLabel sueñoHist = new JLabel(h.getSueño());
+				sueñoHist.setBackground(Color.WHITE);
+				sueñoHist.setOpaque(true);
+				add(sueñoHist);
 					
-					add(new JLabel("Micción: "));
-					JLabel miccionHist = new JLabel(h.getMiccion());
-					miccionHist.setBackground(Color.WHITE);
-					miccionHist.setOpaque(true);
-					add(miccionHist);
-//					miccionTxt = new JTextField(20);
-//					add(miccionTxt);
+				add(new JLabel("Micción: "));
+				JLabel miccionHist = new JLabel(h.getMiccion());
+				miccionHist.setBackground(Color.WHITE);
+				miccionHist.setOpaque(true);
+				add(miccionHist);
 					
-				
-					
-//					add(new JLabel(" "));
-//					add(new JLabel(" "));
-//					editar = new JButton("Editar historial");
-//					add(editar);
-//					add(new JLabel(" "));
-					
-					BaseDeDatos.closeBD();
-					
-				
-				}else {
-					JOptionPane.showMessageDialog(apetitoTxt, "El dni insertado no existe");
-					
-				}
-				
-				
-			
-				
+					BaseDeDatos.closeBD();	
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -198,10 +198,10 @@ public class BaseDeDatos {
 	 * @param fecha_nacimiento
 	 * @param historialClinico
 	 */
-	public static void anadirPaciente(Connection con ,String nombre,String apellido , String dni , 
-			String fecha_nacimiento, String genero, Integer telefono, String direccion) {
-		String sentSQL = "INSERT INTO paciente VALUES('"+nombre+"','"+apellido+"','"+dni+
-				"','"+fecha_nacimiento+"','"+genero+"','"+telefono+"','"+direccion+"')";
+	public static void anadirPaciente(Connection con ,String dni ,String nombre,String apellido , Integer telefono, 
+			 String direccion, String fecha_nacimiento, String genero) {
+		String sentSQL = "INSERT INTO paciente VALUES('"+dni+"','"+nombre+"','"+apellido+
+				"','"+telefono+"','"+direccion+"','"+fecha_nacimiento+"','"+genero+"')";
 		
 		try {
 			Statement stmt =null;
@@ -270,30 +270,20 @@ public class BaseDeDatos {
 		}
 	
 	}
+	
 	/***
 	 * Metodo que elimina un paciente de la base de datos  mediante el dni 
-	 *@param con La conexion con la base de datos
-	 * @param dni El dni del paciente 
-	 * @param nombre El nombre del pacientes
-	 * @param apellidos Los apellido del paciente
-	 * @param telefono El telefono del paciente
-	 * @param direccion La dirección del paciente 
-	 * @param fecha_nacimiento La fecha de nacimiento del paciente ( revisar)
-	 * @param historialClinico El historial clinico del paciente
 	 */
-	public static void eliminarPacientePorDni(Connection con, String dni, String nombre, String apellidos, 
-			Integer telefono, String direccion ,String fecha_nacimiento,HistorialClinico historialClinico) {
-		String sentSQL = "DELETE FROM Paciente  WHERE dni ='"+dni+"'";
-		 
-		try {
-			Statement stmt = null;
-			stmt= con.createStatement();
-			stmt.executeUpdate(sentSQL);
-			stmt.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public static void eliminarPacientePorDni(String dniPB) throws SQLException {
+		Statement statement = con.createStatement();
+		String sentSQL2 = "SELECT * FROM paciente WHERE Dni = '" + dniPB + "' ";
+		stmt = BaseDeDatos.con.createStatement();
+		rs = BaseDeDatos.stmt.executeQuery(sentSQL2);
+		while(rs.next()) {
+			String borrarPaciente = "DELETE FROM paciente WHERE Dni = '" + dniPB + "' ";
+			int filasEliminadas = stmt.executeUpdate(borrarPaciente); 
 		}
+	
 	}
 	
 	
@@ -309,6 +299,63 @@ public class BaseDeDatos {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	/***
+	 * Metodo que elimina un historial de la base de datos  mediante el dni (va junto a eliminarPacienteDni)
+	 */
+	public static void eliminarHistorialPorDni(String dniHB) throws SQLException {
+		Statement statement = con.createStatement();
+		String sentSQL2 = "SELECT * FROM historial WHERE Dni_paciente = '" + dniHB + "' ";
+		stmt = BaseDeDatos.con.createStatement();
+		rs = BaseDeDatos.stmt.executeQuery(sentSQL2);
+		while(rs.next()) {
+			String borrarHistorial = "DELETE FROM historial WHERE Dni_paciente = '" + dniHB + "' ";
+			int filasEliminadas = stmt.executeUpdate(borrarHistorial); 
+		}
+	
+	}
+	/***
+	 * Metodo que busca el paciente por el DNI
+	 */	 
+	public static Paciente buscarPacienteDni( String dniB ) {
+			try (Statement statement = con.createStatement()) {
+			Paciente p=null;
+			ArrayList<Paciente> buscado = new ArrayList<>();
+			String sentSQL = "SELECT * FROM paciente WHERE dni = '" + dniB + "' ";
+			Statement stmt1 = con.createStatement();
+			logger.log( Level.INFO, "Statement: " + sentSQL );
+			ResultSet rs1 = stmt1.executeQuery(sentSQL);
+			HistorialClinico h= null;
+			while( rs1.next() ) { // Leer el resultset
+				String dni = rs1.getString("Dni");
+				String nombre = rs1.getString("Nombre");
+				String apellido = rs1.getString("Apellidos");
+				int telefono = rs1.getInt("Telefono");
+				String dir = rs1.getString("Direccion");
+				String genero = rs1.getString("Genero");
+				String fecha = rs1.getString("Fecha_nac");
+				String sentSQL2 = "SELECT * FROM historial WHERE Dni_paciente = '" + dniB + "' ";
+				Statement stmt2 = con.createStatement();
+				ResultSet rs2 = stmt2.executeQuery(sentSQL2);			
+				if(rs2.next()) {
+					int numHist = rs2.getInt("ID_historial");
+					String enfermedad = rs2.getString("Enfermedad");
+					String sintoma = rs2.getString("Sintoma");
+					String tiempo = rs2.getString("Tiempo");
+					String sed = rs2.getString("Sed");
+					String sueño = rs2.getString("Sueño");
+					String miccion = rs2.getString("Miccion");
+					String dniP = rs2.getString("Dni_paciente");
+					h = new HistorialClinico(numHist, enfermedad, sintoma, tiempo, sed, sueño ,miccion, dniP);
+				}	
+				;
+				p = new Paciente(dni, nombre, apellido, telefono, dir, fecha, h,genero);			
+			}
+			return p;
+		}catch (Exception e) {
+			logger.log( Level.SEVERE, "ExcepciÃ³n", e );
+			return null;
 		}
 	}
 	/***
@@ -452,6 +499,26 @@ public class BaseDeDatos {
 		
 		}
 	
+	/***
+	 * Metodo de login
+	 */	
+	public static boolean comprobarUsuario(String u, String c) {
+		boolean result=false;
+		try (Statement statement = con.createStatement()) {
+			String sentSQL = "SELECT user, password FROM usuario WHERE user = '" + u +"' AND password = '" + c + "' ";
+			BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
+			BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
+			
+			while(rs.next()) {
+				result = true;
+			}
+			return result;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			logger.log( Level.SEVERE, "ExcepciÃ³n", e );
+			return result;
+		}
+	}
 	/**
 	 * Metodo que obtiene el usuario 
 	 * @param con Conexion con la tabla
@@ -599,9 +666,9 @@ public static void anadirHistorialTabla(DefaultTableModel tabla) {
 		
 		while (rs.next()) {
 			
-			Object[] fila = new Object[7]; // hay 8 columnas en la tabla paciente
+			Object[] fila = new Object[8]; // hay 8 columnas en la tabla historial
 			//se rellena cada posición del array con una de las columnas de la tabla de bd
-			for (int i=0; i<7; i++) {
+			for (int i=0; i<8; i++) {
 				fila[i] = rs.getObject(i+1);
 			}
 			tabla.addRow(fila);					
@@ -613,7 +680,9 @@ public static void anadirHistorialTabla(DefaultTableModel tabla) {
 
 }
 
-//CARGA EL HISTORIAL
+/**
+ * Metodo que carga el historial
+ */
 public static ArrayList<HistorialClinico> cargarHistorial(String hc) throws SQLException{
 	ArrayList<HistorialClinico> historial = new ArrayList<HistorialClinico>();
 
@@ -632,6 +701,34 @@ public static ArrayList<HistorialClinico> cargarHistorial(String hc) throws SQLE
 	}
 	return historial;
 	
+	
+}
+	
+/**
+ * Metodo que visualiza los historiales en la ventanaHistorial a través del boton visualizar preguntando el dni
+ */
+public static HistorialClinico visualizarHistorial(String dni) {
+	try (Statement statement = con.createStatement()) {
+		String sentSQL = "SELECT * FROM historial WHERE Dni_paciente = '" + dni + "' ";
+		BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
+		BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
+		HistorialClinico h = null;
+		while(rs.next()) {
+			int numHist = rs.getInt("ID_historial");
+			String enfermedad = rs.getString("Enfermedad");
+			String sintoma = rs.getString("Sintoma");
+			String tiempo = rs.getString("Tiempo");
+			String sed = rs.getString("Sed");
+			String sueño = rs.getString("Sueño");
+			String miccion = rs.getString("Miccion");
+			String dniP = rs.getString("Dni_paciente");
+			h = new HistorialClinico(numHist, enfermedad, sintoma, tiempo, sed, sueño ,miccion, dniP);
+		}
+		return h;
+	}catch (Exception e) {
+		logger.log( Level.SEVERE, "ExcepciÃ³n", e );
+		return null;
+	}
 	
 }
 	
@@ -930,24 +1027,7 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 				Connection con = null;
 				con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
 				stmt = con.createStatement();
-				/* 
-				stmt.executeUpdate("drop table if exists paciente");
-				stmt.executeUpdate("create table paciente(nombre String,  apellido string, dni String, fecha_nacimiento string, genero string, telefono integer, direccion string)");
-				stmt.executeUpdate("insert into paciente values('Paula', 'Asua', '79079419Z', '26-07-2001', 'Femenino', 711726903, 'Zabale kalea')");
-				
-				stmt.executeUpdate("drop table if exists usuario");
-				stmt.executeUpdate("create table usuario(nombre String, contrasena String )");
-				stmt.executeUpdate("insert into usuario values('admin', 'admin')");
-				
-				stmt.executeUpdate("drop table if exists Medico");
-				stmt.executeUpdate("create table Medico( dni String,  nombre String,  apellidos String, telefono Integer, email String,  direccion String , fecha_nacimiento String,salario Integer,cita String)");
-				
-				stmt.executeUpdate("drop table if exists historial");
-				stmt.executeUpdate("create table historial(dni String, enfermedad String,  sintoma String, tiempo String, sed String, sueño String, miccion String, FOREIGN KEY(dni) REFERENCES paciente(dni) ON DELETE CASCADE)");
-				stmt.executeUpdate("insert into historial values('79079419Z', 'Amigdalitis', 'dolor de garganta, dolor al tragar, fiebre, mal aliento', '3 días', 'normal','normal','normal')");
-				
-			*/
-				
+
 			} catch (Exception e) {
 				// TODO: handle exception
 			}

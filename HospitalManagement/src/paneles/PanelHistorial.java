@@ -160,13 +160,14 @@ class Panel2 extends JPanel{ //panel que contiene la TABLA PACIENTES
 			 modelo = new DefaultTableModel();
 			 tabla = new JTable(modelo);
 			//Creamos las columnas
-			modelo.addColumn("Dni");
+			modelo.addColumn("Num Historial");
 			modelo.addColumn("Enfermedad");
 			modelo.addColumn("Síntomas");
 			modelo.addColumn("Tiempo");
 			modelo.addColumn("Sed");
 			modelo.addColumn("Sueño");
 			modelo.addColumn("Micción");
+			modelo.addColumn("Dni");
 			try {
 				actualizarTablaHistorial();
 			} catch (Exception e) {

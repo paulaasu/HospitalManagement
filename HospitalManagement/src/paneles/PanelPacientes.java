@@ -32,11 +32,8 @@ import vistas.VentanaHistorial;
 import vistas.VentanaPaciente;
 import vistas.VentanaPrincipal;
 import clases.BaseDeDatos;
+import clases.Paciente;
 import clases.Pacientte;
-
-
-
-
 
 public class PanelPacientes extends JPanel {
 	public static DefaultTableModel modelo;
@@ -81,13 +78,15 @@ public class PanelPacientes extends JPanel {
 			modelo = new DefaultTableModel();
 			tabla = new JTable(modelo);
 			//Creamos las columnas
+			modelo.addColumn("Dni");
 			modelo.addColumn("Nombre");
 			modelo.addColumn("Apellido");
-			modelo.addColumn("DNI");
-			modelo.addColumn("Fecha nacimiento");
-			modelo.addColumn("Género");
 			modelo.addColumn("Teléfono");
 			modelo.addColumn("Dirección");
+			modelo.addColumn("Fecha nacimiento");
+			modelo.addColumn("Género");
+
+
 
 			
 			actualizaTablaPaciente();
@@ -121,26 +120,7 @@ public class PanelPacientes extends JPanel {
 			PanelBuscar.add(botonBuscar);
 			
 			add(PanelBuscar);
-			// M. recorrer la base de datos de los pacientes y buscarlos mediente el dni
-//			botonBuscar.addActionListener(new ActionListener() {
-//				
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//					String dniBuscar = buscar.getText();
-//					
-//					try {
-//						BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-//						String sentSQL = "SELECT * FROM paciente WHERE dni = '" + dniBuscar + "' ";
-//						BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
-//						BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
-//						
-//						BaseDeDatos.closeBD();
-//					} catch (Exception e2) {
-//						// TODO: handle exception
-//					}
-//					
-//				}
-//			});
+
 			// Buscar paciente por DNI
 			botonBuscar.addActionListener(new ActionListener() {
 				
@@ -150,24 +130,18 @@ public class PanelPacientes extends JPanel {
 					String dniB = buscar.getText();
 					try {
 						BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-						String sentSQL = "SELECT * FROM paciente WHERE dni = '" + dniB + "' ";
-						BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
-						BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
-						
-						if(BaseDeDatos.rs.next()) {
-							int rowCount = modelo.getRowCount();
-							//Elimina las filas uno a uno desde el final de la tabla
-							for (int i = rowCount - 1; i >= 0; i--) {
-							    modelo.removeRow(i);
-							}
-							
-							
-							Object[] fila = new Object[8]; // hay 7 columnas en la tabla paciente
-							//se rellena cada posición del array con una de las columnas de la tabla de bd
-							for (int i=0; i<8; i++) {
-								fila[i] = BaseDeDatos.rs.getObject(i+1);
-							}
-							modelo.addRow(fila);
+						Paciente p = BaseDeDatos.buscarPacienteDni(dniB);
+						eliminaTablaPaciente();	
+						Object[] fila = new Object[7];
+						fila[0]=p.getDni();
+						fila[1]=p.getNombre();
+						fila[2]=p.getApellidos();
+						fila[3]=p.getTelefono();
+						fila[4]=p.getDireccion();
+						fila[5]=p.getFechaNac();
+						fila[6]=p.getGenero();
+						modelo.addRow(fila);	
+
 
 							/* Al buscar el DNI del paciente, aparece solamente ese por pantalla. En ese momento, al darle a buscar, se
 							 * inicializa una cuenta atrás de 15 segundos. Al acabarse el tiempo, toda la lista de pacientes vuelve a 
@@ -197,69 +171,12 @@ public class PanelPacientes extends JPanel {
 					                   
 					                }
 					            }
-					        }, 0, 1000);
-					        
-					        
-					    
-							
-							
-						}else {
-							JOptionPane.showMessageDialog(PanelBuscar, "El dni insertado no existe");
-							
-							int rowCount = modelo.getRowCount();
-							//Elimina las filas uno a uno desde el final de la tabla
-							for (int i = rowCount - 1; i >= 0; i--) {
-							    modelo.removeRow(i);
-							}
-							BaseDeDatos.anadirPacienteTabla(modelo);
-							
-							
-						}
+					        }, 0, 1000);								
 
-						
-//						if(BaseDeDatos.rs.next()) {
-//							int rowCount = modelo.getRowCount();
-//							//Elimina las filas uno a uno desde el final de la tabla
-//							for (int i = rowCount - 1; i >= 0; i--) {
-//							    modelo.removeRow(i);
-//							}
-//							
-//							
-//							Object[] fila = new Object[8]; // hay 7 columnas en la tabla paciente
-//							//se rellena cada posición del array con una de las columnas de la tabla de bd
-//							for (int i=0; i<8; i++) {
-//								fila[i] = BaseDeDatos.rs.getObject(i+1);
-//							}
-//							modelo.addRow(fila);
-//						}else {
-//							int rowCount = modelo.getRowCount();
-//							//Elimina las filas uno a uno desde el final de la tabla
-//							for (int i = rowCount - 1; i >= 0; i--) {
-//							    modelo.removeRow(i);
-//							}
-//							BaseDeDatos.anadirPacienteTabla(modelo);
-//					
-//						}
-//						while(BaseDeDatos.rs.next()) {
-//							int rowCount = modelo.getRowCount();
-//							//Elimina las filas uno a uno desde el final de la tabla
-//							for (int i = rowCount - 1; i >= 0; i--) {
-//							    modelo.removeRow(i);
-//							}
-//							
-//							Pacientte pacienteB = new Pacientte(BaseDeDatos.rs.getString("nombre"), BaseDeDatos.rs.getString("apellido"), BaseDeDatos.rs.getString("dni"), BaseDeDatos.rs.getString("fecha_nacimiento"), BaseDeDatos.rs.getString("genero"),BaseDeDatos.rs.getInt("telefono"),BaseDeDatos.rs.getString("direccion"),BaseDeDatos.rs.getInt("numHistorial"));
-//							Object[] fila = new Object[8]; // hay 7 columnas en la tabla paciente
-//							//se rellena cada posición del array con una de las columnas de la tabla de bd
-//							for (int i=0; i<8; i++) {
-//								fila[i] = BaseDeDatos.rs.getObject(i+1);
-//							}
-//							modelo.addRow(fila);	
-//						}
-						
 						BaseDeDatos.closeBD();
 						
 					} catch (Exception e2) {
-						// TODO: handle exception
+						e2.printStackTrace();
 					}
 					
 				}

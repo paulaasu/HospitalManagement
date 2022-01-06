@@ -20,6 +20,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import clases.BaseDeDatos;
+import clases.HistorialClinico;
 import paneles.PanelHistorial;
 import paneles.PanelPacientes;
 
@@ -87,44 +88,36 @@ public class VentanaAñadirHist extends JFrame{ //QUEDAN LAS CONDICIONES
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				 int dni = VentanaAñadirHist.devuelveDni();
+				 String dni = txt_dni.getText();
 				 String enfermedad = PanelHistorial.devuelveEnfermedad().getText();
 				 String sintomas = PanelHistorial.devuelveSintomas().getText();
 				 String tiempo = PanelHistorial.devuelveTiempo().getText();
 				 String sed = PanelHistorial.devuelveSed().getText();
 				 String sueño = PanelHistorial.devuelveSueño().getText();
 				 String miccion = PanelHistorial.devuelveMiccion().getText();
+				 HistorialClinico historial = new HistorialClinico(1, enfermedad, sintomas, tiempo, sed, sueño, miccion, dni);
 				 
 				 if (enfermedad!=null && sintomas!=null && tiempo!=null && sed!=null && sueño!=null && miccion!=null) {
 					 try {
 						BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-						String sentSQL3 = "SELECT * FROM paciente WHERE dni = '" + dni + "' ";
-						BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
-						BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL3);
-						
-						if(BaseDeDatos.rs.next()) {
-							BaseDeDatos.closeBD();
-							BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-							BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
-							BaseDeDatos.stmt.executeUpdate("insert into historial values("+dni+", '"+enfermedad+"', '"+sintomas+"', '"+tiempo+"', '"+sed+"', '"+sueño+"', '"+miccion+"')");
+						BaseDeDatos.insertarHistorial(BaseDeDatos.con, historial);						
+						PanelHistorial.actualizarTablaHistorial();
 							
-							PanelHistorial.actualizarTablaHistorial();
-							
-							BaseDeDatos.closeBD();
+						BaseDeDatos.closeBD();
 							
 							
-							PanelHistorial.devuelveEnfermedad().setText("");
-							PanelHistorial.devuelveSintomas().setText("");
-							PanelHistorial.devuelveTiempo().setText("");
-							PanelHistorial.devuelveSed().setText("");
-							PanelHistorial.devuelveSueño().setText("");
-							PanelHistorial.devuelveMiccion().setText("");
-							dispose();
+						PanelHistorial.devuelveEnfermedad().setText("");
+						PanelHistorial.devuelveSintomas().setText("");
+						PanelHistorial.devuelveTiempo().setText("");
+						PanelHistorial.devuelveSed().setText("");
+						PanelHistorial.devuelveSueño().setText("");
+						PanelHistorial.devuelveMiccion().setText("");
+						dispose();
 							
-						}else {
-							JOptionPane.showMessageDialog(btnAñadir, "El dni insertado no existe");
-							
-						}
+//						}else {
+//							JOptionPane.showMessageDialog(btnAñadir, "El dni insertado no existe");
+//							
+//						}
 					} catch (Exception e2) {
 						
 					}
@@ -143,9 +136,9 @@ public class VentanaAñadirHist extends JFrame{ //QUEDAN LAS CONDICIONES
 		
 	}
 
-	public static int devuelveDni(){
-		int dni = Integer.parseInt(txt_dni.getText());
-		return dni;
+	public static String devuelveDni(){
+		return txt_dni.getText();
+	
 		// asi te devuelve lo que ha puesto en el texto
 	}
 }

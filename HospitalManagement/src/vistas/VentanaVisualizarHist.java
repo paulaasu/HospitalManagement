@@ -18,7 +18,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 
-
 public class VentanaVisualizarHist extends JFrame{
 	private JPanel contentPane;
 	private static JTextField txt_dni;

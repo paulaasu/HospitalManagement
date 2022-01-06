@@ -31,7 +31,6 @@ import clases.Paciente;
 import paneles.PanelPacientes;
 
 
-
 public class VentanaPaciente extends JFrame {
 	private JButton añadir;
 
@@ -106,6 +105,9 @@ public class VentanaPaciente extends JFrame {
 		public Panel3() {
 			setLayout(new GridLayout(9, 2));
 			
+			add(new JLabel("DNI: "));
+			JTextField dniTxt = new JTextField(20);
+			add(dniTxt);
 			
 			add(new JLabel("Nombre: "));
 			JTextField nombreTxt= new JTextField(20);
@@ -116,11 +118,13 @@ public class VentanaPaciente extends JFrame {
 			JTextField apellidoTxt= new JTextField(20);
 			add(apellidoTxt);
 			
+			add(new JLabel("Teléfono: "));
+			JTextField telefonoTxt = new JTextField(20);
+			add(telefonoTxt);
 			
-			add(new JLabel("DNI: "));
-			JTextField dniTxt = new JTextField(20);
-			add(dniTxt);
-			
+			add(new JLabel("Dirección: "));
+			JTextField dirTxt = new JTextField(20);
+			add(dirTxt);
 			
 			add(new JLabel("Fecha nacimiento: "));
 			JTextField fchanacTxt= new JTextField("DD/MM/YYYY");
@@ -144,14 +148,8 @@ public class VentanaPaciente extends JFrame {
 			add(genero);
 			
 	
-			add(new JLabel("Teléfono: "));
-			JTextField telefonoTxt = new JTextField(20);
-			add(telefonoTxt);
-		
 			
-			add(new JLabel("Dirección: "));
-			JTextField dirTxt = new JTextField(20);
-			add(dirTxt);
+			
 			
 		
 			
@@ -197,8 +195,7 @@ public class VentanaPaciente extends JFrame {
 //						System.out.println(historial);
 						
 						
-						
-						BaseDeDatos.anadirPaciente(con, nombre, apellido, dni, fchanac, genero1, telefono, dir); //
+						BaseDeDatos.anadirPaciente(con, dni, nombre, apellido, telefono, dir, fchanac, genero1);
 						PanelPacientes.eliminaTablaPaciente();
 						PanelPacientes.actualizaTablaPaciente();
 						BaseDeDatos.closeBD();	

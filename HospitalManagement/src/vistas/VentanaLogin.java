@@ -30,8 +30,6 @@ import clases.Persona;
 import clases.Usuario;
 
 
-
-
 public class VentanaLogin extends JFrame {
 	private JTextField txt_user;
 	private JPasswordField txt_password;
@@ -88,23 +86,19 @@ public class VentanaLogin extends JFrame {
 					try {
 						
 					BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-					String sentSQL = "SELECT nombre, contrasena FROM usuario WHERE nombre = '" + u +"' AND contrasena = '" + c + "' ";
-					BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
-					BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
-				
 					
-					if (BaseDeDatos.rs.next()) {
+					if (BaseDeDatos.comprobarUsuario(u, c)) {
 						setVisible(false);
 						VentanaPrincipal ventana = new VentanaPrincipal();
 						ventana.setVisible(true);
 					}else {
 						JOptionPane.showMessageDialog(contentPane, "Usuario o contraseña incorrecta");
 					}
-					
+					BaseDeDatos.closeBD();
 					} catch (Exception e1){
 						e1.printStackTrace();
 					}
-					BaseDeDatos.closeBD();
+					
 			
 			}
 		});
@@ -229,9 +223,7 @@ public class VentanaLogin extends JFrame {
 			add(JLabelImagen, BorderLayout.NORTH);
 		}
 	}
-	
-	
-	
+
 	class Panel3 extends JPanel{ //PANEL DERECHA IMAGEN
 		
 		public Panel3() {
@@ -240,13 +232,8 @@ public class VentanaLogin extends JFrame {
 			
 			JLabel JLabelImagen = new JLabel();
 			JLabelImagen.setIcon(new ImageIcon(VentanaLogin.class.getResource("/img/LoginImagen2.jpg")));
-			add(JLabelImagen);
-			
-		//	setBackground(Color.RED);
-			
+			add(JLabelImagen);			
 		}
 	}
-	
-	
-	
+
 }
