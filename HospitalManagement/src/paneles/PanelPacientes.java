@@ -12,11 +12,6 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Pattern;
@@ -136,50 +131,57 @@ public class PanelPacientes extends JPanel {
 					try {
 						BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
 						Paciente p = BaseDeDatos.buscarPacienteDni(dniB);
-						eliminaTablaPaciente();	
-						Object[] fila = new Object[7];
-						fila[0]=p.getDni();
-						fila[1]=p.getNombre();
-						fila[2]=p.getApellidos();
-						fila[3]=p.getTelefono();
-						fila[4]=p.getDireccion();
-						fila[5]=p.getFechaNac();
-						fila[6]=p.getGenero();
-						modelo.addRow(fila);	
+						if(p!=null) {
+							eliminaTablaPaciente();	
+							Object[] fila = new Object[7];
+							fila[0]=p.getDni();
+							fila[1]=p.getNombre();
+							fila[2]=p.getApellidos();
+							fila[3]=p.getTelefono();
+							fila[4]=p.getDireccion();
+							fila[5]=p.getFechaNac();
+							fila[6]=p.getGenero();
+							modelo.addRow(fila);	
 
 
-							/* Al buscar el DNI del paciente, aparece solamente ese por pantalla. En ese momento, al darle a buscar, se
-							 * inicializa una cuenta atrás de 15 segundos. Al acabarse el tiempo, toda la lista de pacientes vuelve a 
-							 * cómo estaba al comienzo, para que se pueda realizar otra consulta  nueva sin necesidad de cerrar la ventana
-							 * y volver a entrar. 
-							 */
-							jLabelTemporizador.setText("");
-							Timer timer = new Timer();
+								/* Al buscar el DNI del paciente, aparece solamente ese por pantalla. En ese momento, al darle a buscar, se
+								 * inicializa una cuenta atrás de 15 segundos. Al acabarse el tiempo, toda la lista de pacientes vuelve a 
+								 * cómo estaba al comienzo, para que se pueda realizar otra consulta  nueva sin necesidad de cerrar la ventana
+								 * y volver a entrar. 
+								 */
+								jLabelTemporizador.setText("");
+								Timer timer = new Timer();
 
-					        timer.scheduleAtFixedRate(new TimerTask() {
-					            int i = 15;
+						        timer.scheduleAtFixedRate(new TimerTask() {
+						            int i = 15;
 
-					            public void run() {
+						            public void run() {
 
-					            	jLabelTemporizador.setText("Tiempo restante: " + i);
-					                i--;
+						            	jLabelTemporizador.setText("Tiempo restante: " + i);
+						                i--;
 
-					                if (i < 0) {
-					                    timer.cancel();
-					                    jLabelTemporizador.setText("");
-					                    int rowCount = modelo.getRowCount();
-										//Elimina las filas uno a uno desde el final de la tabla
-										for (int i = rowCount - 1; i >= 0; i--) {
-										    modelo.removeRow(i);
-										}
-										BaseDeDatos.anadirPacienteTabla(modelo);
-					                   
-					                }
-					            }
-					        }, 0, 1000);								
+						                if (i < 0) {
+						                    timer.cancel();
+						                    jLabelTemporizador.setText("");
+						                    int rowCount = modelo.getRowCount();
+											//Elimina las filas uno a uno desde el final de la tabla
+											for (int i = rowCount - 1; i >= 0; i--) {
+											    modelo.removeRow(i);
+											}
+											BaseDeDatos.anadirPacienteTabla(modelo);
+						                   
+						                }
+						            }
+						        }, 0, 1000);	
+						        BaseDeDatos.closeBD();
 
-						BaseDeDatos.closeBD();
+						}else {
+							BaseDeDatos.closeBD();
+							JOptionPane.showMessageDialog(PanelBuscar,"El dni no existe");
+						}
 						
+						
+				
 					} catch (Exception e2) {
 						e2.printStackTrace();
 					}
@@ -260,6 +262,7 @@ public class PanelPacientes extends JPanel {
 		}
 		
 	}
+
 }
 
 //	//Método para transformar fecha de nacimiento en edad en el momento. 

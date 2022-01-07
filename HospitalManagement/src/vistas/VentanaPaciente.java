@@ -12,6 +12,8 @@ import java.sql.DriverManager;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -85,6 +87,7 @@ public class VentanaPaciente extends JFrame {
 			JLabel datos = new JLabel("DATOS PERSONALES:");
 			datos.setHorizontalAlignment(SwingConstants.CENTER);
 			datos.setFont(new Font("Sherif", Font.PLAIN, 24));
+			setBackground(new Color(176, 196, 222));
 			add(datos, BorderLayout.NORTH);
 			
 			Panel3 panel3 = new Panel3();
@@ -170,52 +173,70 @@ public class VentanaPaciente extends JFrame {
 					String dni = dniTxt.getText();
 					String fchanac = fchanacTxt.getText();
 					String dir = dirTxt.getText();
-					int telefono = Integer.parseInt(telefonoTxt.getText());
+					String telefono = telefonoTxt.getText();
 					String genero1 = "";
 					if(femenino.isSelected()) {
 						genero1 = "Femenino";
 					}if(masculino.isSelected()) {
 						genero1 = "Masculino";
 					}
-
-			
-					//FALTAN LAS CONDICIONES!!
+					 //LOS PATRONES
+					Pattern patronDni = Pattern.compile("[0-9]{7,8}[A-Z]"); // Patron DNI
+					Matcher matDni = patronDni.matcher(dni);
+					boolean cumplePatronDni = matDni.matches();
 					
-					try {
-						java.sql.Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
-						//para aumentar el nª historial cada vez que se añade un paciente --> HAY QUE CORREGIR, DA ERROR
-//						String sentSQL = "SELECT nombre, apellido, dni, fecha_nacimiento, genero, telefono, direccion, max(numHistorial) FROM paciente";
-//						BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
-//						BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
-//						int historial=1;
-//						while(BaseDeDatos.rs.next()) {
-//							historial = BaseDeDatos.rs.getInt(8) + 1;
-////							historial = historial + 1;
-//						}
-//						System.out.println(historial);
-						
-						
-						BaseDeDatos.anadirPaciente(con, dni, nombre, apellido, telefono, dir, fchanac, genero1);
-						PanelPacientes.eliminaTablaPaciente();
-						PanelPacientes.actualizaTablaPaciente();
-						BaseDeDatos.closeBD();	
-					} catch (Exception e2) {
-						e2.printStackTrace();
+					Pattern patronTf = Pattern.compile("[0-9]{9}"); // Patron teléfono
+					Matcher matTf = patronTf.matcher(telefono);
+					boolean cumplePatronTf = matTf.matches();
+					//DD/MM/YYYY
+					Pattern patronFecha = Pattern.compile("[0-9]{2}/[0-9]{2}/[0-9]{4}");
+					Matcher matFecha = patronFecha.matcher(fchanac);
+					boolean cumplePatronFecha = matFecha.matches();
+					
+					
+					
+					if(cumplePatronDni == true) {
+						if( cumplePatronTf== true) {
+							int tf = Integer.parseInt(telefonoTxt.getText());
+							if(cumplePatronFecha == true) {	
+								try {
+									java.sql.Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
+									BaseDeDatos.anadirPaciente(con, dni, nombre, apellido, tf, dir, fchanac, genero1);
+									PanelPacientes.eliminaTablaPaciente();
+									PanelPacientes.actualizaTablaPaciente();
+									BaseDeDatos.closeBD();	
+									dispose();
+									repaint();
+									//pone en blanco los txtfields denuevo
+									nombreTxt.setText("");
+									apellidoTxt.setText("");
+									dniTxt.setText("");
+									fchanacTxt.setText("");
+									dirTxt.setText("");
+									telefonoTxt.setText("");
+									//RADIOBUTON EN BLANCO?
+									BaseDeDatos.closeBD();
+								} catch (Exception e2) {
+									e2.printStackTrace();
+								}
+							}else {
+								JOptionPane.showMessageDialog( null, "Fecha incorrecta");
+							}					
+						}else {
+							JOptionPane.showMessageDialog( null, "Teléfono incorrecto");
+						}				
+					}else{
+						JOptionPane.showMessageDialog( null, "Dni incorrecto");
 					}
+					
+		
 					}else {
 						JOptionPane.showMessageDialog( contentPanePaciente, "Debes rellenar todos campos");
 					}
 					
-					repaint();
-					dispose(); //para que cierre al darle a añadir
-			
-					//pone en blanco los txtfields denuevo
-					nombreTxt.setText("");
-					apellidoTxt.setText("");
-					dniTxt.setText("");
-					fchanacTxt.setText("");
-					dirTxt.setText("");
-					telefonoTxt.setText("");
+					 //para que cierre al darle a añadir
+					
+					
 					//COMO SE PONE EN RADIOBUTTON EN BLANCO?
 					
 				}

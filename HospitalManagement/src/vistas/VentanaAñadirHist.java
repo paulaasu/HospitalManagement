@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.DriverManager;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -21,6 +22,7 @@ import javax.swing.border.EmptyBorder;
 
 import clases.BaseDeDatos;
 import clases.HistorialClinico;
+import clases.Paciente;
 import paneles.PanelHistorial;
 import paneles.PanelPacientes;
 
@@ -95,12 +97,24 @@ public class VentanaAñadirHist extends JFrame{ //QUEDAN LAS CONDICIONES
 				 String sed = PanelHistorial.devuelveSed().getText();
 				 String sueño = PanelHistorial.devuelveSueño().getText();
 				 String miccion = PanelHistorial.devuelveMiccion().getText();
-				 HistorialClinico historial = new HistorialClinico(1, enfermedad, sintomas, tiempo, sed, sueño, miccion, dni);
 				 
-				 if (enfermedad!=null && sintomas!=null && tiempo!=null && sed!=null && sueño!=null && miccion!=null) {
+				 
+				 if (!enfermedad.isEmpty() && !sintomas.isEmpty() && !tiempo.isEmpty() && !sed.isEmpty() && !sueño.isEmpty() && !miccion.isEmpty()) {	
 					 try {
 						BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-						BaseDeDatos.insertarHistorial(BaseDeDatos.con, historial);						
+						ArrayList<Paciente> pacientesTot = BaseDeDatos.pacientesTotales();
+						String sentSQL2= "Select * from paciente where Dni='"+ dni+"'";
+						
+						//para aumentar el nª historial cada vez que se añade un paciente 
+						String sentSQL = "SELECT ID_historial, Enfermedad, Sintoma, Tiempo, Sed, Sueño, Miccion, max(ID_historial) FROM historial";
+						BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
+						BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
+						int numH=1;
+						while(BaseDeDatos.rs.next()) {
+							numH = BaseDeDatos.rs.getInt(8) + 1;
+						}
+						HistorialClinico historial = new HistorialClinico(numH, enfermedad, sintomas, tiempo, sed, sueño, miccion, dni);
+						BaseDeDatos.anadirHistorial(BaseDeDatos.con, historial);						
 						PanelHistorial.actualizarTablaHistorial();
 							
 						BaseDeDatos.closeBD();
@@ -114,12 +128,8 @@ public class VentanaAñadirHist extends JFrame{ //QUEDAN LAS CONDICIONES
 						PanelHistorial.devuelveMiccion().setText("");
 						dispose();
 							
-//						}else {
-//							JOptionPane.showMessageDialog(btnAñadir, "El dni insertado no existe");
-//							
-//						}
 					} catch (Exception e2) {
-						
+						e2.getStackTrace();
 					}
 			
 				 }else {

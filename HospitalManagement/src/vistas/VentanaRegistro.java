@@ -143,32 +143,33 @@ public class VentanaRegistro extends JFrame {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 //					// TODO Auto-generated method stub
-//					String usuario1 = usuario.getText();
-//					String password1 = usuario.getText();
-//					String passwordRepeat = usuario.getText();
-//					TipoUsuario rol1 = (TipoUsuario) tipoUsuario.getSelectedItem();
-//					//ID --> No se pregunta, cada nuevo usuario se crea un nuevo ID automáticamente
-//					//Rol
-//					
-//					//Conseguir lo que la persona ha puesto en el comboBox
-//				//	para aumentar el nª historial cada vez que se añade un paciente --> HAY QUE CORREGIR, DA ERROR
-//					
-//					try {
-//						BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-//						String sentSQL = "SELECT ID_usuario, user, password, Rol, max(ID_usuario) FROM usuario";
-//						BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
-//						BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
-//						int numeroUsuario = 1;
-//						while(BaseDeDatos.rs.next()) {
-//							numeroUsuario = BaseDeDatos.rs.getInt(5) + 1;
-////							numeroUsuario = numeroUsuario + 1;
-//							Usuario usuarioNuevo = new Usuario(usuario1, password1, numeroUsuario, rol1);
-//						}
-//					} catch (SQLException e1) {
-//						// TODO Auto-generated catch block
-//						e1.printStackTrace();
-//					}
-//					
+					String usuario1 = usuario.getText();
+					String password1 = usuario.getText();
+					String passwordRepeat = usuario.getText();
+					TipoUsuario rol1 = (TipoUsuario) tipoUsuario.getSelectedItem();
+					//ID --> No se pregunta, cada nuevo usuario se crea un nuevo ID automáticamente
+					//Rol
+					
+					//Conseguir lo que la persona ha puesto en el comboBox
+				//	para aumentar el nª historial cada vez que se añade un paciente --> HAY QUE CORREGIR, DA ERROR
+					
+					try {
+						BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+						String sentSQL = "SELECT ID_usuario, user, password, Rol, max(ID_usuario) FROM usuario";
+						BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
+						BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
+						int numeroUsuario = 1;
+						while(BaseDeDatos.rs.next()) {
+							numeroUsuario = BaseDeDatos.rs.getInt(5) + 1;
+//							numeroUsuario = numeroUsuario + 1;
+							Usuario usuarioNuevo = new Usuario(usuario1, password1, numeroUsuario, rol1);
+						}
+						BaseDeDatos.closeBD();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					
 					System.out.println(tipoUsuario.getSelectedItem());
 				}
 			});
