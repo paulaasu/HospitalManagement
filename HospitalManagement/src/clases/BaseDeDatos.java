@@ -535,7 +535,7 @@ public class BaseDeDatos {
 			stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(sentSQL);
 			if(rs.next()) {
-				u = new Usuario(rs.getString("nombre"), rs.getString("contrasena"));
+				u = new Usuario(rs.getString("nombre"), rs.getString("contrasena"), 0, null);
 			}
 			rs.close();
 		} catch (SQLException e) {
@@ -1066,6 +1066,21 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 			e.printStackTrace();
 		}
 		
+	}
+	
+	public static void anadirUsuario(Connection con, Usuario u) {
+		
+		String sentSQL = "INSERT INTO usuario VALUES('"+u.getID_usuario()+"', '"+u.getNom()+"','"+u.getContrasena()+"', '"+u.getRol()+"')";
+		
+		try {
+			Statement stmt =null;
+			stmt= con.createStatement();
+			stmt.executeUpdate(sentSQL);
+			stmt.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -6,7 +6,7 @@ public class Pacientte {
 	private String nombre;
 	private String apellidos;
 	private String dni;
-	private String fechaNac;
+	private static String fechaNac;
 	private String genero;
 	private int telefono;
 	private String direccion;
@@ -49,7 +49,7 @@ public class Pacientte {
 		this.dni = dni;
 	}
 
-	public String getFechaNac() {
+	public static String getFechaNac() {
 		return fechaNac;
 	}
 

@@ -12,6 +12,11 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Pattern;
@@ -255,5 +260,16 @@ public class PanelPacientes extends JPanel {
 		}
 		
 	}
-
 }
+
+//	//Método para transformar fecha de nacimiento en edad en el momento. 
+//	public static String EdadActualPactiente(Pacientte.getFechaNac()) {
+//		
+//	}
+//	//Método recursivo para calcular la edad media de los pacientes del hospital. 
+//	public static void edadMedia(ArrayList<String> edades) {
+//		int resultado = 0;
+//		
+//	}
+//
+//}
