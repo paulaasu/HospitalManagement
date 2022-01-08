@@ -205,7 +205,8 @@ public class BaseDeDatos {
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();}
+			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR AL AÑADIR PACIENTE");
+			}
 		}
 		/***
 		 * Metodo que añade un historial
@@ -213,23 +214,23 @@ public class BaseDeDatos {
 		 */
 		public static void anadirHistorial(Connection con2, HistorialClinico h) throws SQLException {
 			try (Statement statement = con.createStatement()) {
-			String sentSQL2= "Select * from paciente where Dni='"+ h.getDni()+"'";
-			Statement stmt1 = con.createStatement();
-			logger.log( Level.INFO, "Statement: " + sentSQL2 );
-			ResultSet rs1 = stmt1.executeQuery(sentSQL2);
-			if(rs1.next()) {
-				String sentSQL = "INSERT INTO Historial (Enfermedad,Sintoma,Tiempo,Sed,Sueño,Miccion,Dni_paciente)  VALUES('"+h.getEnfermedad()+"','"+h.getSintomas()+"','"+h.getTiempo()+
-						"','"+h.getSed()+"','"+h.getSueño()+"','"+h.getMiccion()+"','"+h.getDni()+"');";
-				logger.log( Level.INFO, "Statement: " + sentSQL );
-				Statement stmt = con.createStatement();
-				stmt.executeUpdate(sentSQL);
-				stmt.close();
-			}else {
-				JOptionPane.showMessageDialog(null, "No existe ese dni");
-			}}
-//			} catch (org.sqlite.SQLiteException e) {
-//				e.printStackTrace();
-//			}
+				String sentSQL2= "Select * from paciente where Dni='"+ h.getDni()+"'";
+				Statement stmt1 = con.createStatement();
+				logger.log( Level.INFO, "Statement: " + sentSQL2 );
+				ResultSet rs1 = stmt1.executeQuery(sentSQL2);
+				if(rs1.next()) {
+					String sentSQL = "INSERT INTO Historial (Enfermedad,Sintoma,Tiempo,Sed,Sueño,Miccion,Dni_paciente)  VALUES('"+h.getEnfermedad()+"','"+h.getSintomas()+"','"+h.getTiempo()+
+							"','"+h.getSed()+"','"+h.getSueño()+"','"+h.getMiccion()+"','"+h.getDni()+"');";
+					logger.log( Level.INFO, "Statement: " + sentSQL );
+					Statement stmt = con.createStatement();
+					stmt.executeUpdate(sentSQL);
+					stmt.close();
+				}else {
+					JOptionPane.showMessageDialog(null, "No existe ese dni");
+				}
+			}catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR");
+			}
 	}
 	/***
 	 * Metodo que pone a todos los pacientes en un ArrayList
@@ -270,7 +271,7 @@ public class BaseDeDatos {
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR AL AÑADIR PACIENTE AL AÑADIR MEDICO");
 		}
 	
 	}
@@ -292,15 +293,13 @@ public class BaseDeDatos {
 			stmt= con.createStatement();
 			stmt.executeUpdate(sentSQL);
 			stmt.close();
-			
-//		} catch (org.sqlite.SQLiteException e) {
-//			
-//			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR COMPRUEBE QUE EL FICHERO ESTE BIEN FORMADO");
-//			
+		
 		}catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR");
+			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR (Compruebe el fichero)");
 			
-		}
+		}catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR");
+		}	
 	
 	}
 	
@@ -335,7 +334,8 @@ public class BaseDeDatos {
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR");
+			//e.printStackTrace();
 		}
 	}
 	/***
@@ -417,7 +417,7 @@ public class BaseDeDatos {
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR AL MODIFICAR EL PACIENTE");
 		}
 		
 		
@@ -445,7 +445,7 @@ public class BaseDeDatos {
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR");
 		}
 		
 		
@@ -509,7 +509,7 @@ public class BaseDeDatos {
 		} catch (SQLException e) {
 			System.out.println(e);
 			JOptionPane.showOptionDialog(null, "Se ha producido un error en la busqueda de pacientes", null, 0, 0, null, null, e);
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return lista;
 		
@@ -530,7 +530,8 @@ public class BaseDeDatos {
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR");
+			//e.printStackTrace();
 		}
 		
 		
@@ -584,7 +585,8 @@ public class BaseDeDatos {
 					stmt.close();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR AL OBTENER UN USUARIO");
+					//e.printStackTrace();
 				}
 			}
 		}
@@ -687,7 +689,7 @@ public static void anadirPacienteTabla(DefaultTableModel tabla) {
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR");
 			}
 	}
 
@@ -712,7 +714,7 @@ public static void anadirHistorialTabla(DefaultTableModel tabla) {
 		}
 	} catch (SQLException e) {
 		// TODO Auto-generated catch block
-		e.printStackTrace();
+		JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR");
 	}
 
 }
@@ -734,7 +736,7 @@ public static ArrayList<HistorialClinico> cargarHistorial(String hc) throws SQLE
 			historial.add(h);
 		}
 	} catch (Exception e) {
-		e.printStackTrace();
+		JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR");
 	}
 	return historial;
 	
@@ -793,7 +795,7 @@ public  static  ArrayList<String> ObtenerPacientes(Connection con){
 		return ret;
 	} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+		JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR");
 	}
 	return ret;
 
@@ -828,10 +830,12 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 		}
 		rs.close();
 		return ret;
-	} catch (SQLException e) {
-			// TODO Auto-generated catch block
-		JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR ");
-			e.printStackTrace();
+	} catch (SQLException e){
+		// TODO Auto-generated catch block
+		JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR");
+		
+	}catch (Exception e) {
+		JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR");
 	}
 	return ret;
 
@@ -908,7 +912,7 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 				stmt.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR");
 			}
 			
 					
@@ -959,7 +963,7 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 				stmt.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR AL AÑADIR UNA CITA");
 			}
 
 		}
@@ -1000,7 +1004,7 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR AL ELIMINAR UNA CITA");
 		}
 	}
 	
@@ -1042,7 +1046,6 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 	public static void insertarHistorial(Connection con2, HistorialClinico h) {
 
 		
-		//INSERT INTO Historial (Enfermedad,Sintoma,Tiempo,Sed,Sueño,Miccion,Dni_paciente) VALUES('Dolor de cabeza','Dolor','3 dias','no','no','no','76855467v');
 		String sentSQL = "INSERT INTO Historial (Enfermedad,Sintoma,Tiempo,Sed,Sueño,Miccion,Dni_paciente)  VALUES('"+h.getEnfermedad()+"','"+h.getSintomas()+"','"+h.getTiempo()+
 				"','"+h.getSed()+"','"+h.getSueño()+"','"+h.getMiccion()+"','"+h.getDni()+"');";
 		
@@ -1051,13 +1054,13 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 			stmt= con.createStatement();
 			stmt.executeUpdate(sentSQL);
 			stmt.close();
-		//} catch (SQLiteException e) {
+		} catch (SQLException e) {
 			
-//			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR COMPRUEBE QUE EL FCIHERO ESTE BIEN FORMADO");
-//			e.printStackTrace();
-		}catch (SQLException e) {
-			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR COMPRUEBE");
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR (Compruebe el fichero)");
+			
+		}catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR ");
+			
 		}
 		
 	}
@@ -1073,7 +1076,7 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR  AL AÑADIR UN USUARIO");
 		}
 	}// metodos de cita
 //nuevo 4/01
@@ -1094,7 +1097,7 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 				anadirCita(con, c);
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR ");
 			}
 			
 		}
@@ -1137,7 +1140,7 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 				stmt.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR ");
 			}
 		}
 
