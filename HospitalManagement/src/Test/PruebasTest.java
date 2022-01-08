@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.junit.AfterClass;
@@ -13,6 +14,8 @@ import org.junit.Test;
 import clases.BaseDeDatos;
 import clases.HistorialClinico;
 import clases.Paciente;
+import clases.TipoUsuario;
+import clases.Usuario;
 import paneles.PanelExportar;
 
 public class PruebasTest {
@@ -32,7 +35,9 @@ public class PruebasTest {
 	@Before
 	public void setUp() throws Exception {
 		
-		con= BaseDeDatos.initBD("BaseDeDatos.db");
+		con= BaseDeDatos.initBD("testBD.db");
+		BaseDeDatos.crearTablas(con);
+		
 		/*---PANEL EXPORTAR CSV---*/
 		 ret = new ArrayList<>();
 		 
@@ -58,7 +63,7 @@ public class PruebasTest {
 	@Test
 	public void testObtenerPaciente() {
 		ret1=BaseDeDatos.getPaciente(con);
-		assertEquals(null, ret.size());
+		assertNotEquals(null, ret.size());
 			
 	}
 	
@@ -72,12 +77,30 @@ public class PruebasTest {
 			
 		assertNotEquals(null, p);
 	}
-	//RESULTADO CORRECTO: correcto
-	@Test
-	public void testInsertarHistorial() throws IOException {
-
-		BaseDeDatos.insertarHistorial(con,h);
-				
-		assertNotEquals(null, h);
-	}
+//	//RESULTADO CORRECTO: correcto
+//	@Test
+//	public void testInsertarHistorial() throws IOException {
+//
+//		BaseDeDatos.insertarHistorial(con,h);
+//				
+//		assertNotEquals(null, h);
+//	}
+	@Test //TEST HISTORIAL: que al insertar un historial de un paciente que no existe genere una excepción
+	public void getHistorial() {
+		try {//DNI correcto
+			BaseDeDatos.anadirHistorial(BaseDeDatos.con, "Diabetes", "Fatiga, visión borrosa, úlceras, pérdida de peso", "4 meses", "Aumento", "Normal", "Aumento", "7907963T");
+		} catch (SQLException e) {
+			fail( "Error en el borrar el historial correcto" );
+		}
+		
+		try {//DNI incorrecto
+			BaseDeDatos.anadirHistorial(BaseDeDatos.con, "Diabetes", "Fatiga, visión borrosa, úlceras, pérdida de peso", "4 meses", "Aumento", "Normal", "Aumento", "11111111T");
+		} catch (SQLException e) {
+			fail( "No hay error en borrar el historial incorrecto" );
+		}
+		}
+	
+	
 }
+
+

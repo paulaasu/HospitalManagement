@@ -100,89 +100,95 @@ public class BaseDeDatos {
 	 * Este metodo se utiliza para crear las tablas en la base de datos
 	 * @param con Pasamos la conexion 
 	 */
-	public static void crearTablas(Connection con) {
-		String sent1= "CREATE TABLE IF NOT EXISTS Paciente(nombre String,  apellido string, dni String, fecha_nacimiento string, genero string, telefono integer, direccion string)";
-		/*String sent1= "CREATE TABLE Paciente(
-			Dni VARCHAR(20) PRIMARY KEY NOT NULL, 
-		    Nombre VARCHAR(20),
-		    Apellidos VARCHAR(40),
-		    Telefono INTEGER,
-
-		    Direccion VARCHAR(40),
-		    Fecha_Nac Date,
-		    Genero VARCHAR(9)
-		    )
-;*/
-		
-		String sent2 = "CREATE TABLA IF NOT EXISTS Medico( dni Integer,  nombre String,  apellidos String, telefono Integer, email String,  direccion String , fecha_nacimiento String, Especialidad string)" ;
-		/*String sent2 = "CREATE TABLE Medico(
-			ID_medico INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-			Nombre VARCHAR(20),
-			Apellidos VARCHAR(30),
-			Telefono INTEGER(9),
-			Email VARCHAR(40),
-			Direccion VARCHAR(40),
-			Fecha_nac Date
-			Especialidad VARCHAR(30)
-		);*/
-		
-		
-		String sent3 ="CREATE TABLA IF NOT EXISTS Historial(dni String, enfermedad String,  sintoma String, tiempo String, sed String, sueño String, miccion String, FOREIGN KEY(dni) REFERENCES paciente(dni) ON DELETE CASCADE)";
-		/*String sent3 = "CREATE TABLE Historial(
-			ID_historial INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-			Enfermedad VARCHAR(50),
-			Sintoma VARCHAR(50),
-			Tiempo VARCHAR(15),
-			Sed VARCHAR(15),
-			Sueño VARCHAR(15),
-			Miccion VARCHAR(15),
-			Dni_paciente CHAR(9),
-		 	FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE
-		 );*/
-		
-		
-		String sent4 ="CREATE TABLA IF NOT EXITS Usuario( nombre String,  contrasena String,  )";
-		/*String sent4 = "CREATE TABLE Usuario(
-			ID_usuario INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-			user VARCHAR(20),
-			password VARCHAR(30),
-			Rol VARCHAR(20)
-		)
-*/
-
-		
-		String sent5 ="CREATE TABLA IF NOT EXITS Cita( dni String,nombre String,  apellido String, fechayhora String, TipoCita String  )";
-		/*String sent5 = "CREATE TABLE Cita(
-				Id_cita INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-				Fecha VARCHAR(20),
-				Dni_paciente VARCHAR(20),
-				Id_medico INTEGER,
-				Tipo VARCHAR(20),
-				FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE,
-				FOREIGN KEY(Id_medico) REFERENCES Medico(Id)
-				)*/
-		
-		Statement st = null;
-		
+	public static void crearTablas(Connection con) {		
 		try {
+		
+			String sent11 ="DROP TABLE IF EXISTS Paciente";
+			String sent1= "CREATE TABLE Paciente(Dni VARCHAR(20) PRIMARY KEY NOT NULL, Nombre VARCHAR(20), Apellidos VARCHAR(40), Telefono INTEGER, Direccion VARCHAR(40), Fecha_Nac Date, Genero VARCHAR(9))";
+			/*String sent1= "CREATE TABLE Paciente(
+				Dni VARCHAR(20) PRIMARY KEY NOT NULL, 
+			    Nombre VARCHAR(20),
+			    Apellidos VARCHAR(40),
+			    Telefono INTEGER,
+			    Direccion VARCHAR(40),
+			    Fecha_Nac Date,
+			    Genero VARCHAR(9)
+			    )
+	;*/
+			String sent22 ="DROP TABLE IF EXISTS Medico";
+			String sent2 = "CREATE TABLE Medico(ID_medico INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Nombre VARCHAR(20), Apellidos VARCHAR(30), Telefono INTEGER(9), Email VARCHAR(40), Direccion VARCHAR(40), Fecha_nac Date, Especialidad VARCHAR(30))" ;
+			/*String sent2 = "CREATE TABLE Medico(
+				ID_medico INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+				Nombre VARCHAR(20),
+				Apellidos VARCHAR(30),
+				Telefono INTEGER(9),
+				Email VARCHAR(40),
+				Direccion VARCHAR(40),
+				Fecha_nac Date
+				Especialidad VARCHAR(30)
+			);*/
+			
+			String sent33 ="DROP TABLE IF EXISTS Historial";
+			String sent3 ="CREATE TABLE Historial(ID_historial INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Enfermedad VARCHAR(50), Sintoma VARCHAR(50), Tiempo VARCHAR(15), Sed VARCHAR(15), Sueño VARCHAR(15),	Miccion VARCHAR(15), Dni_paciente CHAR(9), FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE )";
+			/*String sent3 = "CREATE TABLE Historial(
+				ID_historial INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+				Enfermedad VARCHAR(50),
+				Sintoma VARCHAR(50),
+				Tiempo VARCHAR(15),
+				Sed VARCHAR(15),
+				Sueño VARCHAR(15),
+				Miccion VARCHAR(15),
+				Dni_paciente CHAR(9),
+			 	FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE
+			 );*/
+			
+			String sent44 ="DROP TABLE IF EXISTS Usuario";
+			String sent4 ="CREATE TABLE Usuario(ID_usuario INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,user VARCHAR(20),password VARCHAR(30),Rol VARCHAR(20))";
+			/*String sent4 = "CREATE TABLE Usuario(
+				ID_usuario INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+				user VARCHAR(20),
+				password VARCHAR(30),
+				Rol VARCHAR(20)
+			)
+	*/
+
+			String sent55 ="DROP TABLE IF EXISTS Cita";
+			String sent5 ="CREATE TABLE Cita(Id_cita INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Fecha VARCHAR(20), Dni_paciente VARCHAR(20),Id_medico INTEGER, Tipo VARCHAR(20),FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE,FOREIGN KEY(Id_medico) REFERENCES Medico(Id))";
+			/*String sent5 = "CREATE TABLE Cita(
+					Id_cita INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+					Fecha VARCHAR(20),
+					Dni_paciente VARCHAR(20),
+					Id_medico INTEGER,
+					Tipo VARCHAR(20),
+					FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE,
+					FOREIGN KEY(Id_medico) REFERENCES Medico(Id)
+					)*/
+			
+			Statement st = null;
+			
 			st = con.createStatement();
+			st.executeUpdate(sent11);
 			st.executeUpdate(sent1);
+			st.executeUpdate(sent22);
 			st.executeUpdate(sent2);
+			st.executeUpdate(sent33);
 			st.executeUpdate(sent3);
+			st.executeUpdate(sent44);
 			st.executeUpdate(sent4);
+			st.executeUpdate(sent55);
 			st.executeUpdate(sent5);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			if(st!=null) {
-				try {
-					st.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
+//			if(st!=null) {
+//				try {
+//					st.close();
+//				} catch (SQLException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
 		}
 		}
 	
@@ -212,26 +218,36 @@ public class BaseDeDatos {
 		 * Metodo que añade un historial
 		 * @throws SQLException 
 		 */
-		public static void anadirHistorial(Connection con2, HistorialClinico h) throws SQLException {
-			try (Statement statement = con.createStatement()) {
-				String sentSQL2= "Select * from paciente where Dni='"+ h.getDni()+"'";
-				Statement stmt1 = con.createStatement();
-				logger.log( Level.INFO, "Statement: " + sentSQL2 );
-				ResultSet rs1 = stmt1.executeQuery(sentSQL2);
-				if(rs1.next()) {
-					String sentSQL = "INSERT INTO Historial (Enfermedad,Sintoma,Tiempo,Sed,Sueño,Miccion,Dni_paciente)  VALUES('"+h.getEnfermedad()+"','"+h.getSintomas()+"','"+h.getTiempo()+
-							"','"+h.getSed()+"','"+h.getSueño()+"','"+h.getMiccion()+"','"+h.getDni()+"');";
-					logger.log( Level.INFO, "Statement: " + sentSQL );
-					Statement stmt = con.createStatement();
-					stmt.executeUpdate(sentSQL);
-					stmt.close();
-				}else {
-					JOptionPane.showMessageDialog(null, "No existe ese dni");
-				}
-			}catch (SQLException e) {
-				JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR");
+	public static void anadirHistorial(Connection con, String enfermedad, String sintoma, String tiempo, String sed, String sueño, String miccion, String dni_paciente) throws SQLException {
+		try (Statement statement = con.createStatement()) {
+			//para aumentar el nª historial cada vez que se añade un paciente 
+			String sentSQL1 = "SELECT ID_historial, Enfermedad, Sintoma, Tiempo, Sed, Sueño, Miccion, max(ID_historial) FROM Historial";
+			Statement stmt1 = con.createStatement();
+			logger.log( Level.INFO, "Statement: " + sentSQL1 );
+			ResultSet rs1 = stmt1.executeQuery(sentSQL1);
+			int numH=1;
+			while(rs1.next()) {
+				numH = rs1.getInt(8) + 1;
 			}
-	}
+			HistorialClinico h = new HistorialClinico(numH, enfermedad, sintoma, tiempo, sed, sueño, miccion, dni_paciente);
+			
+		String sentSQL2= "Select * from paciente where Dni='"+ h.getDni()+"'";
+		Statement stmt2 = con.createStatement();
+		logger.log( Level.INFO, "Statement: " + sentSQL2 );
+		ResultSet rs2 = stmt2.executeQuery(sentSQL2);
+		if(rs2.next()) {
+			String sentSQL3 = "INSERT INTO Historial (Enfermedad,Sintoma,Tiempo,Sed,Sueño,Miccion,Dni_paciente)  VALUES('"+h.getEnfermedad()+"','"+h.getSintomas()+"','"+h.getTiempo()+
+					"','"+h.getSed()+"','"+h.getSueño()+"','"+h.getMiccion()+"','"+h.getDni()+"');";
+			logger.log( Level.INFO, "Statement: " + sentSQL3 );
+			Statement stmt3 = con.createStatement();
+			stmt3.executeUpdate(sentSQL3);
+		}else {
+			JOptionPane.showMessageDialog(null, "Dni incorrecto");
+		}
+		} catch (org.sqlite.SQLiteException e) {
+			e.printStackTrace();
+		}
+}
 	/***
 	 * Metodo que pone a todos los pacientes en un ArrayList
 	 */

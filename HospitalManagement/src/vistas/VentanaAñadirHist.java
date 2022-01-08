@@ -8,7 +8,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ArrayList;
 
@@ -102,24 +101,14 @@ public class VentanaAñadirHist extends JFrame{ //QUEDAN LAS CONDICIONES
 				 
 				 if (!enfermedad.isEmpty() && !sintomas.isEmpty() && !tiempo.isEmpty() && !sed.isEmpty() && !sueño.isEmpty() && !miccion.isEmpty()) {	
 					 try {
-						Connection con = null;
 						BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
 						ArrayList<Paciente> pacientesTot = BaseDeDatos.pacientesTotales();
 						String sentSQL2= "Select * from paciente where Dni='"+ dni+"'";
-						
-						//para aumentar el nª historial cada vez que se añade un paciente 
-						String sentSQL = "SELECT ID_historial, Enfermedad, Sintoma, Tiempo, Sed, Sueño, Miccion, max(ID_historial) FROM historial";
-						BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
-						BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
-						int numH=1;
-						while(BaseDeDatos.rs.next()) {
-							numH = BaseDeDatos.rs.getInt(8) + 1;
-						}
-						HistorialClinico historial = new HistorialClinico(numH, enfermedad, sintomas, tiempo, sed, sueño, miccion, dni);
-						BaseDeDatos.anadirHistorial(BaseDeDatos.con, historial);						
+
+						BaseDeDatos.anadirHistorial(BaseDeDatos.con, enfermedad, sintomas, tiempo, sed, sueño, miccion, dni);						
 						PanelHistorial.actualizarTablaHistorial();
 							
-						BaseDeDatos.closeBD(con);
+						BaseDeDatos.closeBD(BaseDeDatos.con);
 							
 							
 						PanelHistorial.devuelveEnfermedad().setText("");
