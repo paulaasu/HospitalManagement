@@ -204,7 +204,7 @@ public class VentanaPaciente extends JFrame {
 									BaseDeDatos.anadirPaciente(con, dni, nombre, apellido, tf, dir, fchanac, genero1);
 									PanelPacientes.eliminaTablaPaciente();
 									PanelPacientes.actualizaTablaPaciente();
-									BaseDeDatos.closeBD();	
+									BaseDeDatos.closeBD(con);	
 									dispose();
 									repaint();
 									//pone en blanco los txtfields denuevo
@@ -215,7 +215,7 @@ public class VentanaPaciente extends JFrame {
 									dirTxt.setText("");
 									telefonoTxt.setText("");
 									//RADIOBUTON EN BLANCO?
-									BaseDeDatos.closeBD();
+									BaseDeDatos.closeBD(con);
 								} catch (Exception e2) {
 									e2.printStackTrace();
 								}

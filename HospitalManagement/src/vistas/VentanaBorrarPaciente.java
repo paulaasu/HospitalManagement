@@ -8,6 +8,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.sql.DriverManager;
 
 import javax.swing.JButton;
@@ -97,7 +98,8 @@ public class VentanaBorrarPaciente extends JFrame{
 							PanelPacientes.actualizaTablaPaciente();
 							PanelHistorial.eliminaTablaHistorial();
 							PanelHistorial.actualizarTablaHistorial();
-							BaseDeDatos.closeBD();
+							Connection con=null;
+							BaseDeDatos.closeBD(con);
 						} catch (Exception e2) {
 							e2.printStackTrace();
 						}					

@@ -95,7 +95,7 @@ public class VentanaHistorial extends JFrame {
 		private JTextField sedTxt;
 		private JTextField sueñoTxt;
 		private JTextField miccionTxt;
-
+		java.sql.Connection con;
 		public Panel3() {
 			setLayout(new GridLayout(7, 2));
 
@@ -150,7 +150,7 @@ public class VentanaHistorial extends JFrame {
 				miccionHist.setOpaque(true);
 				add(miccionHist);
 					
-					BaseDeDatos.closeBD();	
+					BaseDeDatos.closeBD(con);	
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -40,7 +40,7 @@ public class VentanaRegistro extends JFrame {
 	private JButton añadir;
 
 	private JPanel contentPanePaciente;
-	
+	java.sql.Connection con;
 	private static Logger logger = Logger.getLogger( "VentanaPaciente" );
 	
 	//para cambiar de una ventana a otra
@@ -166,7 +166,8 @@ public class VentanaRegistro extends JFrame {
 							}
 							Usuario usuarioNuevo = new Usuario(usuario1, password1, numeroUsuario, rol1);
 							BaseDeDatos.anadirUsuario(usuarioNuevo);
-							BaseDeDatos.closeBD();
+							
+							BaseDeDatos.closeBD(con);
 						} catch (SQLException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();

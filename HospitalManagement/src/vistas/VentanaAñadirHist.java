@@ -8,6 +8,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.ArrayList;
 
@@ -101,6 +102,7 @@ public class VentanaAñadirHist extends JFrame{ //QUEDAN LAS CONDICIONES
 				 
 				 if (!enfermedad.isEmpty() && !sintomas.isEmpty() && !tiempo.isEmpty() && !sed.isEmpty() && !sueño.isEmpty() && !miccion.isEmpty()) {	
 					 try {
+						Connection con = null;
 						BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
 						ArrayList<Paciente> pacientesTot = BaseDeDatos.pacientesTotales();
 						String sentSQL2= "Select * from paciente where Dni='"+ dni+"'";
@@ -117,7 +119,7 @@ public class VentanaAñadirHist extends JFrame{ //QUEDAN LAS CONDICIONES
 						BaseDeDatos.anadirHistorial(BaseDeDatos.con, historial);						
 						PanelHistorial.actualizarTablaHistorial();
 							
-						BaseDeDatos.closeBD();
+						BaseDeDatos.closeBD(con);
 							
 							
 						PanelHistorial.devuelveEnfermedad().setText("");

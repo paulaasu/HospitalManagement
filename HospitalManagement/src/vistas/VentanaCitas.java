@@ -180,7 +180,7 @@ public class VentanaCitas extends JFrame{
 						BaseDeDatos.anadirCita(con, dni,nombre, apellido,fechayhora, String.valueOf(ctipoCita)); //
 						PanelCitas.eliminaTablaCita();
 						PanelCitas.actualizarTablaCita();
-						BaseDeDatos.closeBD();	
+						BaseDeDatos.closeBD(con);	
 						}catch (Exception ex) {
 							// TODO: handle exception
 							

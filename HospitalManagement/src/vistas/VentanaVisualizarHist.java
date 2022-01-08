@@ -8,6 +8,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -26,6 +27,7 @@ import clases.BaseDeDatos;
 public class VentanaVisualizarHist extends JFrame{
 	private JPanel contentPane;
 	private static JTextField txt_dni;
+	Connection con;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -98,7 +100,8 @@ public class VentanaVisualizarHist extends JFrame{
 					}else {
 						JOptionPane.showMessageDialog(null, "El dni no existe");
 					}
-					BaseDeDatos.closeBD();
+					
+					BaseDeDatos.closeBD(con);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

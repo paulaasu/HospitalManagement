@@ -77,21 +77,23 @@ public class BaseDeDatos {
 			e.printStackTrace();
 		}
 	}
-/**
- * Usamos este metodo para cerrar la conexión de la base de datos
- * @param con la conexion  la cerramos
- *
- */
-	/** 
+	/**
+	 * Usamos este metodo para cerrar la conexión de la base de datos
+	 * @param con la conexion  la cerramos
+	 *
 	 */
-	public static void closeBD() {
-		try {
-			logger.log( Level.INFO, "Cerrando conexión" );
-			con.close();
-		} catch (SQLException e) {
-			logger.log( Level.SEVERE, "Excepción", e );
+		/** 
+		 */
+		public static void closeBD(Connection con) {
+			if(con!=null) {
+				try {
+					con.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
-	}
 	
 	/***
 	 * Este metodo se utiliza para crear las tablas en la base de datos

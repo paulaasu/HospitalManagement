@@ -35,7 +35,7 @@ import vistas.VentanaCitas;
 import vistas.VentanaPaciente;
 
 public class PanelCitas extends JPanel {
-	//nuevo
+	static //nuevo
 	Connection con;
 	public static DefaultTableModel modelo = new DefaultTableModel();
 	public static JTable tabla = new JTable(modelo);
@@ -163,7 +163,7 @@ public class PanelCitas extends JPanel {
 							}
 							BaseDeDatos.anadirCitaTabla(modelo);
 						}					
-							BaseDeDatos.closeBD();
+							BaseDeDatos.closeBD(con);
 							
 						} catch (Exception e2) {
 							// TODO: handle exception
@@ -195,7 +195,7 @@ public class PanelCitas extends JPanel {
 						BaseDeDatos.anadirPacienteTabla(modelo );
 						
 					
-					BaseDeDatos.closeBD();
+					BaseDeDatos.closeBD(con);
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -250,7 +250,7 @@ public class PanelCitas extends JPanel {
 		try {
 			BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
 			BaseDeDatos.anadirCitaTabla(modelo);
-			BaseDeDatos.closeBD();
+			BaseDeDatos.closeBD(con);
 		} catch (Exception e) {
 			System.out.println("No se puede rellenar la tabla");
 			e.printStackTrace();

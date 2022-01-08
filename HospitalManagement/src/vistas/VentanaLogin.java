@@ -36,7 +36,7 @@ public class VentanaLogin extends JFrame {
 	private Persona p = null;
 	private Usuario u = null;
 	private JButton botonIniciarSesion, botonRegistrar;
-	
+	Connection con;
 	private JPanel contentPane;
 
 	/**
@@ -93,7 +93,7 @@ public class VentanaLogin extends JFrame {
 					}else {
 						JOptionPane.showMessageDialog(contentPane, "Usuario o contraseña incorrecta");
 					}
-					BaseDeDatos.closeBD();
+					BaseDeDatos.closeBD(con);
 					} catch (Exception e1){
 						e1.printStackTrace();
 					}

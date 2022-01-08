@@ -39,7 +39,7 @@ public class PanelPacientes extends JPanel {
 	public static DefaultTableModel modelo;
 	public static JTable tabla;
 	public static JLabel jLabelTemporizador;
-	
+	static Connection con;
 	
 	
 	public PanelPacientes() {
@@ -173,10 +173,10 @@ public class PanelPacientes extends JPanel {
 						                }
 						            }
 						        }, 0, 1000);	
-						        BaseDeDatos.closeBD();
+						        BaseDeDatos.closeBD(con);
 
 						}else {
-							BaseDeDatos.closeBD();
+							BaseDeDatos.closeBD(con);
 							JOptionPane.showMessageDialog(PanelBuscar,"El dni no existe");
 						}
 						
@@ -247,7 +247,7 @@ public class PanelPacientes extends JPanel {
 		try {
 			BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
 			BaseDeDatos.anadirPacienteTabla(modelo);
-			BaseDeDatos.closeBD();
+			BaseDeDatos.closeBD(con);
 		} catch (Exception e) {
 			System.out.println("No se puede rellenar la tabla");
 			e.printStackTrace();

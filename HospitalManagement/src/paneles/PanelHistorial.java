@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.sql.DriverManager;
 
 import javax.swing.JButton;
@@ -34,6 +35,7 @@ public class PanelHistorial extends JPanel {
 	
 	public static DefaultTableModel modelo;
 	public static JTable tabla;
+	static Connection con;
 	public PanelHistorial() {
 		setLayout(new GridLayout(2,1));
 		 //añadimos los paneles
@@ -183,11 +185,11 @@ class Panel2 extends JPanel{ //panel que contiene la TABLA PACIENTES
 }
 
 
-public static void nuevaTablaHistorial(){
+public  void nuevaTablaHistorial(){
 	try {
 		BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
 		BaseDeDatos.anadirHistorialTabla(modelo);
-		BaseDeDatos.closeBD();
+		BaseDeDatos.closeBD(con);
 	} catch (Exception e) {
 		System.out.println("No se puede rellenar la tabla");
 		e.printStackTrace();
@@ -225,7 +227,7 @@ public static JTextField devuelveMiccion(){
 	return miccionTxt;
 }
 
-public static void actualizarTablaHistorial() {
+public static   void actualizarTablaHistorial() {
 	int rowCount = modelo.getRowCount();
 	//Elimina las filas uno a uno desde el final de la tabla
 	for (int i = rowCount - 1; i >= 0; i--) {
@@ -234,7 +236,7 @@ public static void actualizarTablaHistorial() {
 	try {
 		BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
 		BaseDeDatos.anadirHistorialTabla(modelo);
-		BaseDeDatos.closeBD();
+		BaseDeDatos.closeBD(con);
 	} catch (Exception e) {
 		// TODO: handle exception
 	}
