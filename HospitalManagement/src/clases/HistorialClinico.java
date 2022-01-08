@@ -39,6 +39,17 @@ public class HistorialClinico {
 		// TODO Auto-generated constructor stub
 	}
 
+	public HistorialClinico(String string, String enfermedad2, String sintomas2, String tiempo2, String sed2,
+			String sueño2, String miccion2) {
+		this.enfermedad = enfermedad;
+		this.sintomas = sintomas;
+		this.tiempo = tiempo;
+		this.sed = sed;
+		this.sueño = sueño;
+		this.miccion = miccion;
+		this.dni_p = dni_p;
+	}
+
 	public int getNumHistorial() {
 		return numHistorial;
 	}

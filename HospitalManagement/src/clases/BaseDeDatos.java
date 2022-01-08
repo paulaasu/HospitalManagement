@@ -279,7 +279,7 @@ public class BaseDeDatos {
 	 */
 
 	public static void insertarPaciente(Connection con, Paciente p) {
-	
+		
 		
 		String sentSQL = "INSERT INTO paciente VALUES('"+p.getDni()+"','"+p.getNombre()+"','"+p.getApellidos()+
 				"',"+p.getTelefono()+",'"+p.getDireccion()+"','"+p.getFechaNac()+"','"+p.getGenero()+"')";
@@ -289,13 +289,14 @@ public class BaseDeDatos {
 			stmt= con.createStatement();
 			stmt.executeUpdate(sentSQL);
 			stmt.close();
+			
 		} catch (org.sqlite.SQLiteException e) {
 			
-			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR COMPRUEBE QUE EL FCIHERO ESTE BIEN FORMADO");
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR COMPRUEBE QUE EL FICHERO ESTE BIEN FORMADO");
+			
 		}catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR");
+			
 		}
 	
 	}
@@ -1069,18 +1070,7 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 
 	public static void insertarHistorial(Connection con2, HistorialClinico h) {
 
-		/*CREATE TABLE Historial(
-			ID_historial INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-			Enfermedad VARCHAR(50),
-			Sintoma VARCHAR(50),
-			Tiempo VARCHAR(15),
-			Sed VARCHAR(15),
-			Sueño VARCHAR(15),
-			Miccion VARCHAR(15),
-			Dni_paciente CHAR(9),
-		 	FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE
-		 )
-*/
+		
 		//INSERT INTO Historial (Enfermedad,Sintoma,Tiempo,Sed,Sueño,Miccion,Dni_paciente) VALUES('Dolor de cabeza','Dolor','3 dias','no','no','no','76855467v');
 		String sentSQL = "INSERT INTO Historial (Enfermedad,Sintoma,Tiempo,Sed,Sueño,Miccion,Dni_paciente)  VALUES('"+h.getEnfermedad()+"','"+h.getSintomas()+"','"+h.getTiempo()+
 				"','"+h.getSed()+"','"+h.getSueño()+"','"+h.getMiccion()+"','"+h.getDni()+"');";
