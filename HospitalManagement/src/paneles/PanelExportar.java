@@ -30,7 +30,7 @@ import clases.BaseDeDatos;
 import clases.Cita;
 import clases.HistorialClinico;
 import clases.Paciente;
-import datechooser.beans.DateChooserCombo;
+
 
 
 public class PanelExportar extends JPanel  {
@@ -56,38 +56,6 @@ public class PanelExportar extends JPanel  {
 		panelT.setLayout(new BorderLayout(0, 0));
 			
 		CrearPaneles();
-		/*
-		JFileChooser n=new JFileChooser();
-		n.setPreferredSize(new Dimension(200, 200));
-		panelT.add(n);
-		*/
-	
-		/*
-		btnAceptar.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				Date fechai = null,fechaf=null;
-				String resp = JOptionPane.showInputDialog( null, "Fecha inicial filtro:", null );
-				String resp2 = JOptionPane.showInputDialog( null, "Fecha final filtro:", null );
-				try {
-					 fechai = (Date) formatof.parse( resp );
-					 fechaf = (Date) formatof.parse( resp2 );
-				} catch (ParseException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				
-					//System.out.println(fechai);
-				ExportarDatos();
-				//System.out.println("fgfdgdfg");
-				
-				
-			}
-
-			
-		});
-		*/
 		
 	}
 	
@@ -237,7 +205,7 @@ public class PanelExportar extends JPanel  {
 	 *  Metdodo exportar Historial de bbdd a fichero .csv
 	 *  @throws SQLException
 	 */
-	private void ExportarFicheroCsvH() {
+	public void ExportarFicheroCsvH() {
 		
 		JFileChooser j = Explorador();
 		
