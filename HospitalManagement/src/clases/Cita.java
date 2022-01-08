@@ -1,11 +1,11 @@
 package clases;
 
-import java.sql.Date;
+import java.util.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
  // no deberia tener un paciente una cita en vez de el medico?
-public class Cita extends Medico{
+public class Cita extends Paciente{
 	/*como tenemos un SimpleDateFormat  hay que pase de   date a string*/
 	private static SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yyyy hh:mm" );
 	//nuevo

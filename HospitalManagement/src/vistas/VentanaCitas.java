@@ -13,7 +13,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Logger;
 
 import javax.swing.ButtonGroup;
@@ -130,24 +132,7 @@ public class VentanaCitas extends JFrame{
 			
 			
 //			add(new JLabel("TIPO: "));
-//			ButtonGroup bg = new ButtonGroup(); 
-//			JPanel tipo= new JPanel();
-//			JRadioButton CABECERA = new JRadioButton("CABECERA");
-//			JRadioButton GINECOLOGO = new JRadioButton("GINECOLOGO");
-//			JRadioButton OTRO = new JRadioButton("OTRO");
-//
-//			bg.add(CABECERA);
-//			bg.add(GINECOLOGO);
-//			bg.add(OTRO);
-//			
-//			
-//			
-//			tipo.add(CABECERA);
-//			tipo.add(GINECOLOGO);
-//			tipo.add(OTRO);
-//			
-//			add(tipo);
-//		
+
 			
 
 			add(new JLabel(" "));
@@ -165,19 +150,27 @@ public class VentanaCitas extends JFrame{
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
-					JOptionPane.showMessageDialog( contentPaneCitas, "Debes rellenar todos campos");
-					if (!txtdni.getText().isEmpty() && !txtnombre.getText().isEmpty() && !txtapellido.getText().isEmpty()   ) {
+					if (!txtdni.getText().isEmpty() && !txtnombre.getText().isEmpty() && !txtapellidos.getText().isEmpty()   ) {
 						String dni = txtdni.getText();
 						String nombre = txtnombre.getText();
-						String apellido = txtapellido.getText();
-						String fechayhora = sdf1.format(txtfechayhora.getText());
+						String apellido = txtapellidos.getText();
+						//String fechayhora = txtfechayhora.getText();
+						//nuevo 
+						Date fechayhorad = null;
+						try {
+							fechayhorad = sdf1.parse(txtfechayhora.getText());
+						} catch (ParseException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						TipoCita t = (TipoCita) ctipoCita.getSelectedItem();
-						
+						Cita cita = new Cita(dni, nombre, apellido, fechayhorad, t);
 						try {
 						Connection con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
 						BaseDeDatos.initBD("BaseDeDatos");
 						
-						BaseDeDatos.anadirCita(con, dni,nombre, apellido,fechayhora, String.valueOf(ctipoCita)); //
+						//nuevo4/01
+						BaseDeDatos.anadirCita(con , cita); //
 						PanelCitas.eliminaTablaCita();
 						PanelCitas.actualizarTablaCita();
 						BaseDeDatos.closeBD(con);	
@@ -185,6 +178,7 @@ public class VentanaCitas extends JFrame{
 							// TODO: handle exception
 							
 						}
+						
 						
 						
 					

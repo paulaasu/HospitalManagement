@@ -1,6 +1,5 @@
 package clases;
 
 public enum TipoCita {
-		CABECERA, GINECOLOGO		//He puesto estÃ¡s, pero las cambiamos segÃºn lo que necesitemos. 
-				
+		CABECERA, GINECOLOGO, MATRONA,ANALISIS_DE_SANGRE,PEDIATRIA,ODONTOLOGÍA,ALERGOLOGÍA,DIGESTIVO,PSIQUIATRIA,CARDIOLOGÍA,DEMARTOLOGÍA,NEUROLOGÍA	
 }
