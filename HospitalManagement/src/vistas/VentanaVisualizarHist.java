@@ -8,14 +8,19 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
+
+import clases.BaseDeDatos;
 
 
 public class VentanaVisualizarHist extends JFrame{
@@ -80,9 +85,25 @@ public class VentanaVisualizarHist extends JFrame{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				VentanaHistorial ventanaHistorial = new VentanaHistorial();
-				ventanaHistorial.setVisible(rootPaneCheckingEnabled);
-				dispose();
+				
+				try {
+					BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+					String sentSQL = "SELECT * FROM historial WHERE Dni_paciente='" + devuelveDni() +"' ";
+					BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
+					BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
+					if(BaseDeDatos.rs.next()) {
+						VentanaHistorial ventanaHistorial = new VentanaHistorial();
+						ventanaHistorial.setVisible(true);
+						dispose();
+					}else {
+						JOptionPane.showMessageDialog(null, "El dni no existe");
+					}
+					BaseDeDatos.closeBD();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
 				
 			}
 		});
@@ -94,8 +115,6 @@ public class VentanaVisualizarHist extends JFrame{
 	}
 
 	public static String devuelveDni(){
-//		int dni = Integer.parseInt(txt_dni.getText());
-//		return dni;
 		return txt_dni.getText();
 		// asi te devuelve lo que ha puesto en el texto
 	}

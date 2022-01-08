@@ -188,15 +188,7 @@ public class BaseDeDatos {
 	
 	
 	/***
-	 * Metodo que añade un paciente usando los siguientes parametros:
-	 * @param con
-	 * @param dni
-	 * @param nombre
-	 * @param apellidos
-	 * @param telefono
-	 * @param direccion
-	 * @param fecha_nacimiento
-	 * @param historialClinico
+	 * Metodo que añade un paciente
 	 */
 	public static void anadirPaciente(Connection con ,String dni ,String nombre,String apellido , Integer telefono, 
 			 String direccion, String fecha_nacimiento, String genero) {
@@ -210,21 +202,58 @@ public class BaseDeDatos {
 			stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			e.printStackTrace();}
 		}
-	
+		/***
+		 * Metodo que añade un historial
+		 * @throws SQLException 
+		 */
+		public static void anadirHistorial(Connection con2, HistorialClinico h) throws SQLException {
+			try (Statement statement = con.createStatement()) {
+			String sentSQL2= "Select * from paciente where Dni='"+ h.getDni()+"'";
+			Statement stmt1 = con.createStatement();
+			logger.log( Level.INFO, "Statement: " + sentSQL2 );
+			ResultSet rs1 = stmt1.executeQuery(sentSQL2);
+			if(rs1.next()) {
+				String sentSQL = "INSERT INTO Historial (Enfermedad,Sintoma,Tiempo,Sed,Sueño,Miccion,Dni_paciente)  VALUES('"+h.getEnfermedad()+"','"+h.getSintomas()+"','"+h.getTiempo()+
+						"','"+h.getSed()+"','"+h.getSueño()+"','"+h.getMiccion()+"','"+h.getDni()+"');";
+				logger.log( Level.INFO, "Statement: " + sentSQL );
+				Statement stmt = con.createStatement();
+				stmt.executeUpdate(sentSQL);
+				stmt.close();
+			}else {
+				JOptionPane.showMessageDialog(null, "No existe ese dni");
+			}
+			} catch (org.sqlite.SQLiteException e) {
+				e.printStackTrace();
+			}
 	}
+	/***
+	 * Metodo que pone a todos los pacientes en un ArrayList
+	 */
+	public static ArrayList<Paciente> pacientesTotales(){
+		try (Statement statement = con.createStatement()) {
+			ArrayList<Paciente> pacientes = new ArrayList<Paciente>();
+			String sentSQL = "SELECT * FROM paciente";
+			ResultSet rs = statement.executeQuery( sentSQL );
+			while( rs.next() ) {
+				String dni = rs.getString("Dni");
+				String nombre = rs.getString("Nombre");
+				String apellido = rs.getString("Apellidos");
+				int telefono = rs.getInt("Telefono");
+				String dir = rs.getString("Direccion");
+				String genero = rs.getString("Genero");
+				String fecha = rs.getString("Fecha_nac");
+				pacientes.add( new Paciente(dni, nombre, apellido, telefono, dir, fecha, genero) );
+			}
+			return pacientes;
+		}catch (Exception e) {
+			logger.log( Level.SEVERE, "ExcepciÃ³n", e );
+			return null;
+			}
+		}
 	/**
 	 * Metodo que añade un medico usando los siguientes parametros:
-	 * @param con
-	 * @param nombre
-	 * @param apellido
-	 * @param dni
-	 * @param fecha_nacimiento
-	 * @param genero
-	 * @param telefono
-	 * @param direccion
-	 * @param salario
 	 */
 	public static void anadirMedico(Connection con ,String nombre,String apellido , String dni , //FALTA EL HISTORIAL CLINICO
 			String fecha_nacimiento, String genero, Integer telefono, String direccion,Integer salario) {
@@ -277,15 +306,19 @@ public class BaseDeDatos {
 	public static void eliminarPacientePorDni(String dniPB) throws SQLException {
 		Statement statement = con.createStatement();
 		String sentSQL2 = "SELECT * FROM paciente WHERE Dni = '" + dniPB + "' ";
+		logger.log( Level.INFO, "Statement: " + sentSQL2 );
 		stmt = BaseDeDatos.con.createStatement();
 		rs = BaseDeDatos.stmt.executeQuery(sentSQL2);
-		while(rs.next()) {
+		if(rs.next()) {
 			String borrarPaciente = "DELETE FROM paciente WHERE Dni = '" + dniPB + "' ";
+			logger.log( Level.INFO, "Statement: " + borrarPaciente );
 			int filasEliminadas = stmt.executeUpdate(borrarPaciente); 
+		}else {
+			JOptionPane.showMessageDialog(null, "El dni no existe");
 		}
+		
 	
 	}
-	
 	
 	public static void eliminarMedicoPorDni(Connection con, String dni, String nombre, String apellidos, 
 			Integer telefono, String direccion ,String fecha_nacimiento,Integer salario,HistorialClinico historialClinico) {
@@ -1068,7 +1101,7 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 		
 	}
 	
-	public static void anadirUsuario(Connection con, Usuario u) {
+	public static void anadirUsuario( Usuario u) {
 		
 		String sentSQL = "INSERT INTO usuario VALUES('"+u.getID_usuario()+"', '"+u.getNom()+"','"+u.getContrasena()+"', '"+u.getRol()+"')";
 		
@@ -1084,3 +1117,5 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 	}
 
 }
+
+
