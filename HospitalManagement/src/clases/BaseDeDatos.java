@@ -20,7 +20,6 @@ import java.util.logging.SimpleFormatter;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-
 import vistas.VentanaPaciente; // importamos el panel pacientes
 
 
@@ -38,7 +37,7 @@ public class BaseDeDatos {
 
 	private static Logger logger = Logger.getLogger( "BaseDeDatos.db" );
 	private static Handler handler ;
-	
+	//java.sql.SQLiteException;
 	public static Connection initBD(String BaseDeDatos) {
 		con = null;
 		try {
@@ -227,10 +226,10 @@ public class BaseDeDatos {
 				stmt.close();
 			}else {
 				JOptionPane.showMessageDialog(null, "No existe ese dni");
-			}
-			} catch (org.sqlite.SQLiteException e) {
-				e.printStackTrace();
-			}
+			}}
+//			} catch (org.sqlite.SQLiteException e) {
+//				e.printStackTrace();
+//			}
 	}
 	/***
 	 * Metodo que pone a todos los pacientes en un ArrayList
@@ -294,10 +293,10 @@ public class BaseDeDatos {
 			stmt.executeUpdate(sentSQL);
 			stmt.close();
 			
-		} catch (org.sqlite.SQLiteException e) {
-			
-			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR COMPRUEBE QUE EL FICHERO ESTE BIEN FORMADO");
-			
+//		} catch (org.sqlite.SQLiteException e) {
+//			
+//			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR COMPRUEBE QUE EL FICHERO ESTE BIEN FORMADO");
+//			
 		}catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR");
 			
@@ -1052,10 +1051,10 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 			stmt= con.createStatement();
 			stmt.executeUpdate(sentSQL);
 			stmt.close();
-		} catch (org.sqlite.SQLiteException e) {
+		//} catch (SQLiteException e) {
 			
-			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR COMPRUEBE QUE EL FCIHERO ESTE BIEN FORMADO");
-			e.printStackTrace();
+//			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR COMPRUEBE QUE EL FCIHERO ESTE BIEN FORMADO");
+//			e.printStackTrace();
 		}catch (SQLException e) {
 			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR COMPRUEBE");
 			e.printStackTrace();
