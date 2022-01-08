@@ -1101,7 +1101,7 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 		
 	}
 	
-	public static void anadirUsuario(Connection con, Usuario u) {
+	public static void anadirUsuario( Usuario u) {
 		
 		String sentSQL = "INSERT INTO usuario VALUES('"+u.getID_usuario()+"', '"+u.getNom()+"','"+u.getContrasena()+"', '"+u.getRol()+"')";
 		

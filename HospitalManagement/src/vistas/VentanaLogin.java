@@ -33,7 +33,6 @@ import clases.Usuario;
 public class VentanaLogin extends JFrame {
 	private JTextField txt_user;
 	private JPasswordField txt_password;
-	private JTextField txt_tipo;
 	private Persona p = null;
 	private Usuario u = null;
 	private JButton botonIniciarSesion, botonRegistrar;
@@ -81,7 +80,7 @@ public class VentanaLogin extends JFrame {
 				
 					String u = txt_user.getText();
 					String c= txt_password.getText();
-					String t = txt_tipo.getText();
+					
 
 					try {
 						
@@ -178,7 +177,7 @@ public class VentanaLogin extends JFrame {
 		
 		private Panel6() {
 			
-			setLayout(new GridLayout(6,1));
+setLayout(new GridLayout(7,1));
 			
 			JLabel lblNewLabel = new JLabel("USUARIO:");
 			 add(lblNewLabel);
@@ -190,25 +189,26 @@ public class VentanaLogin extends JFrame {
 			 txt_password = new JPasswordField(10);
 			 add(txt_password);
 			 
-			 JLabel lblTipo = new JLabel("TIPO:");
-			 add(lblTipo);
-			  txt_tipo = new JTextField(10);
-			 add(txt_tipo);
+
 			 
 			 botonIniciarSesion = new JButton("INICIAR SESION");
 			 add(botonIniciarSesion);
 			 
+			 botonRegistrar = new JButton("REGISTRARSE");
+			 add(botonRegistrar);
+			 
+			add(new JLabel(""));
 			
-//			 botonRegistrar.addActionListener(new ActionListener() {
-//				
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//					// TODO Auto-generated method stub
-//					
-//					
-//				}
-//			});
-		
+			 botonRegistrar.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+					VentanaRegistro ventanaRegistro = new VentanaRegistro();
+					ventanaRegistro.setVisible(true);
+					
+				}
+			});
 			
 		}
 	}

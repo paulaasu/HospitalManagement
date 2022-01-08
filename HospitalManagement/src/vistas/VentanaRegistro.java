@@ -91,6 +91,7 @@ public class VentanaRegistro extends JFrame {
 			datos.setHorizontalAlignment(SwingConstants.CENTER);
 			datos.setFont(new Font("Sherif", Font.PLAIN, 24));
 			datos.setBackground(new Color(176, 196, 222));
+			setBackground(new Color(176, 196, 222));
 			add(datos, BorderLayout.NORTH);
 			
 			Panel3 panel3 = new Panel3();
@@ -152,25 +153,34 @@ public class VentanaRegistro extends JFrame {
 					
 					//Conseguir lo que la persona ha puesto en el comboBox
 				//	para aumentar el nª historial cada vez que se añade un paciente --> HAY QUE CORREGIR, DA ERROR
-					
-					try {
-						BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-						String sentSQL = "SELECT ID_usuario, user, password, Rol, max(ID_usuario) FROM usuario";
-						BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
-						BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
-						int numeroUsuario = 1;
-						while(BaseDeDatos.rs.next()) {
-							numeroUsuario = BaseDeDatos.rs.getInt(5) + 1;
-//							numeroUsuario = numeroUsuario + 1;
+					if(contraseña==repiteContraseña) {
+						try {
+							BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
+							String sentSQL = "SELECT ID_usuario, user, password, Rol, max(ID_usuario) FROM usuario";
+							BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
+							BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
+							int numeroUsuario = 1;
+							while(BaseDeDatos.rs.next()) {
+								numeroUsuario = BaseDeDatos.rs.getInt(5) + 1;
+//								numeroUsuario = numeroUsuario + 1;
+							}
 							Usuario usuarioNuevo = new Usuario(usuario1, password1, numeroUsuario, rol1);
+							BaseDeDatos.anadirUsuario(usuarioNuevo);
+							BaseDeDatos.closeBD();
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
 						}
-						BaseDeDatos.closeBD();
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						
+						System.out.println(tipoUsuario.getSelectedItem());
+						dispose();
+						usuario.setText("");
+						contraseña.setText("");
+						repiteContraseña.setText("");
+					}else {
+						JOptionPane.showMessageDialog(null, "contraseña incorrecta");
 					}
 					
-					System.out.println(tipoUsuario.getSelectedItem());
 				}
 			});
 			
