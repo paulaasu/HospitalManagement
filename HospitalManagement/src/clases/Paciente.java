@@ -20,17 +20,17 @@ public class Paciente /*extends Persona*/{
 		this.apellidos=apellidos;
 		this.direccion=direccion;
 	}
-	public Paciente ( String dni, String nombre, String apellidos, int telefono, String direccion,
-			String fechaNac,String genero){
-		
-		
-		this.genero = genero;
-		this.nombre=nombre;
-		this.dni=dni;
-		this.telefono=telefono;
-		this.apellidos=apellidos;
-		this.direccion=direccion;
-	}
+//	public Paciente ( String dni, String nombre, String apellidos, int telefono, String direccion,
+//			String fechaNac,String genero){
+//		
+//		
+//		this.genero = genero;
+//		this.nombre=nombre;
+//		this.dni=dni;
+//		this.telefono=telefono;
+//		this.apellidos=apellidos;
+//		this.direccion=direccion;
+//	}
 	
 	
 	public String getDni() {

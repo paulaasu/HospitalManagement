@@ -12,6 +12,8 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Pattern;
@@ -33,12 +35,13 @@ import vistas.VentanaPaciente;
 import vistas.VentanaPrincipal;
 import clases.BaseDeDatos;
 import clases.Paciente;
-import clases.Pacientte;
 
 public class PanelPacientes extends JPanel {
 	public static DefaultTableModel modelo;
 	public static JTable tabla;
 	public static JLabel jLabelTemporizador;
+	public static JLabel jLabelMedia;
+	private static JButton botonEdad;
 	static Connection con;
 	
 	
@@ -221,7 +224,27 @@ public class PanelPacientes extends JPanel {
 			PanelBorrar.add(botonBorrar);
 			add(PanelBorrar);
 			
-			
+			JPanel PanelEdad = new JPanel();
+			PanelEdad.setLayout(new GridLayout(2, 1));
+			PanelEdad.add(new JLabel("Edad media pacientes"));
+			botonEdad = new JButton("Calcular");
+			PanelEdad.add(botonEdad);
+			add(PanelEdad);
+			jLabelMedia=new JLabel();
+			add(jLabelMedia, BorderLayout.SOUTH);
+			botonEdad.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					BaseDeDatos bd=new BaseDeDatos();
+					ArrayList<String> pacientes=bd.getFechas();
+					System.out.println(pacientes);
+					jLabelMedia.setText("La media de los pacientes de este hospital es: "+ Math.round(mediaRecursiva(pacientes, 0)));
+				
+				
+				}
+			});
+
 			
 			//M.borrar todos los pacientes por el dni
 			
@@ -261,18 +284,27 @@ public class PanelPacientes extends JPanel {
 		    modelo.removeRow(i);
 		}
 		
+				
 	}
 
-}
+	public static int EdadActualPactiente(String fecha) {
+		fecha = fecha.split("/")[2];	//Año
+		int anyos=YearMonth.now().getYear() - Integer.parseInt(fecha);
+		return anyos;
+	}
+	
+	public static float mediaRecursiva(ArrayList<String> lista, int pos) {
+		
+		if (pos == 0) {
+			return (EdadActualPactiente(lista.get(pos)) + mediaRecursiva(lista, pos+1)) / lista.size(); 
+		} else {
+			if(pos < lista.size()) {
+				return EdadActualPactiente(lista.get(pos)) + mediaRecursiva(lista, pos+1); 
+			} 
+		}
+		return 0;	
+	}
+	
+	
 
-//	//Método para transformar fecha de nacimiento en edad en el momento. 
-//	public static String EdadActualPactiente(Pacientte.getFechaNac()) {
-//		
-//	}
-//	//Método recursivo para calcular la edad media de los pacientes del hospital. 
-//	public static void edadMedia(ArrayList<String> edades) {
-//		int resultado = 0;
-//		
-//	}
-//
-//}
+}

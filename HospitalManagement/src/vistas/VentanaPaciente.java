@@ -59,6 +59,7 @@ public class VentanaPaciente extends JFrame {
 				}
 			}
 		});
+		
 	}
 
 	/**
