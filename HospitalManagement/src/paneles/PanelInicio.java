@@ -1,6 +1,7 @@
 package paneles;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -21,6 +22,7 @@ public class PanelInicio extends JPanel {
 //		add(lblTitulo,BorderLayout.NORTH);
 		
 		setLayout(new BorderLayout());
+		setBackground(new Color(91, 135, 175));
 		ImageIcon img = new ImageIcon("src/img/DeustoHospital.png");
 		JLabel lbl_imagen = new JLabel(img);
 		//lbl_imagen.setSize(1900, 1500);;

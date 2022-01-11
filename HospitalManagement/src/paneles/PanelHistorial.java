@@ -37,6 +37,7 @@ public class PanelHistorial extends JPanel {
 	public static JTable tabla;
 	static Connection con;
 	public PanelHistorial() {
+		
 		setLayout(new GridLayout(2,1));
 		 //añadimos los paneles
 		Panel1 panel1 = new Panel1();
@@ -55,6 +56,7 @@ class Panel1 extends JPanel{ //panel que contiene la INFORMACION
 		
 		public Panel1() {
 			setLayout(new BorderLayout());
+		
 			JLabel datos = new JLabel("HISTORIAL CLÍNICO");
 			datos.setHorizontalAlignment(SwingConstants.CENTER);
 			datos.setFont(new Font("Sherif", Font.PLAIN, 24));

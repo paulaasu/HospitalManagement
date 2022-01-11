@@ -108,22 +108,22 @@ public class VentanaPrincipal extends JFrame {
 			}
 			
 		});
-		btnAgenda.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-//				panel2.setVisible(false);pi.setVisible(false);pe.setVisible(false);pc.setVisible(false);//pp.setVisible(false);
-//				pa.setVisible(true);
-//				add(pa, BorderLayout.CENTER);
-				
-				panel2.removeAll();
-				panel2.add(pa);
-				panel2.updateUI();
-				
-
-			}
-
-			
-		});
+//		btnAgenda.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+////				panel2.setVisible(false);pi.setVisible(false);pe.setVisible(false);pc.setVisible(false);//pp.setVisible(false);
+////				pa.setVisible(true);
+////				add(pa, BorderLayout.CENTER);
+//				
+//				panel2.removeAll();
+//				panel2.add(pa);
+//				panel2.updateUI();
+//				
+//
+//			}
+//
+//			
+//		});
 		btnPaciente.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -233,7 +233,7 @@ class Panel2 extends JPanel{ //PANEL QUE TE APARECE AL PRINCIPIO
 		class Panel3 extends JPanel{
 	
 			public Panel3() {
-				setLayout(new GridLayout(7,1));
+				setLayout(new GridLayout(6,1));
 				
 
 				btnInicio=new JButton("INICIO");
@@ -244,14 +244,14 @@ class Panel2 extends JPanel{ //PANEL QUE TE APARECE AL PRINCIPIO
 				btnInicio.setOpaque(true);
 				add(btnInicio, BorderLayout.CENTER);
 				
-				btnAgenda=new JButton("AGENDA");
-				//lblAgenda = new JLabel("Agenda");
-				btnAgenda.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-				btnAgenda.setFont(new Font("Verdana", Font.PLAIN, 14));
-				btnAgenda.setBorder(new MatteBorder(2, 0, 2, 2, (Color) Color.WHITE));
-				btnAgenda.setBackground(new Color(176, 196, 222));
-				btnAgenda.setOpaque(true);
-				add(btnAgenda, BorderLayout.CENTER);
+//				btnAgenda=new JButton("AGENDA");
+//				//lblAgenda = new JLabel("Agenda");
+//				btnAgenda.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+//				btnAgenda.setFont(new Font("Verdana", Font.PLAIN, 14));
+//				btnAgenda.setBorder(new MatteBorder(2, 0, 2, 2, (Color) Color.WHITE));
+//				btnAgenda.setBackground(new Color(176, 196, 222));
+//				btnAgenda.setOpaque(true);
+//				add(btnAgenda, BorderLayout.CENTER);
 				
 				btnPaciente=new JButton("PACIENTE");
 				//lblPaciente = new JLabel("Pacientes");

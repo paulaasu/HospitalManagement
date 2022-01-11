@@ -260,6 +260,26 @@ public class BaseDeDatos {
 			e.printStackTrace();
 		}
 }
+	
+	public ArrayList<String> getFechas(){
+		ArrayList<String> fechas=new ArrayList<String>();
+		try {
+			Statement st=con.createStatement();
+			String sentSQL = "SELECT * FROM paciente";
+			ResultSet rs = st.executeQuery( sentSQL );
+			while( rs.next() ) {
+				
+				String fecha = rs.getString("Fecha_nac");
+				System.out.println(fecha);
+				fechas.add(fecha );
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		return fechas;
+	}
 	/***
 	 * Metodo que pone a todos los pacientes en un ArrayList
 	 */
@@ -276,7 +296,8 @@ public class BaseDeDatos {
 				String dir = rs.getString("Direccion");
 				String genero = rs.getString("Genero");
 				String fecha = rs.getString("Fecha_nac");
-				pacientes.add( new Paciente(dni, nombre, apellido, telefono, dir, fecha, genero) );
+				System.out.println(fecha);
+				pacientes.add( new Paciente(dni, nombre, apellido, telefono, dir, fecha,null,genero) );
 			}
 			return pacientes;
 		}catch (Exception e) {
