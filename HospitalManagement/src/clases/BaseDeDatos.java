@@ -41,7 +41,7 @@ public class BaseDeDatos {
 	private static Logger logger = Logger.getLogger( "BaseDeDatos.db" );
 	private static Handler handler ;
 	//java.sql.SQLiteException;
-	public static Connection initBD(String BaseDeDatos,boolean reiniciaBD) {
+	public static Connection initBD(String BaseDeDatos) {
 		con = null;
 		try {
 			Class.forName("org.sqlite.JDBC");// Carga la base de datos en el squliteman
@@ -103,7 +103,7 @@ public class BaseDeDatos {
 	 * Este metodo se utiliza para crear las tablas en la base de datos
 	 * @param con Pasamos la conexion 
 	 */
-	public static void crearTablas(Connection con,boolean reiniciaBD) {		
+	public static void crearTablas(Connection con) {		
 		try {
 		
 			String sent11 ="DROP TABLE IF EXISTS Paciente";
@@ -160,7 +160,7 @@ public class BaseDeDatos {
 	*/
 
 			String sent55 ="DROP TABLE IF EXISTS Cita";
-			String sent5 ="CREATE TABLE Cita(Dni_paciente INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,Nombre VARCHAR(15) ,Apellidos VARCHAR(15) Fecha y hora VARCHAR(20) Tipo VARCHAR(20),FOREIGN KEY(Dni_paciente, Nombre,Apellidos) REFERENCES Paciente(Dni , Nombre,Apellidos) ON DELETE CASCADE)";
+			String sent5 ="CREATE TABLE Cita(Dni String , Nombre String , Apellidos String , Fechayhora String, TipoCita String)";
 			logger.log( Level.INFO, "Statement: " + sent5 );
 			/*String sent5 = "CREATE TABLE Cita(
 					Dni_paciente INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -1200,7 +1200,7 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 	 * @return devuelve la arralist
 	 * @throws SQLException
 	 */
-		public static ArrayList<Cita>cargarCitas(String cc) throws SQLException{
+		public static ArrayList<Cita>cargarCitas( Connection con) throws SQLException{
 			 String[] nombrecolumna = { "dni", "nombre", "apellidos", "fecha y hora ", "Tipo cita"};
 //			ArrayList<Cita>citas= new ArrayList<>();
 			Object[][]cita = new Object[4][4];
@@ -1210,8 +1210,8 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(sentSQL);
 			int i = 0;
-			if(cargarCitas(cc).size()!=0) {
-				for(Cita c : cargarCitas(cc)) {
+			if(cargarCitas(con).size()!=0) {
+				for(Cita c : cargarCitas(con)) {
 					cita [i][0]= c.getDni();
 					cita [i][1]= c.getNombre();
 					cita[i][2]= c.getApellidos();
@@ -1219,11 +1219,11 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 					cita[i][4]= c.getTipodecita();
 					i++;
 					
-					cargarCitas(cc).add(c);
+					cargarCitas(con).add(c);
 					
 					
 				}}
-			return cargarCitas(cc);
+			return cargarCitas(con);
 			}
 		
 
