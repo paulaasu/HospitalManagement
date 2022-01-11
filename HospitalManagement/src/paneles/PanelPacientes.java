@@ -33,7 +33,6 @@ import vistas.VentanaPaciente;
 import vistas.VentanaPrincipal;
 import clases.BaseDeDatos;
 import clases.Paciente;
-import clases.Pacientte;
 
 public class PanelPacientes extends JPanel {
 	public static DefaultTableModel modelo;

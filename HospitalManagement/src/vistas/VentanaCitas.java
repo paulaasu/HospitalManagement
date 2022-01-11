@@ -167,7 +167,7 @@ public class VentanaCitas extends JFrame{
 						Cita cita = new Cita(dni, nombre, apellido, fechayhorad, t);
 						try {
 						Connection con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-						BaseDeDatos.initBD("BaseDeDatos");
+						BaseDeDatos.initBD("BaseDeDatos", true);
 						
 						//nuevo4/01
 						BaseDeDatos.anadirCita(con , cita); //

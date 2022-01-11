@@ -1,5 +1,8 @@
 package clases;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
@@ -38,7 +41,7 @@ public class BaseDeDatos {
 	private static Logger logger = Logger.getLogger( "BaseDeDatos.db" );
 	private static Handler handler ;
 	//java.sql.SQLiteException;
-	public static Connection initBD(String BaseDeDatos) {
+	public static Connection initBD(String BaseDeDatos,boolean reiniciaBD) {
 		con = null;
 		try {
 			Class.forName("org.sqlite.JDBC");// Carga la base de datos en el squliteman
@@ -100,11 +103,12 @@ public class BaseDeDatos {
 	 * Este metodo se utiliza para crear las tablas en la base de datos
 	 * @param con Pasamos la conexion 
 	 */
-	public static void crearTablas(Connection con) {		
+	public static void crearTablas(Connection con,boolean reiniciaBD) {		
 		try {
 		
 			String sent11 ="DROP TABLE IF EXISTS Paciente";
 			String sent1= "CREATE TABLE Paciente(Dni VARCHAR(20) PRIMARY KEY NOT NULL, Nombre VARCHAR(20), Apellidos VARCHAR(40), Telefono INTEGER, Direccion VARCHAR(40), Fecha_Nac Date, Genero VARCHAR(9))";
+			logger.log( Level.INFO, "Statement: " + sent1 );
 			/*String sent1= "CREATE TABLE Paciente(
 				Dni VARCHAR(20) PRIMARY KEY NOT NULL, 
 			    Nombre VARCHAR(20),
@@ -117,6 +121,7 @@ public class BaseDeDatos {
 	;*/
 			String sent22 ="DROP TABLE IF EXISTS Medico";
 			String sent2 = "CREATE TABLE Medico(ID_medico INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Nombre VARCHAR(20), Apellidos VARCHAR(30), Telefono INTEGER(9), Email VARCHAR(40), Direccion VARCHAR(40), Fecha_nac Date, Especialidad VARCHAR(30))" ;
+			logger.log( Level.INFO, "Statement: " + sent2 );
 			/*String sent2 = "CREATE TABLE Medico(
 				ID_medico INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 				Nombre VARCHAR(20),
@@ -130,6 +135,7 @@ public class BaseDeDatos {
 			
 			String sent33 ="DROP TABLE IF EXISTS Historial";
 			String sent3 ="CREATE TABLE Historial(ID_historial INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Enfermedad VARCHAR(50), Sintoma VARCHAR(50), Tiempo VARCHAR(15), Sed VARCHAR(15), Sueño VARCHAR(15),	Miccion VARCHAR(15), Dni_paciente CHAR(9), FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE )";
+			logger.log( Level.INFO, "Statement: " + sent3 );
 			/*String sent3 = "CREATE TABLE Historial(
 				ID_historial INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 				Enfermedad VARCHAR(50),
@@ -144,6 +150,7 @@ public class BaseDeDatos {
 			
 			String sent44 ="DROP TABLE IF EXISTS Usuario";
 			String sent4 ="CREATE TABLE Usuario(ID_usuario INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,user VARCHAR(20),password VARCHAR(30),Rol VARCHAR(20))";
+			logger.log( Level.INFO, "Statement: " + sent4 );
 			/*String sent4 = "CREATE TABLE Usuario(
 				ID_usuario INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
 				user VARCHAR(20),
@@ -153,20 +160,23 @@ public class BaseDeDatos {
 	*/
 
 			String sent55 ="DROP TABLE IF EXISTS Cita";
-			String sent5 ="CREATE TABLE Cita(Id_cita INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Fecha VARCHAR(20), Dni_paciente VARCHAR(20),Id_medico INTEGER, Tipo VARCHAR(20),FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE,FOREIGN KEY(Id_medico) REFERENCES Medico(Id))";
+			String sent5 ="CREATE TABLE Cita(Dni_paciente INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,Nombre VARCHAR(15) ,Apellidos VARCHAR(15) Fecha y hora VARCHAR(20) Tipo VARCHAR(20),FOREIGN KEY(Dni_paciente, Nombre,Apellidos) REFERENCES Paciente(Dni , Nombre,Apellidos) ON DELETE CASCADE)";
+			logger.log( Level.INFO, "Statement: " + sent5 );
 			/*String sent5 = "CREATE TABLE Cita(
-					Id_cita INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+					Dni_paciente INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+					Nombre
+					Apellidos
 					Fecha VARCHAR(20),
 					Dni_paciente VARCHAR(20),
 					Id_medico INTEGER,
 					Tipo VARCHAR(20),
-					FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE,
-					FOREIGN KEY(Id_medico) REFERENCES Medico(Id)
+					FOREIGN KEY(Dni_paciente ,Nombre,Apellidos) REFERENCES Paciente(Dni,,Nombre,Apellidos) ON DELETE CASCADE,
+					
 					)*/
 			
-			Statement st = null;
+			 
 			
-			st = con.createStatement();
+	Statement st = con.createStatement();
 			st.executeUpdate(sent11);
 			st.executeUpdate(sent1);
 			st.executeUpdate(sent22);
@@ -180,7 +190,8 @@ public class BaseDeDatos {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
+		}
+//		} finally {
 //			if(st!=null) {
 //				try {
 //					st.close();
@@ -189,8 +200,9 @@ public class BaseDeDatos {
 //					e.printStackTrace();
 //				}
 //			}
-		}
-		}
+//		}
+			
+	}
 	
 	
 	

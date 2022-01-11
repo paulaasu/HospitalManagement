@@ -10,6 +10,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -17,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -55,6 +59,7 @@ public class PanelCitas extends JPanel {
 		add(datos, BorderLayout.NORTH);
 		Panel4 panel4 = new Panel4();
 		add(panel4, BorderLayout.CENTER);
+		
 	}
 	class Panel4 extends JPanel { //AQUI ESTA EL GRIDLAYOUT DEL CENTRO
 		public Panel4() {
@@ -113,6 +118,23 @@ public class PanelCitas extends JPanel {
 			botonBuscar = new JButton("Buscar");
 			PanelBuscar.add(botonBuscar);
 			add(PanelBuscar);
+			JFrame f= new JFrame();
+			f.addWindowListener( new WindowAdapter() {
+				@Override
+				public void windowOpened(WindowEvent e) {
+					if (new File("BaseDeDatos.db").exists()) {
+						// Poner el parámetro a true si se quiere reiniciar la base de datos
+						BaseDeDatos.initBD( "BaseDeDatos.db", false );  // Abrir base de datos existente
+					} else {
+						BaseDeDatos.initBD( "BaseDeDatos.db", true );  // Crear base de datos con datos iniciales
+					}
+					 BaseDeDatos.volcarJTableATablaCita(con, modelo);// Según se inicia la ventana se visualizan los productos
+				}
+				@Override
+				public void windowClosed(WindowEvent e) {
+					BaseDeDatos.closeBD(con);;
+				}
+			});
 			botonBuscar.addActionListener(new ActionListener() {
 				
 				@Override
@@ -196,7 +218,7 @@ public class PanelCitas extends JPanel {
 						JOptionPane.showMessageDialog(null, "Primero debes seleccionar una fila de la tabla");
 					}else {
 						modelo.removeRow(filaSeleccionada);
-						con = BaseDeDatos.initBD("BaseDeDatos.db");
+						con = BaseDeDatos.initBD("BaseDeDatos.db",true);
 						//m
 						BaseDeDatos.eliminarCita(con);
 						eliminaTablaCita();
