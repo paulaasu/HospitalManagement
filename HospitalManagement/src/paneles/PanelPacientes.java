@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -112,7 +113,15 @@ public class PanelPacientes extends JPanel {
 		
 			
 		public PanelAbajo() {
-			setLayout(new FlowLayout());
+			setLayout(new GridLayout(2,1));
+			JPanel panelA = new JPanel();
+			panelA.setLayout(new FlowLayout());
+			JPanel panelB = new JPanel();
+			panelB.setLayout(new FlowLayout());
+			add(panelA);
+			add(panelB);
+	
+			
 			
 			JPanel PanelBuscar = new JPanel();
 			PanelBuscar.setLayout(new GridLayout(5, 1));
@@ -122,7 +131,7 @@ public class PanelPacientes extends JPanel {
 			botonBuscar = new JButton("Buscar");
 			PanelBuscar.add(botonBuscar);
 			
-			add(PanelBuscar);
+			panelA.add(PanelBuscar);
 
 			// Buscar paciente por DNI
 			botonBuscar.addActionListener(new ActionListener() {
@@ -197,14 +206,14 @@ public class PanelPacientes extends JPanel {
 			JPanel PanelVacio = new JPanel();
 			PanelVacio.setLayout(new GridLayout(1, 1));
 			PanelVacio.add(new JLabel(""));
-			add(PanelVacio);
+			panelA.add(PanelVacio);
 			
 			JPanel PanelAñadir = new JPanel();
 			PanelAñadir.setLayout(new GridLayout(2, 1));
 			PanelAñadir.add(new JLabel("Añadir paciente..."));
 			botonAñadir = new JButton("Añadir");
 			PanelAñadir.add(botonAñadir);
-			add(PanelAñadir);
+			panelA.add(PanelAñadir);
 			VentanaPaciente ventanaPaciente = new VentanaPaciente();
 			botonAñadir.addActionListener(new ActionListener() {
 				
@@ -222,16 +231,16 @@ public class PanelPacientes extends JPanel {
 			PanelBorrar.add(new JLabel("Borrar paciente..."));
 			botonBorrar = new JButton("Borrar");
 			PanelBorrar.add(botonBorrar);
-			add(PanelBorrar);
+			panelA.add(PanelBorrar);
 			
 			JPanel PanelEdad = new JPanel();
 			PanelEdad.setLayout(new GridLayout(2, 1));
 			PanelEdad.add(new JLabel("Edad media pacientes"));
 			botonEdad = new JButton("Calcular");
 			PanelEdad.add(botonEdad);
-			add(PanelEdad);
+			panelA.add(PanelEdad);
 			jLabelMedia=new JLabel();
-			add(jLabelMedia, BorderLayout.SOUTH);
+			panelB.add(jLabelMedia, BorderLayout.SOUTH);
 			botonEdad.addActionListener(new ActionListener() {
 				
 				@Override
@@ -244,6 +253,8 @@ public class PanelPacientes extends JPanel {
 				
 				}
 			});
+			
+			
 
 			
 			//M.borrar todos los pacientes por el dni
