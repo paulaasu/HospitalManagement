@@ -42,7 +42,7 @@ public class PruebasTest {
 		 ret = new ArrayList<>();
 		 
 		 /*---PANEL IMPORTAR CSV---*/
-		 p=new Paciente("75888562f","ana","gonzalez arnaiz",655894321,"dir 1","01-02-2020","femenino");
+		 p=new Paciente("75888562f","ana","gonzalez arnaiz",655894321,"dir 1","01-02-2020", null, "femenino");
 			//dni existente
 		 h=new HistorialClinico("Dolor de cabeza","Dolor","3 dias","no","no","no","76855467v");
 
