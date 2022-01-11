@@ -13,11 +13,15 @@ import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TreeMap;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -45,7 +49,7 @@ public class PanelCitas extends JPanel {
 	public static DefaultTableModel modelo = new DefaultTableModel();
 	public static JTable tabla = new JTable(modelo);
 
-	
+	public TreeMap<String, Cita>tmCitas = new TreeMap<>();
 	static SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yyyy hh:mm" );
 	
 
@@ -60,6 +64,7 @@ public class PanelCitas extends JPanel {
 		Panel4 panel4 = new Panel4();
 		add(panel4, BorderLayout.CENTER);
 		
+		tmCitas = new TreeMap<>();
 	}
 	class Panel4 extends JPanel { //AQUI ESTA EL GRIDLAYOUT DEL CENTRO
 		public Panel4() {
@@ -256,10 +261,43 @@ public class PanelCitas extends JPanel {
 			e.printStackTrace();
 		}
 		
-		
-	
-		
 	}
+		private String obtenerTexto() {
+			String texto = "INFORMACIÓN DE LAS CITAS\n";
+			for(String clave: tmCitas.keySet()) {
+				Cita valor = tmCitas.get(clave);
+				texto = texto + clave + "\n";
+			}
+			return texto;
+		}
+		
 	
+	private void crearFicheroDeTexto() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy_HH-mm");
+		long milis = System.currentTimeMillis();
+		Date fecha = new Date(milis);
+		String f = sdf.format(fecha);
+		
+		PrintWriter pw = null;
+		/*
+		 * Si el fichero Matriculas.txt no existe, lo crea y lo abre
+		 * Si el fichero Matriculas.txt sí existe, lo abre y borra su contenido
+		 * */
+		try {
+			String nomfich = JOptionPane.showInputDialog("Introduce el nombre del fichero: ");
+			nomfich = nomfich + f +".txt";
+			//pw = new PrintWriter("Matriculas.txt");
+			pw = new PrintWriter(nomfich);
+			String texto = obtenerTexto();
+			pw.println(texto);
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			pw.flush();
+			pw.close();
+		}
+	}
 
 }

@@ -256,7 +256,7 @@ public class BaseDeDatos {
 		}else {
 			JOptionPane.showMessageDialog(null, "Dni incorrecto");
 		}
-		} catch (org.sqlite.SQLiteException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 }
