@@ -10,6 +10,10 @@ import java.awt.GridLayout;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -110,6 +114,7 @@ public class PanelPacientes extends JPanel {
 		private JButton botonBorrar;
 		private JButton botonhistorialClinico;
 		private String dni;
+		private JButton btnGuardarPacientesEnFicheroBinario;
 		
 			
 		public PanelAbajo() {
@@ -270,12 +275,50 @@ public class PanelPacientes extends JPanel {
 			});
 
 
-
+			JPanel PanelFicherob = new JPanel();
+			PanelFicherob.setLayout(new GridLayout(2, 1));
+			
+			btnGuardarPacientesEnFicheroBinario = new JButton("Borrar");
+			PanelFicherob.add(btnGuardarPacientesEnFicheroBinario);
+			add(PanelFicherob);
+			
+			btnGuardarPacientesEnFicheroBinario.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					ObjectOutputStream oos = null;
+					
+					try {
+						oos = new ObjectOutputStream(new FileOutputStream("Paciente.dat"));
+						oos.writeObject(modelo);
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} finally {
+						if(oos!=null) {
+							try {
+								oos.flush();
+								oos.close();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+						}
+					}
+					
+				}
+			});
+			setVisible(true);
+		}
 			
 		
 			
 		}
-	}
+	
 	
 	public static void actualizaTablaPaciente(){
 		try {
