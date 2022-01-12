@@ -135,7 +135,7 @@ public class PanelExportar extends JPanel  {
 		btnBuscarFH.setFont(new Font("Tahoma", Font.BOLD, 13));
 		
 		panelHistorial.add(btnBuscarFH);
-		
+		/*
 		Panel panelCitas = new Panel();
 		tabbedPane.addTab("CITAS", null, panelCitas, null);
 		panelCitas.setBackground(new Color(240, 240, 240));
@@ -160,10 +160,10 @@ public class PanelExportar extends JPanel  {
 		//DateChooserCombo dateChooserCombo2 = new DateChooserCombo();
 		//panelCitas.add(dateChooserCombo2);
 		
-		JButton btnBuscarFA = new JButton("EXPORTAR FICHERO");
-		btnBuscarFA.setBackground(new Color(211, 211, 211));
-		btnBuscarFA.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		//JButton btnBuscarFA = new JButton("EXPORTAR FICHERO");
+		//btnBuscarFA.setBackground(new Color(211, 211, 211));
+		//btnBuscarFA.addActionListener(new ActionListener() {
+			//public void actionPerformed(ActionEvent e) {
 				//MEJORA
 				/*
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -177,14 +177,14 @@ public class PanelExportar extends JPanel  {
 				 * 
 				 */
 			//System.out.println(f);
-				ExportarFicheroCsvA();
-			}
+				//ExportarFicheroCsvA();
+			//}
 
 			
-		});
-		btnBuscarFA.setFont(new Font("Tahoma", Font.BOLD, 13));
-		panelCitas.add(btnBuscarFA);
-		
+		//});
+		//btnBuscarFA.setFont(new Font("Tahoma", Font.BOLD, 13));
+		//panelCitas.add(btnBuscarFA);
+		//*/
 	}
 	
 	/*
