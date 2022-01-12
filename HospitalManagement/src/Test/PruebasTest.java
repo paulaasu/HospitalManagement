@@ -35,8 +35,8 @@ public class PruebasTest {
 	@Before
 	public void setUp() throws Exception {
 		
-		con= BaseDeDatos.initBD("testBD.db",true);
-		BaseDeDatos.crearTablas(con,true);
+		con= BaseDeDatos.initBD("testBD.db");
+		BaseDeDatos.crearTablas(con);
 		
 		/*---PANEL EXPORTAR CSV---*/
 		 ret = new ArrayList<>();
