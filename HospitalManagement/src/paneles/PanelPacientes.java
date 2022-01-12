@@ -34,6 +34,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 
+import org.junit.internal.runners.model.EachTestNotifier;
+
 import vistas.VentanaBorrarPaciente;
 import vistas.VentanaHistorial;
 import vistas.VentanaPaciente;
@@ -46,7 +48,10 @@ public class PanelPacientes extends JPanel {
 	public static JTable tabla;
 	public static JLabel jLabelTemporizador;
 	public static JLabel jLabelMedia;
+	public static JLabel jLabelFemenino;
+	public static JLabel jLabelMasculino;
 	private static JButton botonEdad;
+	private static JButton botonGenero;
 	static Connection con;
 	
 	
@@ -245,7 +250,7 @@ public class PanelPacientes extends JPanel {
 			PanelEdad.add(botonEdad);
 			panelA.add(PanelEdad);
 			jLabelMedia=new JLabel();
-			panelB.add(jLabelMedia, BorderLayout.SOUTH);
+			panelB.add(jLabelMedia, BorderLayout.NORTH);
 			botonEdad.addActionListener(new ActionListener() {
 				
 				@Override
@@ -257,62 +262,76 @@ public class PanelPacientes extends JPanel {
 				
 				
 				}
+				
+			
 			});
 			
+			JPanel PanelGenero = new JPanel();
+			PanelGenero.setLayout(new GridLayout(2, 1));
+			PanelGenero.add(new JLabel("Calcular porcentaje... "));
+			botonGenero = new JButton("Porcentaje");
+			PanelGenero.add(botonGenero);
+			panelA.add(PanelGenero);
+		//	panelB.add(jLabelFemenino, BorderLayout.CENTER);
+		//	panelB.add(jLabelMasculino, BorderLayout.SOUTH);
 			
-
 			
 			//M.borrar todos los pacientes por el dni
 			
-			botonBorrar.addActionListener(new ActionListener() {
+			botonGenero.addActionListener(new ActionListener() {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					VentanaBorrarPaciente ventanaBorrar = new VentanaBorrarPaciente();
-					ventanaBorrar.setVisible(true);
+					float femenino = porcentajeGenero(BaseDeDatos.getGenero(), 0,0,0);
+					float masculino = 100 - femenino;
+					//jLabelFemenino.setText("El porcentaje de pacientes con género femenino es: "+ femenino + "%");
+					//jLabelMasculino.setText("El porcentaje de pacientes con género femenino es: "+ masculino + "%");
+					JOptionPane.showMessageDialog(PanelBuscar,"El porcentaje de pacientes con género femenino es: "+ femenino + "%" + "\n" + "El porcentaje de pacientes con género masculino es: "+ masculino + "%");
+				
+
 					
 				}
 			});
 
 
-			JPanel PanelFicherob = new JPanel();
-			PanelFicherob.setLayout(new GridLayout(2, 1));
-			
-			btnGuardarPacientesEnFicheroBinario = new JButton("Borrar");
-			PanelFicherob.add(btnGuardarPacientesEnFicheroBinario);
-			add(PanelFicherob);
-			
-			btnGuardarPacientesEnFicheroBinario.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					ObjectOutputStream oos = null;
-					
-					try {
-						oos = new ObjectOutputStream(new FileOutputStream("Paciente.dat"));
-						oos.writeObject(modelo);
-					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					} finally {
-						if(oos!=null) {
-							try {
-								oos.flush();
-								oos.close();
-							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-							
-						}
-					}
-					
-				}
-			});
-			setVisible(true);
+//			JPanel PanelFicherob = new JPanel();
+//			PanelFicherob.setLayout(new GridLayout(2, 1));
+//			
+//			btnGuardarPacientesEnFicheroBinario = new JButton("Borrar");
+//			PanelFicherob.add(btnGuardarPacientesEnFicheroBinario);
+//			add(PanelFicherob);
+//			
+//			btnGuardarPacientesEnFicheroBinario.addActionListener(new ActionListener() {
+//				
+//				@Override
+//				public void actionPerformed(ActionEvent e) {
+//					ObjectOutputStream oos = null;
+//					
+//					try {
+//						oos = new ObjectOutputStream(new FileOutputStream("Paciente.dat"));
+//						oos.writeObject(modelo);
+//					} catch (FileNotFoundException e1) {
+//						// TODO Auto-generated catch block
+//						e1.printStackTrace();
+//					} catch (IOException e1) {
+//						// TODO Auto-generated catch block
+//						e1.printStackTrace();
+//					} finally {
+//						if(oos!=null) {
+//							try {
+//								oos.flush();
+//								oos.close();
+//							} catch (IOException e1) {
+//								// TODO Auto-generated catch block
+//								e1.printStackTrace();
+//							}
+//							
+//						}
+//					}
+//					
+//				}
+//			});
+//			setVisible(true);
 		}
 			
 		
@@ -359,6 +378,19 @@ public class PanelPacientes extends JPanel {
 		return 0;	
 	}
 	
+	public static float porcentajeGenero(ArrayList<String> lista, int pos,int contadorFemenino,int contadorMasculino) {
+		if(pos<lista.size()) {
+			if (lista.get(pos) == "Femenino"){
+				return porcentajeGenero( lista, pos+1,contadorFemenino+1,contadorMasculino);
+			} else {
+				return porcentajeGenero( lista, pos+1,contadorFemenino,contadorMasculino+1);
+			}
+		}else {
+			return (contadorFemenino/(contadorFemenino+contadorMasculino))*100;
+		}
+		
+		
+	}
 	
 
 }

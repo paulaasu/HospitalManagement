@@ -62,7 +62,7 @@ public class PanelExportar extends JPanel  {
 	//MEJORAR--RELLENAR CON CONSULTA A BBDD
 	private JComboBox AgregarCombo(JComboBox comboBox) {
 		ArrayList<String> dni =new ArrayList<>();
-		Connection con = BaseDeDatos.initBD("BaseDeDatos.db",true);
+		Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
 		dni=BaseDeDatos.ObtenerPacientes(con);
 		
 	

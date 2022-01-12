@@ -280,6 +280,27 @@ public class BaseDeDatos {
 	
 		return fechas;
 	}
+	
+	public static ArrayList<String> getGenero(){
+		ArrayList<String> generos=new ArrayList<String>();
+		try {
+			Statement st=con.createStatement();
+			String sentSQL = "SELECT * FROM paciente";
+			ResultSet rs = st.executeQuery( sentSQL );
+			while( rs.next() ) {
+				
+				String genero = rs.getString("Genero");
+				System.out.println(genero);
+				generos.add(genero );
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		return generos;
+	}
+	
 	/***
 	 * Metodo que pone a todos los pacientes en un ArrayList
 	 */

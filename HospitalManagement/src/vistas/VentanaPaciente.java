@@ -201,7 +201,7 @@ public class VentanaPaciente extends JFrame {
 							int tf = Integer.parseInt(telefonoTxt.getText());
 							if(cumplePatronFecha == true) {	
 								try {
-									java.sql.Connection con = BaseDeDatos.initBD("BaseDeDatos.db",true);
+									java.sql.Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
 									BaseDeDatos.anadirPaciente(con, dni, nombre, apellido, tf, dir, fchanac, genero1);
 									PanelPacientes.eliminaTablaPaciente();
 									PanelPacientes.actualizaTablaPaciente();

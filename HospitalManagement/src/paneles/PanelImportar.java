@@ -135,7 +135,7 @@ public class PanelImportar extends JPanel{
 	}
 	private void ImportarFicheroCsvH() {
 		File fichero=BuscarFichero();
-		Connection con = BaseDeDatos.initBD("BaseDeDatos.db",true);
+		Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
 		if(fichero!=null) {
 			
 			FileReader fr;
@@ -182,7 +182,7 @@ public class PanelImportar extends JPanel{
 	
 	private void ImportarFicheroCsvP() {
 		File fichero=BuscarFichero();
-		Connection con = BaseDeDatos.initBD("BaseDeDatos.db",true);
+		Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
 		if(fichero!=null) {
 			
 			FileReader fr;
