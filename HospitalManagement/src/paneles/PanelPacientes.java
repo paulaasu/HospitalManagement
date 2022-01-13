@@ -272,8 +272,6 @@ public class PanelPacientes extends JPanel {
 			botonGenero = new JButton("Porcentaje");
 			PanelGenero.add(botonGenero);
 			panelA.add(PanelGenero);
-		//	panelB.add(jLabelFemenino, BorderLayout.CENTER);
-		//	panelB.add(jLabelMasculino, BorderLayout.SOUTH);
 			
 			
 			//M.borrar todos los pacientes por el dni
@@ -284,6 +282,8 @@ public class PanelPacientes extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					float femenino = porcentajeGenero(BaseDeDatos.getGenero(), 0,0,0);
 					float masculino = 100 - femenino;
+					femenino=(float) (Math.round(femenino));
+					masculino=(float) (Math.round(masculino));
 					JOptionPane.showMessageDialog(PanelBuscar,"El porcentaje de pacientes con género femenino es: "+ femenino + "%" + "\n" + "El porcentaje de pacientes con género masculino es: "+ masculino + "%");
 				}
 			});
