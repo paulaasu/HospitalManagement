@@ -257,7 +257,7 @@ public class PanelPacientes extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					BaseDeDatos bd=new BaseDeDatos();
 					ArrayList<String> pacientes=bd.getFechas();
-					System.out.println(pacientes);
+//					System.out.println(pacientes);
 					jLabelMedia.setText("La media de los pacientes de este hospital es: "+ Math.round(mediaRecursiva(pacientes, 0)));
 				
 				
@@ -284,12 +284,7 @@ public class PanelPacientes extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					float femenino = porcentajeGenero(BaseDeDatos.getGenero(), 0,0,0);
 					float masculino = 100 - femenino;
-					//jLabelFemenino.setText("El porcentaje de pacientes con género femenino es: "+ femenino + "%");
-					//jLabelMasculino.setText("El porcentaje de pacientes con género femenino es: "+ masculino + "%");
 					JOptionPane.showMessageDialog(PanelBuscar,"El porcentaje de pacientes con género femenino es: "+ femenino + "%" + "\n" + "El porcentaje de pacientes con género masculino es: "+ masculino + "%");
-				
-
-					
 				}
 			});
 
@@ -360,7 +355,7 @@ public class PanelPacientes extends JPanel {
 				
 	}
 
-	public static int EdadActualPactiente(String fecha) {
+	public static int EdadActualPactiente(String fecha) {   
 		fecha = fecha.split("/")[2];	//Año
 		int anyos=YearMonth.now().getYear() - Integer.parseInt(fecha);
 		return anyos;
@@ -378,12 +373,20 @@ public class PanelPacientes extends JPanel {
 		return 0;	
 	}
 	
-	public static float porcentajeGenero(ArrayList<String> lista, int pos,int contadorFemenino,int contadorMasculino) {
-		if(pos<lista.size()) {
-			if (lista.get(pos) == "Femenino"){
-				return porcentajeGenero( lista, pos+1,contadorFemenino+1,contadorMasculino);
+//	public static String listaGenero (ArrayList<String> listaGenero) {
+//		
+//		
+//		return null;
+//		
+//	}
+	//Si utilizamos el ArrayList getGenero que hemos creado?
+	
+	public static float porcentajeGenero(ArrayList<String> listaGenero, int pos,float contadorFemenino,float contadorMasculino) {
+		if(pos<listaGenero.size()) {
+			if (listaGenero.get(pos).equals("Femenino")){
+				return porcentajeGenero( listaGenero, pos+1,contadorFemenino+1,contadorMasculino);
 			} else {
-				return porcentajeGenero( lista, pos+1,contadorFemenino,contadorMasculino+1);
+				return porcentajeGenero( listaGenero, pos+1,contadorFemenino,contadorMasculino+1);
 			}
 		}else {
 			return (contadorFemenino/(contadorFemenino+contadorMasculino))*100;

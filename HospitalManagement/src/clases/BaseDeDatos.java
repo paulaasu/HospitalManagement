@@ -24,7 +24,6 @@ import java.util.logging.SimpleFormatter;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-import vistas.VentanaLogin;
 import vistas.VentanaPaciente; // importamos el panel pacientes
 
 
@@ -272,7 +271,6 @@ public class BaseDeDatos {
 			while( rs.next() ) {
 				
 				String fecha = rs.getString("Fecha_nac");
-				System.out.println(fecha);
 				fechas.add(fecha );
 			}
 		} catch (SQLException e) {
@@ -290,9 +288,7 @@ public class BaseDeDatos {
 			String sentSQL = "SELECT * FROM paciente";
 			ResultSet rs = st.executeQuery( sentSQL );
 			while( rs.next() ) {
-				
 				String genero = rs.getString("Genero");
-				System.out.println(genero);
 				generos.add(genero );
 			}
 		} catch (SQLException e) {
@@ -319,7 +315,6 @@ public class BaseDeDatos {
 				String dir = rs.getString("Direccion");
 				String genero = rs.getString("Genero");
 				String fecha = rs.getString("Fecha_nac");
-				System.out.println(fecha);
 				pacientes.add( new Paciente(dni, nombre, apellido, telefono, dir, fecha,null,genero) );
 			}
 			return pacientes;
@@ -615,22 +610,12 @@ public class BaseDeDatos {
 	public static boolean comprobarUsuario(String u, String c) {
 		boolean result=false;
 		try (Statement statement = con.createStatement()) {
-			String sentSQL = "SELECT user, password FROM usuario WHERE user = '" + u +"' ";
+			String sentSQL = "SELECT user, password FROM usuario WHERE user = '" + u +"' AND password = '" + c + "' ";
 			BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
 			BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
-			VentanaLogin v=new VentanaLogin();
+			
 			while(rs.next()) {
-			String contraseña=(rs.getString("password")).toString();
-				String con=v.Desencriptar(contraseña);
-				
-				if(String.valueOf(c).equals(String.valueOf(con))) {
-					System.out.println("valido");
-					return result=true;
-					
-				}else {
-					return result ;
-				}
-				
+				result = true;
 			}
 			return result;
 		} catch (SQLException e) {
@@ -1022,7 +1007,7 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 	
 	public static void anadirUsuario( Usuario u) {
 		
-		String sentSQL = "INSERT INTO usuario (user,password,Rol)  VALUES('"+u.getNom()+"','"+u.getContrasena()+"', '"+u.getRol()+"')";
+		String sentSQL = "INSERT INTO usuario VALUES('"+u.getID_usuario()+"', '"+u.getNom()+"','"+u.getContrasena()+"', '"+u.getRol()+"')";
 		
 		try {
 			Statement stmt =null;

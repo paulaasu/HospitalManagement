@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>HospitalManagement</name>
+	<name>Estudiantes</name>
 	<comment></comment>
 	<projects>
 	</projects>
@@ -14,36 +14,4 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>sqlite-jdbc-3.36.0.3.jar</name>
-			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/Downloads/sqlite-jdbc-3.36.0.3.jar</locationURI>
-		</link>
-		<link>
-			<name>src/img/ImagenLogo.jpg</name>
-			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/Pictures/Imagenesproyecto/ImagenLogo.jpg</locationURI>
-		</link>
-		<link>
-			<name>src/img/LoginImagen1.jpg</name>
-			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/Pictures/Imagenesproyecto/LoginImagen1.jpg</locationURI>
-		</link>
-		<link>
-			<name>src/img/LoginImagen2.jpg</name>
-			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/Pictures/Imagenesproyecto/LoginImagen2.jpg</locationURI>
-		</link>
-		<link>
-			<name>src/img/Logosalir.png</name>
-			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/Pictures/Imagenesproyecto/Logosalir.png</locationURI>
-		</link>
-		<link>
-			<name>src/img/UsuarioIcono.png</name>
-			<type>1</type>
-			<locationURI>PARENT-3-PROJECT_LOC/Pictures/Imagenesproyecto/UsuarioIcono.png</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>
