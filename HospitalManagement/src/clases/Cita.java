@@ -13,7 +13,7 @@ public class Cita extends Paciente{
 	
 	TipoCita tipodecita;
 	public Cita(String dni, String nombre , String apellidos, Date fechaYHoraCita, TipoCita tipodecita) {
-		super();
+		super(dni,nombre,apellidos);
 		this.fechaYHoraCita = fechaYHoraCita;
 		this.tipodecita = tipodecita.CABECERA;
 	}

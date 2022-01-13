@@ -43,7 +43,7 @@ public class VentanaCitas extends JFrame{
 	PanelCita2 panelComponentes;
 	private JTextField txtdni,txtnombre,txtapellidos,txtfechayhora;
 	private JButton btnanadir, btncerrar;
-	public SimpleDateFormat sdf1 = new SimpleDateFormat( "dd/MM/yyyy HH:mm:ss" );
+	public SimpleDateFormat sdf1 = new SimpleDateFormat( "dd/MM/yyyy HH:mm" );
 	private Object[] addCita;
 	 private JComboBox ctipoCita;
 	 private TipoCita tp;
@@ -102,7 +102,7 @@ public class VentanaCitas extends JFrame{
 	class PanelCita2  extends JPanel{
 		private JTextField txtdni,txtnombre,txtapellidos,txtfechayhora,txttipoCita;
 		private JButton btnanadir, btncerrar;
-		public SimpleDateFormat sdf1 = new SimpleDateFormat( "dd/MM/yyyy HH:mm:ss" );
+		public SimpleDateFormat sdf1 = new SimpleDateFormat( "dd/MM/yyyy HH:mm" );
 		private Object[] addCita;
 		protected Component contentPaneCitas;
 		
@@ -119,17 +119,18 @@ public class VentanaCitas extends JFrame{
 			
 			
 			add(new JLabel("APEDILLOS: "));
-			JTextField txtapellido= new JTextField(50);
-			add(txtapellido);
+			txtapellidos= new JTextField(50);
+			add(txtapellidos);
 		
 			add(new JLabel("FECHA Y HORA: "));
-			txtfechayhora=new JTextField("dd/MM/yyyy HH:mm:ss") ;
+			txtfechayhora=new JTextField("dd/MM/yyyy HH:mm") ;
 			add(txtfechayhora);
 			
 
-			ctipoCita = new JComboBox<>();
+			//cambio
+			add(new JLabel("TIPO CITA: "));
+			ctipoCita = new JComboBox<>(TipoCita.values());
 			add(ctipoCita);
-			
 			
 //			add(new JLabel("TIPO: "));
 
@@ -166,14 +167,12 @@ public class VentanaCitas extends JFrame{
 						TipoCita t = (TipoCita) ctipoCita.getSelectedItem();
 						Cita cita = new Cita(dni, nombre, apellido, fechayhorad, t);
 						try {
-						Connection con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-						BaseDeDatos.initBD("BaseDeDatos");
+						Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
 						
 						
 						//nuevo4/01
 						BaseDeDatos.anadirCita(con , cita); //
-						PanelCitas.eliminaTablaCita();
-						PanelCitas.actualizarTablaCita();
+						PanelCitas.cargarModeloTabla();
 						BaseDeDatos.closeBD(con);	
 						}catch (Exception ex) {
 							// TODO: handle exception
@@ -181,7 +180,11 @@ public class VentanaCitas extends JFrame{
 						}
 						
 						
-						
+//						con = BaseDeDatos.initBD("BaseDeDatos.db");
+//						BaseDeDatos.anadirCita(con, cita);
+//						
+//						PanelCitas.cargarModeloTabla();
+//						BaseDeDatos.closeBD(con);
 					
 					repaint();
 					dispose();
@@ -201,6 +204,7 @@ public class VentanaCitas extends JFrame{
 		 
 			
 }
+	
 	
 		
 	}

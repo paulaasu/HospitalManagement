@@ -9,6 +9,11 @@ public class Paciente /*extends Persona*/{
 	public String dni,nombre,apellidos,direccion,fechaNac;
 	public int telefono;
 
+	public Paciente(String dni, String nombre , String apellidos) {
+		this.dni = dni;
+		this.nombre = nombre;
+		this.apellidos = apellidos;
+	}
 	public Paciente ( String dni, String nombre, String apellidos, int telefono, String direccion,
 			String fechaNac, HistorialClinico historialClinico,String genero){
 		

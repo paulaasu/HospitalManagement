@@ -19,9 +19,11 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.TreeMap;
 
 import javax.swing.JButton;
@@ -47,7 +49,7 @@ import vistas.VentanaPaciente;
 
 public class PanelCitas extends JPanel {
 	//nuevo
-	private Connection con;
+	private static Connection con;
 	private JTable tabla;
 	private static DefaultTableModel modeloTabla;
 	public TreeMap<String, Cita>tmCitas = new TreeMap<>();
@@ -92,20 +94,9 @@ public class PanelCitas extends JPanel {
 			Object columnas[] = {"Dni","Nombre","Apellido","Fecha y Hora","Tipo cita"};
 			modeloTabla = new DefaultTableModel();
 			modeloTabla.setColumnIdentifiers(columnas);
-			try {
-				actualizarTablaCita();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}//cargarModeloTabla();
+			cargarModeloTabla();
 			tabla = new JTable(modeloTabla);
 			
-			try {
-				actualizarTablaCita();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 			
 			JScrollPane scrollTabla = new JScrollPane(tabla);
 			add(scrollTabla);
@@ -117,7 +108,7 @@ public class PanelCitas extends JPanel {
 						int row, int column) {
 					Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 					if(row==0) {
-						c.setBackground(Color.DARK_GRAY);
+						c.setBackground(Color.WHITE);
 					}else {
 						String nombreFilaActual = (String) modeloTabla.getValueAt(row, 0);
 						String nombreFilaAnterior = (String) modeloTabla.getValueAt(row-1, 0);
@@ -174,11 +165,11 @@ public class PanelCitas extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					// TODO Auto-generated method stub
-					String dni= buscar.getText() ;
+					String nombre= buscar.getText() ;
 				//nuevo
 					try {
 						BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-						String sentSQL = "SELECT * FROM cita WHERE dni = '" + dni + "' ";
+						String sentSQL = "SELECT * FROM cita WHERE nombre = '" + nombre + "' ";
 						BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
 						BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
 						
@@ -203,7 +194,8 @@ public class PanelCitas extends JPanel {
 							for (int i = rowCount - 1; i >= 0; i--) {
 								modeloTabla.removeRow(i);
 							}
-							BaseDeDatos.volcarJTableATablaCita(con,modeloTabla);
+							ArrayList<Cita> a = new ArrayList<>();
+							BaseDeDatos.obtenerTodasLasCitasOrdenadasPorNombrePaciente(con,a);
 						}					
 							BaseDeDatos.closeBD(con);
 							
@@ -253,16 +245,9 @@ public class PanelCitas extends JPanel {
 					}else {
 						modeloTabla.removeRow(filaSeleccionada);
 						con = BaseDeDatos.initBD("BaseDeDatos.db");
-						//m
 						BaseDeDatos.eliminarCita(con);
 						eliminaTablaCita();
-						try {
-							actualizarTablaCita();
-						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
-						//BaseDeDatos.volcarJTableATablaCita(con, modelo);
+						PanelCitas.cargarModeloTabla();
 						BaseDeDatos.closeBD(con);
 					}
 				}
@@ -271,13 +256,13 @@ public class PanelCitas extends JPanel {
 			JPanel Panelfichero = new JPanel();
 			Panelfichero.setLayout(new GridLayout(2, 1));
 			btnCrearFichero = new JButton("CREAR FICHERO");
+			JLabel lblcrearfichero = new JLabel();
 			Panelfichero.add(btnCrearFichero);
 			add(Panelfichero);
 			btnCrearFichero.addActionListener(new ActionListener() {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					
 						crearFicheroDeTexto();
 					
 				}
@@ -298,26 +283,26 @@ public class PanelCitas extends JPanel {
 	}
 	
 			
-	public static  void actualizarTablaCita() throws SQLException {
-		
-		Connection con;
-			//nuevo
-		
-			con = BaseDeDatos.initBD("BaseDeDatos.db");
-			BaseDeDatos.volcarJTableATablaCita(con ,modeloTabla);
-			BaseDeDatos.closeBD(con);
-		
-			System.out.println("No se puede rellenar la tabla");
-			
-		while(modeloTabla.getRowCount()>0)
-			modeloTabla.removeRow(0);
+//	public static  void actualizarTablaCita() throws SQLException {
+//		
+//		Connection con;
+//			//nuevo
+//		
+//			con = BaseDeDatos.initBD("BaseDeDatos.db");
+//			BaseDeDatos.volcarJTableATablaCita(con ,modeloTabla);
+//			BaseDeDatos.closeBD(con);
+//		
+//			System.out.println("No se puede rellenar la tabla");
+//			
+//		while(modeloTabla.getRowCount()>0)
+//			modeloTabla.removeRow(0);
 //		for(Cita c: a) {
 //			System.out.println(c);
 //			String [] fila = {c.getDni(),c.getNombre(),c.getApellidos(),sdf.format(c.getFechaYHoraCita()),String.valueOf(c.getTipodecita())};
 //			modeloTabla.addRow(fila);
 //		}
 		
-	}
+	//}
 		private String obtenerTexto() {
 			String texto = "INFORMACIÓN DE LAS CITAS\n";
 			for(String clave: tmCitas.keySet()) {
@@ -354,6 +339,29 @@ public class PanelCitas extends JPanel {
 			pw.flush();
 			pw.close();
 		}
+	}
+	//posible
+	public static  void cargarModeloTabla() {
+		con = BaseDeDatos.initBD("BaseDeDatos.db");
+	
+		ArrayList<Cita> a = new ArrayList<>();
+		try {
+			BaseDeDatos.obtenerTodasLasCitasOrdenadasPorNombrePaciente(con, a);
+			System.out.println(a.get(0).getDni());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		BaseDeDatos.closeBD(con);
+		while(modeloTabla.getRowCount()>0)
+			modeloTabla.removeRow(0);
+		for(Cita c: a) {
+			String f = sdf.format(c.getFechaYHoraCita());
+			String fila[] = {c.getDni(),c.getNombre(),c.getApellidos(),f,c.getTipodecita().toString()};
+			System.out.println(c.getDni());
+			modeloTabla.addRow(fila);
+		}
+		
 	}
 
 }
