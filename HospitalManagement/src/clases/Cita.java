@@ -7,7 +7,7 @@ import java.util.ArrayList;
  // no deberia tener un paciente una cita en vez de el medico?
 public class Cita extends Paciente{
 	/*como tenemos un SimpleDateFormat  hay que pase de   date a string*/
-	private static SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yyyy hh:mm" );
+	private static SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd HH:mm" );
 	//nuevo
 	private Date fechaYHoraCita ; // no entiendo porque da error
 	

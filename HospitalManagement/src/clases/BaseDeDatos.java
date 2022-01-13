@@ -107,8 +107,8 @@ public class BaseDeDatos {
 	public static void crearTablas(Connection con) {		
 		try {
 		
-			String sent11 ="DROP TABLE IF EXISTS Paciente";
-			String sent1= "CREATE TABLE Paciente(Dni VARCHAR(20) PRIMARY KEY NOT NULL, Nombre VARCHAR(20), Apellidos VARCHAR(40), Telefono INTEGER, Direccion VARCHAR(40), Fecha_Nac Date, Genero VARCHAR(9))";
+			
+			String sent1= "CREATE TABLE IF NOT EXISTS Paciente(Dni VARCHAR(20) PRIMARY KEY NOT NULL, Nombre VARCHAR(20), Apellidos VARCHAR(40), Telefono INTEGER, Direccion VARCHAR(40), Fecha_Nac Date, Genero VARCHAR(9))";
 			logger.log( Level.INFO, "Statement: " + sent1 );
 			/*String sent1= "CREATE TABLE Paciente(
 				Dni VARCHAR(20) PRIMARY KEY NOT NULL, 
@@ -120,8 +120,8 @@ public class BaseDeDatos {
 			    Genero VARCHAR(9)
 			    )
 	;*/
-			String sent22 ="DROP TABLE IF EXISTS Medico";
-			String sent2 = "CREATE TABLE Medico(ID_medico INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Nombre VARCHAR(20), Apellidos VARCHAR(30), Telefono INTEGER(9), Email VARCHAR(40), Direccion VARCHAR(40), Fecha_nac Date, Especialidad VARCHAR(30))" ;
+			
+			String sent2 = "CREATE TABLE  IF NOT EXISTS Medico(ID_medico INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Nombre VARCHAR(20), Apellidos VARCHAR(30), Telefono INTEGER(9), Email VARCHAR(40), Direccion VARCHAR(40), Fecha_nac Date, Especialidad VARCHAR(30))" ;
 			logger.log( Level.INFO, "Statement: " + sent2 );
 			/*String sent2 = "CREATE TABLE Medico(
 				ID_medico INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -134,8 +134,8 @@ public class BaseDeDatos {
 				Especialidad VARCHAR(30)
 			);*/
 			
-			String sent33 ="DROP TABLE IF EXISTS Historial";
-			String sent3 ="CREATE TABLE Historial(ID_historial INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Enfermedad VARCHAR(50), Sintoma VARCHAR(50), Tiempo VARCHAR(15), Sed VARCHAR(15), Sueño VARCHAR(15),	Miccion VARCHAR(15), Dni_paciente CHAR(9), FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE )";
+			
+			String sent3 ="CREATE TABLE IF NOT EXISTS Historial(ID_historial INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, Enfermedad VARCHAR(50), Sintoma VARCHAR(50), Tiempo VARCHAR(15), Sed VARCHAR(15), Sueño VARCHAR(15),	Miccion VARCHAR(15), Dni_paciente CHAR(9), FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE )";
 			logger.log( Level.INFO, "Statement: " + sent3 );
 			/*String sent3 = "CREATE TABLE Historial(
 				ID_historial INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -149,8 +149,8 @@ public class BaseDeDatos {
 			 	FOREIGN KEY(Dni_paciente) REFERENCES Paciente(Dni) ON DELETE CASCADE
 			 );*/
 			
-			String sent44 ="DROP TABLE IF EXISTS Usuario";
-			String sent4 ="CREATE TABLE Usuario(ID_usuario INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,user VARCHAR(20),password VARCHAR(30),Rol VARCHAR(20))";
+			
+			String sent4 ="CREATE TABLE IF NOT EXISTS  Usuario(ID_usuario INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,user VARCHAR(20),password VARCHAR(30),Rol VARCHAR(20))";
 			logger.log( Level.INFO, "Statement: " + sent4 );
 			/*String sent4 = "CREATE TABLE Usuario(
 				ID_usuario INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -160,7 +160,7 @@ public class BaseDeDatos {
 			)
 	*/
 
-			String sent55 ="DROP TABLE IF EXISTS Cita";
+			
 			String sent5 ="CREATE TABLE IF NOT EXISTS Cita(Dni String , Nombre String , Apellidos String , Fechayhora String, TipoCita String)";
 			logger.log( Level.INFO, "Statement: " + sent5 );
 			/*String sent5 = "CREATE TABLE Cita(
@@ -178,15 +178,15 @@ public class BaseDeDatos {
 			 
 			
 	Statement st = con.createStatement();
-			st.executeUpdate(sent11);
+			
 			st.executeUpdate(sent1);
-			st.executeUpdate(sent22);
+			
 			st.executeUpdate(sent2); 
-			st.executeUpdate(sent33);
+			
 			st.executeUpdate(sent3);
-			st.executeUpdate(sent44);
+			
 			st.executeUpdate(sent4);
-			st.executeUpdate(sent55);
+			
 			st.executeUpdate(sent5);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -1163,7 +1163,7 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 				String apellidos = (String) modeloTabla.getValueAt(i, 2);
 				String fechayhora = (String) modeloTabla.getValueAt(i, 3);
 				String TipoDeCita= (String) modeloTabla.getValueAt(i, 4);
-				SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yyyy hh:mm" );	
+				SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd HH:mm" );	
 				Date fechaD = (Date) sdf.parse(fechayhora);
 				//importante 
 				TipoCita tc = TipoCita.valueOf(TipoDeCita);
@@ -1283,9 +1283,8 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 			}
 			return hmCitas;
 		}*/
-		
-		public static void obtenerTodasLasCitasOrdenadasPorNombrePaciente(Connection con, ArrayList<Cita> a) throws ParseException {
-			String sent = "SELECT * FROM Cita ORDER BY nombre";
+		public static void obtenerTodasLasCitasOrdenadasPorNombreDni(Connection con, ArrayList<Cita> a) throws ParseException {
+			String sent = "SELECT * FROM Cita ORDER BY Dni";
 			try {
 				Statement st = con.createStatement();
 				ResultSet rs = st.executeQuery(sent);
@@ -1296,7 +1295,7 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 					String apellidos = rs.getString("apellidos");
 					String fechayhora = (String) rs.getString("fechayhora");
 					String TipoDeCita= (String) rs.getString("TipoCita");
-					SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yyyy HH:mm" );	
+					SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-MM-dd HH:mm" );	
 					 
 					Date fechaD = (Date) sdf.parse(fechayhora);
 					//importante 
@@ -1312,6 +1311,7 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 				e.printStackTrace();
 			}
 		}
+
 
 
 

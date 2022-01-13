@@ -34,7 +34,7 @@ import clases.BaseDeDatos;
 import clases.TipoCita;
 import clases.Cita;
 import paneles.PanelCitas;
-
+import java.sql.Connection;
 
 public class VentanaCitas extends JFrame{
 	private static Logger logger = Logger.getLogger( "VentanaCitas" );
@@ -43,10 +43,11 @@ public class VentanaCitas extends JFrame{
 	PanelCita2 panelComponentes;
 	private JTextField txtdni,txtnombre,txtapellidos,txtfechayhora;
 	private JButton btnanadir, btncerrar;
-	public SimpleDateFormat sdf1 = new SimpleDateFormat( "dd/MM/yyyy HH:mm" );
+	public SimpleDateFormat sdf1 = new SimpleDateFormat( "yyyy-MM-dd HH:mm" );
 	private Object[] addCita;
 	 private JComboBox ctipoCita;
 	 private TipoCita tp;
+	 public static Connection con;
 	
 	/**
 	 * Launch the application.
@@ -102,7 +103,7 @@ public class VentanaCitas extends JFrame{
 	class PanelCita2  extends JPanel{
 		private JTextField txtdni,txtnombre,txtapellidos,txtfechayhora,txttipoCita;
 		private JButton btnanadir, btncerrar;
-		public SimpleDateFormat sdf1 = new SimpleDateFormat( "dd/MM/yyyy HH:mm" );
+		public SimpleDateFormat sdf1 = new SimpleDateFormat( "yyyy-MM-dd HH:mm" );
 		private Object[] addCita;
 		protected Component contentPaneCitas;
 		
@@ -123,7 +124,7 @@ public class VentanaCitas extends JFrame{
 			add(txtapellidos);
 		
 			add(new JLabel("FECHA Y HORA: "));
-			txtfechayhora=new JTextField("dd/MM/yyyy HH:mm") ;
+			txtfechayhora=new JTextField("yyyy-MM-dd HH:mm") ;
 			add(txtfechayhora);
 			
 
@@ -167,9 +168,7 @@ public class VentanaCitas extends JFrame{
 						TipoCita t = (TipoCita) ctipoCita.getSelectedItem();
 						Cita cita = new Cita(dni, nombre, apellido, fechayhorad, t);
 						try {
-						Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
-						
-						
+						 con = BaseDeDatos.initBD("BaseDeDatos.db");
 						//nuevo4/01
 						BaseDeDatos.anadirCita(con , cita); //
 						PanelCitas.cargarModeloTabla();

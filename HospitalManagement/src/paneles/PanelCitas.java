@@ -55,7 +55,7 @@ public class PanelCitas extends JPanel {
 	private JTable tabla;
 	private static DefaultTableModel modeloTabla;
 	public TreeMap<String, Cita>tmCitas = new TreeMap<>();
-	static SimpleDateFormat sdf1 = new SimpleDateFormat( "dd/MM/yyyy HH:mm" );
+	static SimpleDateFormat sdf1 = new SimpleDateFormat( "yyyy-MM-dd HH:mm" );
 	Boolean reiniciarBD;
 
 	public PanelCitas() {
@@ -72,7 +72,7 @@ public class PanelCitas extends JPanel {
 		con = BaseDeDatos.initBD("BaseDeDatos.db");
 		BaseDeDatos.crearTablas(con);
 		BaseDeDatos.closeBD(con);
-		
+		cargarModeloTabla();
 		tmCitas = new TreeMap<>();
 	}
 	class Panel4 extends JPanel { //AQUI ESTA EL GRIDLAYOUT DEL CENTRO
@@ -155,7 +155,7 @@ public class PanelCitas extends JPanel {
 					} else {
 						BaseDeDatos.initBD( "BaseDeDatos.db");  // Crear base de datos con datos iniciales
 					}
-					 BaseDeDatos.volcarJTableATablaCita(con, modeloTabla);// Según se inicia la ventana se visualizan los productos
+					// BaseDeDatos.volcarJTableATablaCita(con, modeloTabla);// Según se inicia la ventana se visualizan los productos
 				}
 				@Override
 				public void windowClosed(WindowEvent e) {
@@ -197,7 +197,7 @@ public class PanelCitas extends JPanel {
 								modeloTabla.removeRow(i);
 							}
 							ArrayList<Cita> a = new ArrayList<>();
-							BaseDeDatos.obtenerTodasLasCitasOrdenadasPorNombrePaciente(con,a);
+							BaseDeDatos.obtenerTodasLasCitasOrdenadasPorNombreDni(con,a);
 						}					
 							BaseDeDatos.closeBD(con);
 							
@@ -316,7 +316,7 @@ public class PanelCitas extends JPanel {
 		
 	
 	private void crearFicheroDeTexto() {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy_HH-mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH-mm");
 		long milis = System.currentTimeMillis();
 		Date fecha = new Date(milis);
 		String f = sdf.format(fecha);
@@ -348,8 +348,8 @@ public class PanelCitas extends JPanel {
 	
 		ArrayList<Cita> a = new ArrayList<>();
 		try {
-			BaseDeDatos.obtenerTodasLasCitasOrdenadasPorNombrePaciente(con, a);
-			System.out.println(a.get(0).getDni());
+			BaseDeDatos.obtenerTodasLasCitasOrdenadasPorNombreDni(con, a);
+			//System.out.println(a.get(0).getDni());
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
