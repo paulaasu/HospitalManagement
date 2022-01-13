@@ -559,16 +559,19 @@ public class BaseDeDatos {
 		Statement statement = con.createStatement();
 		String sent = "select * from paciente";
 		 rs = statement.executeQuery(sent);
-		Paciente p=new Paciente();
+		
 		
 			while (rs.next()) {
-				p.dni = rs.getString("Dni");
-				p.nombre = rs.getString("Nombre");
-				p.apellidos =rs.getString("Apellidos"); 
-				p.telefono  =rs.getInt("Telefono");
-				p.direccion  =rs.getString("Direccion");
-				p.fechaNac= rs.getString("Fecha_Nac");
-				p.genero= rs.getString("Genero");
+				String dni = rs.getString("Dni");
+				String nombre = rs.getString("Nombre");
+				String apellidos =rs.getString("Apellidos"); 
+				int telefono  =rs.getInt("Telefono");
+				String direccion  =rs.getString("Direccion");
+				String fechaNac= rs.getString("Fecha_Nac");
+				String genero= rs.getString("Genero");
+				
+				Paciente p=new Paciente(dni,nombre,apellidos,telefono,direccion,fechaNac,genero);
+				
 				lista.add(p);
 				 
 				
