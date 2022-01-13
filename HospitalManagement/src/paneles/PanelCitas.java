@@ -8,25 +8,29 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.TreeMap;
+//prueba
+import java.text.DateFormat;
+
+
+
+
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -48,6 +52,10 @@ import paneles.PanelPacientes.PanelAbajo;
 import paneles.PanelPacientes.PanelArriba;
 import vistas.VentanaCitas;
 import vistas.VentanaPaciente;
+
+
+
+
 
 public class PanelCitas extends JPanel {
 	//nuevo
@@ -247,9 +255,10 @@ public class PanelCitas extends JPanel {
 					}else {
 						modeloTabla.removeRow(filaSeleccionada);
 						con = BaseDeDatos.initBD("BaseDeDatos.db");
+						//eliminaTablaCita();
 						BaseDeDatos.eliminarCita(con);
-						eliminaTablaCita();
-						PanelCitas.cargarModeloTabla();
+						
+						BaseDeDatos.volcarJTableATablaCita(con, modeloTabla);
 						BaseDeDatos.closeBD(con);
 					}
 				}
@@ -316,7 +325,7 @@ public class PanelCitas extends JPanel {
 		
 	
 	private void crearFicheroDeTexto() {
-		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH-mm");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		long milis = System.currentTimeMillis();
 		Date fecha = new Date(milis);
 		String f = sdf.format(fecha);
@@ -358,12 +367,12 @@ public class PanelCitas extends JPanel {
 		while(modeloTabla.getRowCount()>0)
 			modeloTabla.removeRow(0);
 		for(Cita c: a) {
-			String f = sdf1.format(c.getFechaYHoraCita());
-			String fila[] = {c.getDni(),c.getNombre(),c.getApellidos(),f,c.getTipodecita().toString()};
+			
+			String fila[] = {c.getDni(),c.getNombre(),c.getApellidos(),sdf1.format(c.getFechaYHoraCita()),String.valueOf(c.getTipodecita())};
 			System.out.println(c.getDni());
 			modeloTabla.addRow(fila);
 		}
-		
+	
 	}
 
 }

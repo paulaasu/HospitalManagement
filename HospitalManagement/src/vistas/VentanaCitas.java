@@ -36,6 +36,10 @@ import clases.Cita;
 import paneles.PanelCitas;
 import java.sql.Connection;
 
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
+
 public class VentanaCitas extends JFrame{
 	private static Logger logger = Logger.getLogger( "VentanaCitas" );
 	JPanel contentPaneCitas;
@@ -158,15 +162,15 @@ public class VentanaCitas extends JFrame{
 						String apellido = txtapellidos.getText();
 						//String fechayhora = txtfechayhora.getText();
 						//nuevo 
-						Date fechayhorad = null;
+						Date fechaD = null;
 						try {
-							fechayhorad = sdf1.parse(txtfechayhora.getText());
+							fechaD = (Date) sdf1.parse(txtfechayhora.getText());
 						} catch (ParseException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
 						TipoCita t = (TipoCita) ctipoCita.getSelectedItem();
-						Cita cita = new Cita(dni, nombre, apellido, fechayhorad, t);
+						Cita cita = new Cita(dni, nombre, apellido, fechaD, t);
 						try {
 						 con = BaseDeDatos.initBD("BaseDeDatos.db");
 						//nuevo4/01
