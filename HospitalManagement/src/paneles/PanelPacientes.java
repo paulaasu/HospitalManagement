@@ -243,6 +243,19 @@ public class PanelPacientes extends JPanel {
 			PanelBorrar.add(botonBorrar);
 			panelA.add(PanelBorrar);
 			
+//M.borrar todos los pacientes por el dni
+			
+			botonBorrar.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					VentanaBorrarPaciente ventanaBorrar = new VentanaBorrarPaciente();
+					ventanaBorrar.setVisible(true);
+					
+				}
+			});
+			
+
 			JPanel PanelEdad = new JPanel();
 			PanelEdad.setLayout(new GridLayout(2, 1));
 			PanelEdad.add(new JLabel("Edad media pacientes"));
@@ -289,44 +302,7 @@ public class PanelPacientes extends JPanel {
 			});
 
 
-//			JPanel PanelFicherob = new JPanel();
-//			PanelFicherob.setLayout(new GridLayout(2, 1));
-//			
-//			btnGuardarPacientesEnFicheroBinario = new JButton("Borrar");
-//			PanelFicherob.add(btnGuardarPacientesEnFicheroBinario);
-//			add(PanelFicherob);
-//			
-//			btnGuardarPacientesEnFicheroBinario.addActionListener(new ActionListener() {
-//				
-//				@Override
-//				public void actionPerformed(ActionEvent e) {
-//					ObjectOutputStream oos = null;
-//					
-//					try {
-//						oos = new ObjectOutputStream(new FileOutputStream("Paciente.dat"));
-//						oos.writeObject(modelo);
-//					} catch (FileNotFoundException e1) {
-//						// TODO Auto-generated catch block
-//						e1.printStackTrace();
-//					} catch (IOException e1) {
-//						// TODO Auto-generated catch block
-//						e1.printStackTrace();
-//					} finally {
-//						if(oos!=null) {
-//							try {
-//								oos.flush();
-//								oos.close();
-//							} catch (IOException e1) {
-//								// TODO Auto-generated catch block
-//								e1.printStackTrace();
-//							}
-//							
-//						}
-//					}
-//					
-//				}
-//			});
-//			setVisible(true);
+
 		}
 			
 		

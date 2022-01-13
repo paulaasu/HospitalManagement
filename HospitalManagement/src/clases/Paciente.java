@@ -24,6 +24,7 @@ public class Paciente /*extends Persona*/{
 		this.telefono=telefono;
 		this.apellidos=apellidos;
 		this.direccion=direccion;
+		this.fechaNac=fechaNac;
 	}
 	public Paciente ( String dni, String nombre, String apellidos, int telefono, String direccion,
 			String fechaNac,String genero){
