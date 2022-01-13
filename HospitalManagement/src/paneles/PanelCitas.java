@@ -239,7 +239,7 @@ public class PanelCitas extends JPanel {
 			
 			JPanel PanelBorrar = new JPanel();
 			PanelBorrar.setLayout(new GridLayout(2, 1));
-			PanelBorrar.add(new JLabel("Borrar paciente..."));
+			PanelBorrar.add(new JLabel("Borrar cita..."));
 			botonBorrar = new JButton("Borrar");
 			PanelBorrar.add(botonBorrar);
 			add(PanelBorrar);

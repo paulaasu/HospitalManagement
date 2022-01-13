@@ -17,6 +17,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -160,7 +162,9 @@ public class VentanaCitas extends JFrame{
 						String dni = txtdni.getText();
 						String nombre = txtnombre.getText();
 						String apellido = txtapellidos.getText();
-						//String fechayhora = txtfechayhora.getText();
+						String fechayhora = txtfechayhora.getText();
+						
+						
 						//nuevo 
 						Date fechaD = null;
 						try {
@@ -169,8 +173,23 @@ public class VentanaCitas extends JFrame{
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
+						
 						TipoCita t = (TipoCita) ctipoCita.getSelectedItem();
 						Cita cita = new Cita(dni, nombre, apellido, fechaD, t);
+						
+						//LOS PATRONES
+						//Patron dni
+						Pattern patronDni = Pattern.compile("[0-9]{7,8}[A-Z]"); // Patron DNI
+						Matcher matDni = patronDni.matcher(dni);
+						boolean cumplePatronDni = matDni.matches();
+						
+						//patron hora --> yyyy-MM-dd HH:mm
+//						Pattern patronFecha = Pattern.compile("[0-9]{4}-[0-9]{2}-[0-9]{4} [0-9]{2}:[0-9]{2}");
+//						Matcher matFecha = patronFecha.matcher(fechayhora);
+//						boolean cumplePatronFecha = matFecha.matches();
+						
+						
+						if(cumplePatronDni == true) {
 						try {
 						 con = BaseDeDatos.initBD("BaseDeDatos.db");
 						//nuevo4/01
@@ -178,10 +197,11 @@ public class VentanaCitas extends JFrame{
 						PanelCitas.cargarModeloTabla();
 						BaseDeDatos.closeBD(con);	
 						}catch (Exception ex) {
-							// TODO: handle exception
-							
+							// TODO: handle exception	
 						}
-						
+						}else {
+							JOptionPane.showMessageDialog( null, "Dni incorrecto");
+						}
 						
 //						con = BaseDeDatos.initBD("BaseDeDatos.db");
 //						BaseDeDatos.anadirCita(con, cita);
