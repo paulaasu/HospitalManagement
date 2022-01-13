@@ -28,7 +28,7 @@ import clases.Paciente;
 
 import paneles.PanelPacientes;
 import paneles.PanelAgenda;
-import paneles.PanelCitas;
+//import paneles.PanelCitas;
 import paneles.PanelExportar;
 import paneles.PanelHistorial;
 import paneles.PanelImportar;
@@ -40,8 +40,8 @@ public class VentanaPrincipal extends JFrame {
 	//Creamos un treemap de pacientes
 	public static TreeMap<String,Paciente> tmPacientes;
 	//para ir cambiando de ventana en ventana
-	private static JFrame ventanaAnterior;
-	private static JFrame ventanaActual;
+//	private static JFrame ventanaAnterior;
+//	private static JFrame ventanaActual;
 	
 	
 
@@ -73,7 +73,7 @@ public class VentanaPrincipal extends JFrame {
 //		ventanaAnterior = va;
 		PanelInicio pii = new PanelInicio();
 		PanelAgenda pa=new PanelAgenda();
-		PanelCitas pc=new PanelCitas();
+//		PanelCitas pc=new PanelCitas();
 		PanelExportar pe=new PanelExportar();
 		PanelImportar pi=new PanelImportar();
 		PanelPacientes pp= new PanelPacientes();
@@ -162,7 +162,7 @@ public class VentanaPrincipal extends JFrame {
 //				add(pc, BorderLayout.CENTER);
 				
 				panel2.removeAll();
-				panel2.add(pc);
+//				panel2.add(pc);
 				panel2.updateUI();
 			}
 			
