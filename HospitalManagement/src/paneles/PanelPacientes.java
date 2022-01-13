@@ -54,7 +54,8 @@ public class PanelPacientes extends JPanel {
 	private static JButton botonGenero;
 	static Connection con;
 	
-	
+
+	/*Creación del panelPacientes*/
 	public PanelPacientes() {
 		setLayout(new BorderLayout());
 		JLabel datos = new JLabel("LISTADO DE PACIENTES");
@@ -111,6 +112,8 @@ public class PanelPacientes extends JPanel {
 		}
 	}
 	
+	/*En el PanelAbajo, creamos los botones y JTextFields necesarios para
+	 * interactuar con la tabla que encontramos en el PanelArriba*/
 	public class PanelAbajo extends JPanel{
 		private JTextField buscar;
 		private JTextField añadir ,txtDni,txtNombre , txtApellidos,txtdir, txttl,txtfecha,txthc;
@@ -121,8 +124,8 @@ public class PanelPacientes extends JPanel {
 		private String dni;
 		private JButton btnGuardarPacientesEnFicheroBinario;
 		
-			
-		public PanelAbajo() {
+		/*Dentro de PanelAbajo, tenemos los siguientes paneles:
+		 * PanelBuscar, PanelVacío, PanelAñadir, PanelBorrar, PanelEdad y PanelGenero*/public PanelAbajo() {
 			setLayout(new GridLayout(2,1));
 			JPanel panelA = new JPanel();
 			panelA.setLayout(new FlowLayout());
@@ -321,6 +324,7 @@ public class PanelPacientes extends JPanel {
 		}	
 	}
 	
+	/*Método para eliminar toda la información de un paciente de la tabla*/
 	public static void eliminaTablaPaciente(){
 		int rowCount = modelo.getRowCount();
 		//Elimina las filas uno a uno desde el final de la tabla
@@ -330,13 +334,16 @@ public class PanelPacientes extends JPanel {
 		
 				
 	}
-
+	/*Método para conseguir la Edad de un paciente en el momento en que se pide. Utilizamos este método
+	 * para poder crear el método mediaRecursiva*/
 	public static int EdadActualPactiente(String fecha) {   
 		fecha = fecha.split("/")[2];	//Año
 		int anyos=YearMonth.now().getYear() - Integer.parseInt(fecha);
 		return anyos;
 	}
 	
+	/*Método para calcular la media de edad de los pacientes que hay en la BD del hospital de manera recursiva.
+	 * Este método, es un método recursivo múltiple.*/
 	public static float mediaRecursiva(ArrayList<String> lista, int pos) {
 		
 		if (pos == 0) {
@@ -349,14 +356,10 @@ public class PanelPacientes extends JPanel {
 		return 0;	
 	}
 	
-//	public static String listaGenero (ArrayList<String> listaGenero) {
-//		
-//		
-//		return null;
-//		
-//	}
-	//Si utilizamos el ArrayList getGenero que hemos creado?
-	
+
+	/*Método para calcular el número de pacientes de cada género que hay en la BD del hospital. Es decir, si hay 1000 pacientes en nuestra
+	 * BD y 53 se identifican con el género "femenino" y 47 con el "masculino", haremos el cálculo del porcentaje y obtendremos que el
+	 * 53% de nuestros pacientes son "femenino" y el 47% masculino.*/
 	public static float porcentajeGenero(ArrayList<String> listaGenero, int pos,float contadorFemenino,float contadorMasculino) {
 		if(pos<listaGenero.size()) {
 			if (listaGenero.get(pos).equals("Femenino")){

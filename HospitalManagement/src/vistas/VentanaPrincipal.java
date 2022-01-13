@@ -325,7 +325,7 @@ class Panel2 extends JPanel{ //PANEL QUE TE APARECE AL PRINCIPIO
 		
 		case "MEDICO":
 			btnPaciente.setEnabled(false);
-			btnCitas.setEnabled(false);
+			btnCitas.setEnabled(true);
 			btnHistorial.setEnabled(true);
 			btnExportar.setEnabled(true);
 			btnImportar.setEnabled(true);
