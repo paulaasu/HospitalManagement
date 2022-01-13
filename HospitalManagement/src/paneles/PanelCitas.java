@@ -18,7 +18,9 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,7 +55,7 @@ public class PanelCitas extends JPanel {
 	private JTable tabla;
 	private static DefaultTableModel modeloTabla;
 	public TreeMap<String, Cita>tmCitas = new TreeMap<>();
-	static SimpleDateFormat sdf = new SimpleDateFormat( "dd/MM/yyyy hh:mm" );
+	static SimpleDateFormat sdf1 = new SimpleDateFormat( "dd/MM/yyyy HH:mm" );
 	Boolean reiniciarBD;
 
 	public PanelCitas() {
@@ -168,10 +170,10 @@ public class PanelCitas extends JPanel {
 					String nombre= buscar.getText() ;
 				//nuevo
 					try {
-						BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-						String sentSQL = "SELECT * FROM cita WHERE nombre = '" + nombre + "' ";
-						BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
-						BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
+						con = BaseDeDatos.initBD("BaseDeDatos.db");
+						String sentSQL = "SELECT * FROM Cita WHERE Nombre = '" + nombre + "' ";
+						Statement stmt = BaseDeDatos.con.createStatement();
+						ResultSet rs = stmt.executeQuery(sentSQL);
 						
 						if(BaseDeDatos.rs.next()) {
 							int rowCount = modeloTabla.getRowCount();
@@ -356,7 +358,7 @@ public class PanelCitas extends JPanel {
 		while(modeloTabla.getRowCount()>0)
 			modeloTabla.removeRow(0);
 		for(Cita c: a) {
-			String f = sdf.format(c.getFechaYHoraCita());
+			String f = sdf1.format(c.getFechaYHoraCita());
 			String fila[] = {c.getDni(),c.getNombre(),c.getApellidos(),f,c.getTipodecita().toString()};
 			System.out.println(c.getDni());
 			modeloTabla.addRow(fila);
