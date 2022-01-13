@@ -8,6 +8,7 @@ import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,7 +28,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import com.sun.jdi.connect.spi.Connection;
 
 import clases.BaseDeDatos;
 import clases.Paciente;
@@ -145,33 +145,24 @@ public class VentanaRegistro extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 //					// TODO Auto-generated method stub
 					String usuario1 = usuario.getText();
-					String password1 = usuario.getText();
-					String passwordRepeat = usuario.getText();
+					String password1 = (contraseña.getPassword()).toString();
+					String passwordRepeat = (repiteContraseña.getPassword()).toString();
 					TipoUsuario rol1 = (TipoUsuario) tipoUsuario.getSelectedItem();
 					//ID --> No se pregunta, cada nuevo usuario se crea un nuevo ID automáticamente
 					//Rol
 					
 					//Conseguir lo que la persona ha puesto en el comboBox
 				//	para aumentar el nª historial cada vez que se añade un paciente --> HAY QUE CORREGIR, DA ERROR
-					if(contraseña==repiteContraseña) {
-						try {
-							BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
-							String sentSQL = "SELECT ID_usuario, user, password, Rol, max(ID_usuario) FROM usuario";
-							BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
-							BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
-							int numeroUsuario = 1;
-							while(BaseDeDatos.rs.next()) {
-								numeroUsuario = BaseDeDatos.rs.getInt(5) + 1;
-//								numeroUsuario = numeroUsuario + 1;
-							}
-							Usuario usuarioNuevo = new Usuario(usuario1, password1, numeroUsuario, rol1);
-							BaseDeDatos.anadirUsuario(usuarioNuevo);
-							
-							BaseDeDatos.closeBD(con);
-						} catch (SQLException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-						}
+					if(String.valueOf(contraseña.getPassword()).equals(String.valueOf(repiteContraseña.getPassword()))) {
+						Connection con = BaseDeDatos.initBD("BaseDeDatos.db");
+						Usuario u=new Usuario();
+						TipoUsuario t;
+						u.nom=usuario1;
+						String c=String.valueOf(contraseña.getPassword());
+						
+						u.contrasena=Cifrar(c);
+						u.rol=TipoUsuario.valueOf(rol1.toString());
+						BaseDeDatos.anadirUsuario(u);;
 						
 						System.out.println(tipoUsuario.getSelectedItem());
 						dispose();
@@ -182,6 +173,23 @@ public class VentanaRegistro extends JFrame {
 						JOptionPane.showMessageDialog(null, "contraseña incorrecta");
 					}
 					
+					
+				}
+				private String Cifrar(String contraseña) {
+					// TODO Auto-generated method stub
+					char array[]=contraseña.toCharArray();
+					
+					for(int i=0;i<array.length;i++) {
+						array[i]=(char)(array[i]+(char)5);
+					}
+					
+					String encriptado=String.valueOf(array);
+					System.out.println(encriptado);
+					char arrayE[]=encriptado.toCharArray();	
+					
+					
+					
+					return encriptado;
 				}
 			});
 			

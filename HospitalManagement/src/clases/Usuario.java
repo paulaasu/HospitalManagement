@@ -2,10 +2,10 @@ package clases;
 
 
 public  class Usuario {
-	private String nom;
-	private String contrasena;
-	private int ID_usuario;
-	private TipoUsuario rol;
+	public String nom;
+	public String contrasena;
+	public int ID_usuario;
+	public TipoUsuario rol;
 
 	
 	public String getNom() {

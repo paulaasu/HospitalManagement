@@ -78,9 +78,9 @@ public class VentanaLogin extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-					String u = txt_user.getText();
-					String c= txt_password.getText();
-					
+				String u = txt_user.getText();
+				String c= String.valueOf(txt_password.getPassword());
+				
 
 					try {
 						
@@ -234,6 +234,16 @@ setLayout(new GridLayout(7,1));
 			JLabelImagen.setIcon(new ImageIcon(VentanaLogin.class.getResource("/img/LoginImagen2.jpg")));
 			add(JLabelImagen);			
 		}
+	}
+
+	public String Desencriptar(String con) {
+		char array[]=con.toCharArray();
+		for(int i=0;i<array.length;i++) {
+			array[i]=(char)(array[i]-(char)5);
+		}
+		String desencriptado=String.valueOf(array);
+		System.out.println(desencriptado);
+		return desencriptado;
 	}
 
 }

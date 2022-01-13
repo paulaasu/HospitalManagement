@@ -24,6 +24,7 @@ import java.util.logging.SimpleFormatter;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+import vistas.VentanaLogin;
 import vistas.VentanaPaciente; // importamos el panel pacientes
 
 
@@ -614,12 +615,22 @@ public class BaseDeDatos {
 	public static boolean comprobarUsuario(String u, String c) {
 		boolean result=false;
 		try (Statement statement = con.createStatement()) {
-			String sentSQL = "SELECT user, password FROM usuario WHERE user = '" + u +"' AND password = '" + c + "' ";
+			String sentSQL = "SELECT user, password FROM usuario WHERE user = '" + u +"' ";
 			BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
 			BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
-			
+			VentanaLogin v=new VentanaLogin();
 			while(rs.next()) {
-				result = true;
+			String contraseña=(rs.getString("password")).toString();
+				String con=v.Desencriptar(contraseña);
+				
+				if(String.valueOf(c).equals(String.valueOf(con))) {
+					System.out.println("valido");
+					return result=true;
+					
+				}else {
+					return result ;
+				}
+				
 			}
 			return result;
 		} catch (SQLException e) {
@@ -1011,7 +1022,7 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 	
 	public static void anadirUsuario( Usuario u) {
 		
-		String sentSQL = "INSERT INTO usuario VALUES('"+u.getID_usuario()+"', '"+u.getNom()+"','"+u.getContrasena()+"', '"+u.getRol()+"')";
+		String sentSQL = "INSERT INTO usuario (user,password,Rol)  VALUES('"+u.getNom()+"','"+u.getContrasena()+"', '"+u.getRol()+"')";
 		
 		try {
 			Statement stmt =null;
