@@ -24,6 +24,7 @@ import java.util.logging.SimpleFormatter;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+import vistas.VentanaLogin;
 import vistas.VentanaPaciente; // importamos el panel pacientes
 
 
@@ -610,13 +611,24 @@ public class BaseDeDatos {
 	public static boolean comprobarUsuario(String u, String c) {
 		boolean result=false;
 		try (Statement statement = con.createStatement()) {
-			String sentSQL = "SELECT user, password FROM usuario WHERE user = '" + u +"' AND password = '" + c + "' ";
+			String sentSQL = "SELECT user, password FROM usuario WHERE user = '" + u +"' ";
 			BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
 			BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
-			
+			VentanaLogin v=new VentanaLogin();
 			while(rs.next()) {
-				result = true;
+			String contraseña=(rs.getString("password")).toString();
+				String con=v.Desencriptar(contraseña);
+				
+				if(String.valueOf(c).equals(String.valueOf(con))) {
+					System.out.println("valido");
+					return result=true;
+					
+				}else {
+					return result ;
+				}
+				
 			}
+			rs.close();
 			return result;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -1007,7 +1019,7 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 	
 	public static void anadirUsuario( Usuario u) {
 		
-		String sentSQL = "INSERT INTO usuario VALUES('"+u.getID_usuario()+"', '"+u.getNom()+"','"+u.getContrasena()+"', '"+u.getRol()+"')";
+		String sentSQL = "INSERT INTO usuario (user,password,rol) VALUES('"+u.getNom()+"','"+u.getContrasena()+"', '"+u.getRol()+"')";
 		
 		try {
 			Statement stmt =null;
@@ -1018,6 +1030,7 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 			// TODO Auto-generated catch block
 			JOptionPane.showMessageDialog(null, "SE HA PRODUCIDO UN ERROR  AL AÑADIR UN USUARIO");
 		}
+		
 	}
 	
 //METODOS DE CITA:	
@@ -1309,6 +1322,35 @@ public  static  ArrayList<HistorialClinico> ObtenerHistorialDni(Connection con,S
 		}
 
 
+		public static String RolUsuario(String u, String c) {
+			String result="";
+			try (Statement statement = con.createStatement()) {
+				String sentSQL = "SELECT * FROM usuario WHERE user = '" + u +"' ";
+				BaseDeDatos.stmt = BaseDeDatos.con.createStatement();
+				BaseDeDatos.rs = BaseDeDatos.stmt.executeQuery(sentSQL);
+				VentanaLogin v=new VentanaLogin();
+				while(rs.next()) {
+				String contraseña=(rs.getString("password")).toString();
+				String rol=(rs.getString("rol")).toString();
+					String con=v.Desencriptar(contraseña);
+					
+					if(String.valueOf(c).equals(String.valueOf(con))) {
+						
+						return rol;
+						
+					}else {
+						return result ;
+					}
+					
+				}
+				rs.close();
+				return result;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				logger.log( Level.SEVERE, "ExcepciÃ³n", e );
+				return result;
+			}
+		}
 
 
 }

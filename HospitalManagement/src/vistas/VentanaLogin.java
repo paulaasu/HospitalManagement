@@ -84,11 +84,15 @@ public class VentanaLogin extends JFrame {
 
 					try {
 						
+						
+						//usuario.setRol1(rol);
+						
 					BaseDeDatos.con = DriverManager.getConnection("jdbc:sqlite:BaseDeDatos.db");
 					
 					if (BaseDeDatos.comprobarUsuario(u, c)) {
 						setVisible(false);
-						VentanaPrincipal ventana = new VentanaPrincipal();
+						String rol=(BaseDeDatos.RolUsuario(u,c));
+						VentanaPrincipal ventana = new VentanaPrincipal(rol);
 						ventana.setVisible(true);
 					}else {
 						JOptionPane.showMessageDialog(contentPane, "Usuario o contraseña incorrecta");

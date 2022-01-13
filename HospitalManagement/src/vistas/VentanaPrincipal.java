@@ -67,7 +67,18 @@ public class VentanaPrincipal extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	
+	public VentanaPrincipal(String rol) {
+		//VentanaPrincipal v = new VentanaPrincipal();
+		Componentes();
+		ControlPermisos(rol);
+	}
 	public VentanaPrincipal() {
+		
+		Componentes();
+	}
+
+	public void Componentes() {
 		
 		// va a ser la ventana actual
 //		ventanaActual = this;
@@ -308,6 +319,37 @@ class Panel2 extends JPanel{ //PANEL QUE TE APARECE AL PRINCIPIO
 	}
 	
 	
-	
+	private void ControlPermisos(String rol) {
+		//v.GetRolUsuario();
+		switch(rol) {
+		
+		case "MEDICO":
+			btnPaciente.setEnabled(false);
+			btnCitas.setEnabled(false);
+			btnHistorial.setEnabled(true);
+			btnExportar.setEnabled(true);
+			btnImportar.setEnabled(true);
+			break;
+		case "RECEPCIONISTA":
+			btnHistorial.setEnabled(false);
+			btnExportar.setEnabled(false);
+			btnImportar.setEnabled(false);
+			btnPaciente.setEnabled(true);
+			btnCitas.setEnabled(true);
+			break;
+		case "INFORMATICO":
+			btnHistorial.setEnabled(true);
+			btnExportar.setEnabled(true);
+			btnImportar.setEnabled(true);
+			btnPaciente.setEnabled(true);
+			btnCitas.setEnabled(true);
+			break;
+		default:
+			
+		}
+		
+	}
+
+
 
 }
